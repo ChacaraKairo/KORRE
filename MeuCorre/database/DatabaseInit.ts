@@ -84,18 +84,7 @@ export const DatabaseInit = () => {
       );
     `);
 
-    // 5. SEED DATA
-    db.execSync(`
-      INSERT OR IGNORE INTO perfil_usuario (id, nome, meta_diaria) VALUES (1, 'Kairo Chacara', 100.00);
-      
-      INSERT OR IGNORE INTO categorias_financeiras (nome, tipo, cor) VALUES 
-      ('Combustível', 'despesa', '#FF4444'),
-      ('Manutenção', 'despesa', '#FFAA00'),
-      ('App Entrega', 'ganho', '#44FF44'),
-      ('Gorjeta', 'ganho', '#00AAFF');
-    `);
-
-    console.log('[BANCO] Tabelas e sementes prontas.');
+    console.log('[BANCO] Tabelas prontas.');
   } catch (error) {
     console.error(
       '[ERRO] Falha crítica na inicialização do banco:',

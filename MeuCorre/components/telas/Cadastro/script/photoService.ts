@@ -6,9 +6,6 @@ export const PhotoService = {
     fotoAntigaUri?: string | null,
   ): Promise<string | null> {
     try {
-      // DEBUG: Vamos ver no terminal do seu PC o que está chegando aqui
-      console.log('FS Object:', Object.keys(FileSystem));
-
       const { status } =
         await ImagePicker.requestCameraPermissionsAsync();
       if (status !== 'granted')

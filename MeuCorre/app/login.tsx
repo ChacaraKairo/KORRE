@@ -39,9 +39,6 @@ const LoginScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Configuração da rota no Expo Router */}
-      <Stack.Screen options={{ headerShown: false }} />
-
       <KeyboardAvoidingView
         behavior={
           Platform.OS === 'ios' ? 'padding' : 'height'
@@ -69,7 +66,9 @@ const LoginScreen: React.FC = () => {
               biometriaDisponivel={biometriaDisponivel}
               onLogin={realizarLoginManual}
               onBiometria={realizarLoginBiometrico}
-              onNavigateCadastro={() => router.push('/')}
+              onNavigateCadastro={() =>
+                router.push('/cadastro')
+              }
             />
 
             {/* Rodapé informativo */}

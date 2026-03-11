@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Animated } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useRouter } from 'expo-router';
-import db from '../database/DatabaseInit';
+import db from '../database/';
 
 export const useLogin = () => {
   const router = useRouter();
