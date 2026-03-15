@@ -15,7 +15,8 @@ import {
 
 // Importação do Hook e Estilos
 import { useFinance } from '../../hooks/finance/useFinance';
-import { styles } from '../../styles/telas/Finance/AddTransactionStyles';
+import { styles as parentStyles } from '../../styles/telas/Finance/AddTransactionStyles';
+import { financeStyles as styles } from '../../styles/telas/Finance/financeStyles';
 
 // Importação dos Sub-componentes
 import { FinanceHeader } from '../../components/telas/finance/FinanceHeader';
@@ -54,7 +55,7 @@ export default function AddTransactionScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={parentStyles.container}
       behavior={
         Platform.OS === 'ios' ? 'padding' : undefined
       }
@@ -69,32 +70,21 @@ export default function AddTransactionScreen() {
         style={{ flex: 1 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.content}>
+        <View style={parentStyles.content}>
           {/* Seletor de Tipo (Ganho / Despesa) */}
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: 12,
-              marginBottom: 24,
-            }}
-          >
+          <View style={styles.financeTypeRow}>
             <TouchableOpacity
-              style={{
-                flex: 1,
-                backgroundColor:
-                  tipo === 'ganho'
-                    ? 'rgba(0, 200, 83, 0.1)'
-                    : '#1A1A1A',
-                borderWidth: 1,
-                borderColor:
-                  tipo === 'ganho' ? '#00C853' : '#333',
-                borderRadius: 16,
-                height: 56,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 8,
-              }}
+              style={[
+                styles.financeTypeBtn,
+                {
+                  backgroundColor:
+                    tipo === 'ganho'
+                      ? 'rgba(0, 200, 83, 0.1)'
+                      : '#1A1A1A',
+                  borderColor:
+                    tipo === 'ganho' ? '#00C853' : '#333',
+                },
+              ]}
               onPress={() => setTipo('ganho')}
               activeOpacity={0.7}
             >
@@ -105,33 +95,30 @@ export default function AddTransactionScreen() {
                 }
               />
               <Text
-                style={{
-                  color:
-                    tipo === 'ganho' ? '#00C853' : '#666',
-                  fontWeight: 'bold',
-                }}
+                style={[
+                  styles.financeTypeBtnText,
+                  {
+                    color:
+                      tipo === 'ganho' ? '#00C853' : '#666',
+                  },
+                ]}
               >
                 GANHO
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={{
-                flex: 1,
-                backgroundColor:
-                  tipo === 'despesa'
-                    ? 'rgba(244, 67, 54, 0.1)'
-                    : '#1A1A1A',
-                borderWidth: 1,
-                borderColor:
-                  tipo === 'despesa' ? '#F44336' : '#333',
-                borderRadius: 16,
-                height: 56,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 8,
-              }}
+              style={[
+                styles.financeTypeBtn,
+                {
+                  backgroundColor:
+                    tipo === 'despesa'
+                      ? 'rgba(244, 67, 54, 0.1)'
+                      : '#1A1A1A',
+                  borderColor:
+                    tipo === 'despesa' ? '#F44336' : '#333',
+                },
+              ]}
               onPress={() => setTipo('despesa')}
               activeOpacity={0.7}
             >
@@ -142,11 +129,15 @@ export default function AddTransactionScreen() {
                 }
               />
               <Text
-                style={{
-                  color:
-                    tipo === 'despesa' ? '#F44336' : '#666',
-                  fontWeight: 'bold',
-                }}
+                style={[
+                  styles.financeTypeBtnText,
+                  {
+                    color:
+                      tipo === 'despesa'
+                        ? '#F44336'
+                        : '#666',
+                  },
+                ]}
               >
                 DESPESA
               </Text>
@@ -161,28 +152,17 @@ export default function AddTransactionScreen() {
           />
 
           {/* Seletor de Veículo */}
-          <View style={{ marginBottom: 32, width: '100%' }}>
-            <Text
-              style={{
-                color: '#888',
-                fontSize: 10,
-                textTransform: 'uppercase',
-                fontWeight: '900',
-                letterSpacing: 2,
-                marginBottom: 12,
-                textAlign: 'center',
-              }}
-            >
+          <View style={styles.vehicleSection}>
+            <Text style={styles.vehicleTitle}>
               Vincular ao Veículo
             </Text>
             <View style={{ height: 50 }}>
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingHorizontal: 20,
-                  alignItems: 'center',
-                }}
+                contentContainerStyle={
+                  styles.vehicleScrollView
+                }
               >
                 {allVehicles.map((v) => (
                   <TouchableOpacity
@@ -190,31 +170,30 @@ export default function AddTransactionScreen() {
                     onPress={() =>
                       setSelectedVehicleId(v.id)
                     }
-                    style={{
-                      paddingHorizontal: 20,
-                      paddingVertical: 10,
-                      borderRadius: 20,
-                      backgroundColor:
-                        selectedVehicleId === v.id
-                          ? mainColor
-                          : '#1A1A1A',
-                      borderWidth: 1,
-                      borderColor:
-                        selectedVehicleId === v.id
-                          ? mainColor
-                          : '#333',
-                      marginRight: 10,
-                    }}
+                    style={[
+                      styles.vehicleBtn,
+                      {
+                        backgroundColor:
+                          selectedVehicleId === v.id
+                            ? mainColor
+                            : '#1A1A1A',
+                        borderColor:
+                          selectedVehicleId === v.id
+                            ? mainColor
+                            : '#333',
+                      },
+                    ]}
                   >
                     <Text
-                      style={{
-                        color:
-                          selectedVehicleId === v.id
-                            ? '#0A0A0A'
-                            : '#888',
-                        fontWeight: 'bold',
-                        fontSize: 12,
-                      }}
+                      style={[
+                        styles.vehicleBtnText,
+                        {
+                          color:
+                            selectedVehicleId === v.id
+                              ? '#0A0A0A'
+                              : '#888',
+                        },
+                      ]}
                     >
                       {v.modelo.toUpperCase()}
                       {v.placa ? ` - ${v.placa}` : ''}
@@ -234,18 +213,14 @@ export default function AddTransactionScreen() {
 
           {/* Botão de Adicionar Nova Categoria */}
           <TouchableOpacity
-            style={{
-              marginTop: 24,
-              alignItems: 'center',
-            }}
+            style={styles.addCategoryBtn}
             onPress={() => setModalCategoriaAberto(true)}
           >
             <Text
-              style={{
-                color: mainColor,
-                fontWeight: 'bold',
-                fontSize: 12,
-              }}
+              style={[
+                styles.addCategoryBtnText,
+                { color: mainColor },
+              ]}
             >
               + ADICIONAR NOVA CATEGORIA
             </Text>
@@ -253,7 +228,7 @@ export default function AddTransactionScreen() {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={parentStyles.footer}>
         <TouchableOpacity
           disabled={
             valorNumerico <= 0 ||
@@ -261,10 +236,10 @@ export default function AddTransactionScreen() {
             showSuccess
           }
           style={[
-            styles.btnSalvar,
+            parentStyles.btnSalvar,
             valorNumerico > 0 && categoriaSelecionada
               ? { backgroundColor: mainColor }
-              : styles.btnSalvarDisabled,
+              : parentStyles.btnSalvarDisabled,
           ]}
           onPress={handleSave}
         >
@@ -278,7 +253,7 @@ export default function AddTransactionScreen() {
           )}
           <Text
             style={[
-              styles.btnSalvarText,
+              parentStyles.btnSalvarText,
               {
                 color:
                   tipo === 'ganho' &&

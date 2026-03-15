@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import { financeStyles as styles } from '../../../styles/telas/Finance/financeStyles';
 
 interface ValueInputProps {
   valor: string;
@@ -19,52 +20,16 @@ export const ValueInput = ({
   inputRef,
   onChangeText,
 }: ValueInputProps) => (
-  <View
-    style={{
-      alignItems: 'center',
-      marginBottom: 32,
-      width: '100%',
-    }}
-  >
-    <Text
-      style={{
-        fontSize: 10,
-        textTransform: 'uppercase',
-        fontWeight: '900',
-        color: '#888',
-        letterSpacing: 2,
-        marginBottom: 8,
-      }}
-    >
-      Valor da Anotação
-    </Text>
+  <View style={styles.valueContainer}>
+    <Text style={styles.valueTitle}>Valor da Anotação</Text>
     <TouchableOpacity
-      style={{
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-      }}
+      style={styles.valueTouchable}
       onPress={() => inputRef.current?.focus()}
       activeOpacity={1}
     >
+      <Text style={styles.currencySymbol}>R$</Text>
       <Text
-        style={{
-          fontSize: 24,
-          fontWeight: 'bold',
-          color: '#666',
-          marginRight: 4,
-        }}
-      >
-        R$
-      </Text>
-      <Text
-        style={{
-          fontSize: 60,
-          fontWeight: '900',
-          color: mainColor,
-          letterSpacing: -2,
-        }}
+        style={[styles.valueText, { color: mainColor }]}
       >
         {valor}
       </Text>
@@ -72,13 +37,7 @@ export const ValueInput = ({
         ref={inputRef}
         keyboardType="numeric"
         onChangeText={onChangeText}
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          opacity: 0,
-          color: 'transparent',
-        }}
+        style={styles.hiddenInput}
         autoFocus
       />
     </TouchableOpacity>

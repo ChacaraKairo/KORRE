@@ -25,6 +25,7 @@ import {
   Home,
   Music,
 } from 'lucide-react-native';
+import { financeStyles as styles } from '../../../styles/telas/Finance/financeStyles';
 
 const IconComponents: any = {
   Smartphone,
@@ -76,17 +77,19 @@ export const AdicionarCategoria = ({
         behavior={
           Platform.OS === 'ios' ? 'padding' : undefined
         }
-        style={styles.overlay}
+        style={styles.modalOverlay}
       >
         <View style={styles.modalContainer}>
-          <Text style={styles.title}>Nova Categoria</Text>
+          <Text style={styles.modalTitle}>
+            Nova Categoria
+          </Text>
 
-          <Text style={styles.label}>
+          <Text style={styles.modalLabel}>
             NOME DA CATEGORIA
           </Text>
           <TextInput
             style={[
-              styles.input,
+              styles.modalInput,
               { borderColor: mainColor },
             ]}
             placeholder="Ex: Refeição, Gorjeta..."
@@ -95,15 +98,17 @@ export const AdicionarCategoria = ({
             onChangeText={setNome}
           />
 
-          <Text style={styles.label}>ESCOLHER ÍCONE</Text>
-          <View style={styles.iconGrid}>
+          <Text style={styles.modalLabel}>
+            ESCOLHER ÍCONE
+          </Text>
+          <View style={styles.modalIconGrid}>
             {iconList.map((ico) => {
               const Icon = IconComponents[ico];
               return (
                 <TouchableOpacity
                   key={ico}
                   style={[
-                    styles.iconOption,
+                    styles.modalIconOption,
                     icone === ico && {
                       borderColor: mainColor,
                       backgroundColor: `${mainColor}20`,
@@ -122,12 +127,12 @@ export const AdicionarCategoria = ({
             })}
           </View>
 
-          <View style={styles.buttonsRow}>
+          <View style={styles.modalButtonsRow}>
             <TouchableOpacity
               onPress={onClose}
-              style={styles.btnCancel}
+              style={styles.modalBtnCancel}
             >
-              <Text style={styles.btnCancelText}>
+              <Text style={styles.modalBtnCancelText}>
                 Cancelar
               </Text>
             </TouchableOpacity>
@@ -135,7 +140,7 @@ export const AdicionarCategoria = ({
             <TouchableOpacity
               onPress={onSave}
               style={[
-                styles.btnSave,
+                styles.modalBtnSave,
                 {
                   backgroundColor: mainColor,
                   opacity: nome.trim() ? 1 : 0.5,
@@ -143,7 +148,9 @@ export const AdicionarCategoria = ({
               ]}
               disabled={!nome.trim()}
             >
-              <Text style={styles.btnSaveText}>Salvar</Text>
+              <Text style={styles.modalBtnSaveText}>
+                Salvar
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -151,86 +158,3 @@ export const AdicionarCategoria = ({
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  modalContainer: {
-    width: '100%',
-    backgroundColor: '#161616',
-    borderRadius: 24,
-    padding: 24,
-    borderWidth: 1,
-    borderColor: '#333',
-  },
-  title: {
-    color: '#FFF',
-    fontSize: 20,
-    fontWeight: '900',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  label: {
-    color: '#888',
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 1.5,
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: '#0A0A0A',
-    borderWidth: 1,
-    borderRadius: 12,
-    color: '#FFF',
-    padding: 16,
-    fontSize: 16,
-    marginBottom: 16,
-  },
-  buttonsRow: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  btnCancel: {
-    flex: 1,
-    padding: 16,
-    borderRadius: 12,
-    backgroundColor: '#222',
-    alignItems: 'center',
-  },
-  btnCancelText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-  },
-  btnSave: {
-    flex: 1,
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  btnSaveText: {
-    color: '#0A0A0A',
-    fontWeight: 'bold',
-  },
-  iconGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-    marginBottom: 24,
-    justifyContent: 'center',
-  },
-  iconOption: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#0A0A0A',
-    borderWidth: 2,
-    borderColor: '#333',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
