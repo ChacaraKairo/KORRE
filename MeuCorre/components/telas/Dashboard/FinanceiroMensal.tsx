@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import {
   Calendar,
-  TrendingUp,
   TrendingDown,
+  TrendingUp,
   Wallet,
 } from 'lucide-react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 interface FinanceiroMensalProps {
   ganhos: number;

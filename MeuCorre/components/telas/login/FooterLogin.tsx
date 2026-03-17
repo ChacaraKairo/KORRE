@@ -2,7 +2,7 @@
 // Componente: FooterLogin
 
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { styles } from '../../../styles/telas/login/components/FooterLoginStyles';
 
 export const FooterLogin: React.FC = () => {

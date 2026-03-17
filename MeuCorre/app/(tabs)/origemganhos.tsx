@@ -1,22 +1,22 @@
+import {
+  ChevronRight,
+  Info,
+  Plus,
+} from 'lucide-react-native';
 import React from 'react';
 import {
-  View,
-  Text,
   ScrollView,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import {
-  Plus,
-  Info,
-  ChevronRight,
-} from 'lucide-react-native';
 
 // Importando a Lógica, Estilos e Componentes
-import { useOrigemGanhos } from '../../hooks/OrigemGanhos/useOrigemGanhos';
-import { styles } from '../../styles/telas/OrigemGanhos/OrigemGanhosStyles';
 import { HeaderOrigem } from '../../components/telas/OrigemGanhos/HeaderOrigem';
 import { ItemOrigem } from '../../components/telas/OrigemGanhos/ItemOrigem';
 import { ModalNovaOrigem } from '../../components/telas/OrigemGanhos/ModalNovaOrigem';
+import { useOrigemGanhos } from '../../hooks/OrigemGanhos/useOrigemGanhos';
+import { styles } from '../../styles/telas/OrigemGanhos/OrigemGanhosStyles';
 
 export default function OrigemGanhosScreen() {
   // Puxando toda a lógica do nosso Hook

@@ -1,26 +1,22 @@
-import React from 'react';
-import {
-  View,
-  ScrollView,
-  ActivityIndicator,
-} from 'react-native';
+import React from "react";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 
 // Importação dos Estilos (Caminho atualizado)
-import { dashboardStyles as styles } from '../../styles/telas/Dashboard/dashboardStyles';
+import { dashboardStyles as styles } from "../../styles/telas/Dashboard/dashboardStyles";
 
 // Importação do Hook Personalizado
-import { useDashboard } from '../../hooks/dashboard/useDashboard';
+import { useDashboard } from "../../hooks/dashboard/useDashboard";
 
 // Importação dos Componentes (Caminhos atualizados)
-import { HeaderDashboard } from '../../components/telas/Dashboard/HeaderDashboard';
-import { VeiculoCard } from '../../components/telas/Dashboard/VeiculoCard';
-import { StatusGrid } from '../../components/telas/Dashboard/StatusGrid';
-import { GanhosCard } from '../../components/telas/Dashboard/GanhosCard';
-import { GastosCard } from '../../components/telas/Dashboard/GastosCard';
-import { UltimasMovimentacoes } from '../../components/telas/Dashboard/UltimasMovimentacoes';
-import { FinanceiroMensal } from '../../components/telas/Dashboard/FinanceiroMensal';
-import { FooterCalculadora } from '../../components/telas/Dashboard/FooterCalculadora';
-import { ModalUpdateKm } from '../../components/telas/Dashboard/ModalUpdateKm';
+import { FinanceiroMensal } from "../../components/telas/Dashboard/FinanceiroMensal";
+import { FooterCalculadora } from "../../components/telas/Dashboard/FooterCalculadora";
+import { GanhosCard } from "../../components/telas/Dashboard/GanhosCard";
+import { GastosCard } from "../../components/telas/Dashboard/GastosCard";
+import { HeaderDashboard } from "../../components/telas/Dashboard/HeaderDashboard";
+import { ModalUpdateKm } from "../../components/telas/Dashboard/ModalUpdateKm";
+import { StatusGrid } from "../../components/telas/Dashboard/StatusGrid";
+import { UltimasMovimentacoes } from "../../components/telas/Dashboard/UltimasMovimentacoes";
+import { VeiculoCard } from "../../components/telas/Dashboard/VeiculoCard";
 
 export default function DashboardScreen() {
   const {
@@ -55,8 +51,8 @@ export default function DashboardScreen() {
         style={[
           styles.container,
           {
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
           },
         ]}
       >
@@ -68,8 +64,8 @@ export default function DashboardScreen() {
   return (
     <View style={styles.container}>
       <HeaderDashboard
-        nome={usuario?.nome || 'Piloto'}
-        fraseMotivacional={frase || 'Bora faturar!'}
+        nome={usuario?.nome || "Piloto"}
+        fraseMotivacional={frase || "Bora faturar!"}
         fotoPerfil={usuario?.foto_uri}
         onPressConfig={onPressConfig}
       />
@@ -103,10 +99,7 @@ export default function DashboardScreen() {
 
         <GastosCard valor={gastos} qtdGastos={qtdGastos} />
 
-        <FinanceiroMensal
-          ganhos={ganhosMensal}
-          gastos={gastosMensal}
-        />
+        <FinanceiroMensal ganhos={ganhosMensal} gastos={gastosMensal} />
 
         <UltimasMovimentacoes dados={movimentacoes} />
       </ScrollView>

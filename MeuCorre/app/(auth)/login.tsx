@@ -1,24 +1,23 @@
+import { useRouter } from 'expo-router';
+import { Check, Fuel } from 'lucide-react-native';
 import React from 'react';
 import {
-  View,
+  Animated,
+  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  TouchableOpacity,
-  Alert,
-  Image,
-  Animated,
   Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Fuel, Check } from 'lucide-react-native';
-import { Stack, useRouter } from 'expo-router';
 
 // Lógica centralizada (Crie este hook em src/hooks/useLogin.ts)
 import { useLogin } from '../../hooks/login/useLogin';
 
 // Importação dos seus componentes modulares
-import { CardLogin } from '../../components/telas/Login/CardLogin';
-import { FooterLogin } from '../../components/telas/Login/FooterLogin';
+import { CardLogin } from '../../components/telas/login/CardLogin';
+import { FooterLogin } from '../../components/telas/login/FooterLogin';
 
 // Importação dos estilos centralizados
 import { loginStyles as styles } from '../../styles/telas/login/LoginStyles';
@@ -63,12 +62,7 @@ const LoginScreen: React.FC = () => {
           shadowRadius: 3.84,
           elevation: 5,
         }}
-        onPress={() =>
-          Alert.alert(
-            'Em Breve',
-            'A Calculadora Flex estará disponível aqui.',
-          )
-        }
+        onPress={() => router.push('/calculadora')}
         activeOpacity={0.7}
       >
         <Fuel size={24} color="#00C853" />

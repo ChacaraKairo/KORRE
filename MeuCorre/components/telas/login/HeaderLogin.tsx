@@ -1,9 +1,9 @@
 // Arquivo: src/components/telas/Login/HeaderLogin.tsx
 // Componente: HeaderLogin
 
-import React from 'react';
-import { View, Text, Animated } from 'react-native';
 import { Lock } from 'lucide-react-native';
+import React from 'react';
+import { Animated, Text, View } from 'react-native';
 import { styles } from '../../../styles/telas/login/components/HeaderLoginStyles';
 
 interface HeaderLoginProps {
