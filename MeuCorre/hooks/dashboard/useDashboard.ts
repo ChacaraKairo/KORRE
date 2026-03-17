@@ -83,10 +83,10 @@ export const useDashboard = () => {
               // Filtra ganhos do veículo HOJE
               queryGanhos = `
               SELECT SUM(valor) as total, COUNT(*) as qtd 
-              FROM transacoes 
+              FROM transacoes_financeiras 
               WHERE tipo = 'ganho' 
               AND veiculo_id = ? 
-              AND data LIKE ?
+              AND data_transacao LIKE ?
             `;
               paramsGanhos = [veiculoSalvo.id, `${dataHojeStrLocal}%`];
             } else {
@@ -105,10 +105,10 @@ export const useDashboard = () => {
 
               queryGanhos = `
               SELECT SUM(valor) as total, COUNT(*) as qtd 
-              FROM transacoes 
+              FROM transacoes_financeiras 
               WHERE tipo = 'ganho' 
               AND veiculo_id = ? 
-              AND data >= ?
+              AND data_transacao >= ?
             `;
               paramsGanhos = [veiculoSalvo.id, dataInicioSemanaStr];
             }
@@ -123,10 +123,10 @@ export const useDashboard = () => {
             // --- BUSCA DE GASTOS (Gastos do dia) ---
             const queryGastos = `
           SELECT SUM(valor) as total, COUNT(*) as qtd 
-          FROM transacoes 
+          FROM transacoes_financeiras 
           WHERE tipo = 'despesa' 
           AND veiculo_id = ? 
-          AND data LIKE ?
+          AND data_transacao LIKE ?
         `;
             const resultadoGastos: any = await db.getFirstAsync(queryGastos, [
               veiculoSalvo.id,
@@ -136,14 +136,14 @@ export const useDashboard = () => {
             setQtdGastos(resultadoGastos?.qtd || 0);
 
             // --- BUSCA MENSAL ---
-            const queryGanhosMensal = `SELECT SUM(valor) as total FROM transacoes WHERE tipo = 'ganho' AND veiculo_id = ? AND data >= ?`;
+            const queryGanhosMensal = `SELECT SUM(valor) as total FROM transacoes_financeiras WHERE tipo = 'ganho' AND veiculo_id = ? AND data_transacao >= ?`;
             const resultGanhosMensal: any = await db.getFirstAsync(
               queryGanhosMensal,
               [veiculoSalvo.id, dataInicioMesStr],
             );
             setGanhosMensal(resultGanhosMensal?.total || 0);
 
-            const queryGastosMensal = `SELECT SUM(valor) as total FROM transacoes WHERE tipo = 'despesa' AND veiculo_id = ? AND data >= ?`;
+            const queryGastosMensal = `SELECT SUM(valor) as total FROM transacoes_financeiras WHERE tipo = 'despesa' AND veiculo_id = ? AND data_transacao >= ?`;
             const resultGastosMensal: any = await db.getFirstAsync(
               queryGastosMensal,
               [veiculoSalvo.id, dataInicioMesStr],
@@ -152,11 +152,11 @@ export const useDashboard = () => {
 
             // --- BUSCA DE MOVIMENTAÇÕES (Últimos 5 registros) ---
             const ultimosRegistros: any[] = await db.getAllAsync(
-              `SELECT t.id, t.tipo, t.valor, c.nome as categoria, strftime('%H:%M', t.data) as hora 
-             FROM transacoes t
+              `SELECT t.id, t.tipo, t.valor, c.nome as categoria, strftime('%H:%M', t.data_transacao) as hora 
+             FROM transacoes_financeiras t
              LEFT JOIN categorias_financeiras c ON t.categoria_id = c.id
              WHERE t.veiculo_id = ? 
-             ORDER BY t.data DESC, t.id DESC 
+             ORDER BY t.data_transacao DESC, t.id DESC 
              LIMIT 5`,
               [veiculoSalvo.id],
             );

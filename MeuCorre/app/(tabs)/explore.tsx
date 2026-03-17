@@ -1,97 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   FlatList,
-  Alert,
 } from 'react-native';
 import {
   Database,
   RefreshCw,
   Trash2,
 } from 'lucide-react-native';
-import db from '../../database/DatabaseInit';
+import { useExplore } from '../../hooks/explore/useExplore';
+import { exploreStyles as styles } from '../../styles/telas/Explore/exploreStyles';
 
 export default function DatabaseViewerScreen() {
-  const [tabelas, setTabelas] = useState<string[]>([]);
-  const [tabelaSelecionada, setTabelaSelecionada] =
-    useState<string | null>(null);
-  const [dados, setDados] = useState<any[]>([]);
-  const [colunas, setColunas] = useState<string[]>([]);
-
-  // Carregar lista de tabelas ao abrir
-  useEffect(() => {
-    carregarTabelas();
-  }, []);
-
-  // Carregar dados quando uma tabela é selecionada
-  useEffect(() => {
-    if (tabelaSelecionada) {
-      carregarDadosTabela(tabelaSelecionada);
-    }
-  }, [tabelaSelecionada]);
-
-  const carregarTabelas = async () => {
-    try {
-      const resultado: any[] = await db.getAllAsync(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name != 'sqlite_sequence' AND name != 'android_metadata'",
-      );
-      setTabelas(resultado.map((item) => item.name));
-      if (resultado.length > 0 && !tabelaSelecionada) {
-        setTabelaSelecionada(resultado[0].name);
-      }
-    } catch (error) {
-      console.error('Erro ao listar tabelas:', error);
-    }
-  };
-
-  const carregarDadosTabela = async (
-    nomeTabela: string,
-  ) => {
-    try {
-      const resultado: any[] = await db.getAllAsync(
-        `SELECT * FROM ${nomeTabela}`,
-      );
-      setDados(resultado);
-
-      if (resultado.length > 0) {
-        setColunas(Object.keys(resultado[0]));
-      } else {
-        setColunas([]);
-      }
-    } catch (error) {
-      console.error(
-        `Erro ao ler tabela ${nomeTabela}:`,
-        error,
-      );
-      setDados([]);
-    }
-  };
-
-  const limparTabela = async () => {
-    if (!tabelaSelecionada) return;
-
-    Alert.alert(
-      'Limpar Tabela',
-      `Tem certeza que deseja apagar todos os dados de ${tabelaSelecionada}?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Apagar Tudo',
-          style: 'destructive',
-          onPress: async () => {
-            await db.runAsync(
-              `DELETE FROM ${tabelaSelecionada}`,
-            );
-            carregarDadosTabela(tabelaSelecionada);
-          },
-        },
-      ],
-    );
-  };
+  const {
+    tabelas,
+    tabelaSelecionada,
+    setTabelaSelecionada,
+    dados,
+    carregarDadosTabela,
+    limparTabela,
+  } = useExplore();
 
   return (
     <View style={styles.container}>
@@ -181,106 +112,3 @@ export default function DatabaseViewerScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0A0A0A',
-    paddingTop: 50,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFF',
-  },
-  tabContainer: {
-    height: 50,
-    marginBottom: 10,
-  },
-  tabButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginHorizontal: 4,
-    borderRadius: 20,
-    backgroundColor: '#202020',
-    justifyContent: 'center',
-    height: 40,
-  },
-  tabButtonActive: {
-    backgroundColor: '#00C853',
-  },
-  tabText: {
-    color: '#888',
-    fontWeight: '600',
-  },
-  tabTextActive: {
-    color: '#0A0A0A',
-  },
-  actionsBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#222',
-  },
-  infoText: {
-    color: '#666',
-    fontSize: 12,
-  },
-  deleteButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  deleteText: {
-    color: '#FF4444',
-    fontSize: 12,
-  },
-  card: {
-    backgroundColor: '#161616',
-    marginHorizontal: 20,
-    marginTop: 10,
-    padding: 15,
-    borderRadius: 8,
-    borderLeftWidth: 3,
-    borderLeftColor: '#00C853',
-  },
-  cardIndex: {
-    position: 'absolute',
-    right: 10,
-    top: 10,
-    color: '#333',
-    fontWeight: 'bold',
-    fontSize: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    marginBottom: 4,
-    flexWrap: 'wrap',
-  },
-  key: {
-    color: '#888',
-    fontWeight: 'bold',
-    marginRight: 6,
-    fontSize: 12,
-  },
-  value: {
-    color: '#EEE',
-    fontSize: 12,
-    flex: 1,
-  },
-  emptyText: {
-    color: '#555',
-    textAlign: 'center',
-    marginTop: 50,
-  },
-});

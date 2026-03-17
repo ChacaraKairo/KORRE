@@ -20,7 +20,7 @@ export const DatabaseInit = () => {
 
       CREATE TABLE IF NOT EXISTS veiculos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        tipo TEXT CHECK(tipo IN ('moto', 'carro', 'caminhao', 'van')) NOT NULL,
+        tipo TEXT CHECK(tipo IN ('moto', 'carro', 'caminhao', 'van', 'bicicleta')) NOT NULL,
         marca TEXT,
         modelo TEXT NOT NULL,
         ano INTEGER,
@@ -71,16 +71,31 @@ export const DatabaseInit = () => {
       }
     });
 
-    // 4. Manutenção
+    // 4. NOVA ESTRUTURA DE MANUTENÇÃO (Oficina)
     db.execSync(`
-      CREATE TABLE IF NOT EXISTS registros_manutencao (
+      -- A. Tabela para os Itens de Manutenção (O que deve ser acompanhado: Óleo, Pneu, etc)
+      CREATE TABLE IF NOT EXISTS itens_manutencao (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         veiculo_id INTEGER NOT NULL,
+        nome TEXT NOT NULL,
+        icone TEXT DEFAULT 'Wrench',
+        ultima_troca_km INTEGER NOT NULL DEFAULT 0,
+        intervalo_km INTEGER NOT NULL,
+        criticidade TEXT CHECK(criticidade IN ('baixa', 'media', 'alta')) DEFAULT 'media',
+        FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE CASCADE
+      );
+
+      -- B. Tabela para o Histórico de Serviços (Quando foi trocado, quanto custou)
+      CREATE TABLE IF NOT EXISTS historico_manutencao (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        veiculo_id INTEGER NOT NULL,
+        item_id INTEGER, -- Ligação à peça trocada (Pode ser nulo se for um conserto avulso/inesperado)
         descricao TEXT NOT NULL,
         valor REAL DEFAULT 0,
-        km_no_servico INTEGER,
+        km_servico INTEGER NOT NULL,
         data_servico DATE DEFAULT (date('now', 'localtime')),
-        FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE CASCADE
+        FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE CASCADE,
+        FOREIGN KEY (item_id) REFERENCES itens_manutencao (id) ON DELETE SET NULL
       );
     `);
 

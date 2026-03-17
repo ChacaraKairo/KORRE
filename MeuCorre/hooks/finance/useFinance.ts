@@ -187,11 +187,10 @@ export const useFinance = () => {
       );
 
       await db.runAsync(
-        `INSERT INTO transacoes 
-        (usuario_id, veiculo_id, categoria_id, valor, tipo, data) 
-        VALUES (?, ?, ?, ?, ?, datetime('now', 'localtime'))`,
+        `INSERT INTO transacoes_financeiras 
+        (veiculo_id, categoria_id, valor, tipo, data_transacao) 
+        VALUES (?, ?, ?, ?, datetime('now', 'localtime'))`,
         [
-          usuarioId,
           selectedVehicleId,
           parseInt(categoriaSelecionada),
           valorNumerico,

@@ -5,9 +5,17 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { Zap, Settings, User } from 'lucide-react-native';
+import {
+  Zap,
+  Settings,
+  User,
+  Sun,
+  Cloud,
+  CloudRain,
+} from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { dashboardStyles as styles } from '../../../styles/telas/Dashboard/dashboardStyles';
+import { useHeaderClimaDashboard } from '../../../hooks/dashboard/useHeaderClimaDashboard';
 
 interface HeaderProps {
   nome: string;
@@ -23,6 +31,7 @@ export const HeaderDashboard: React.FC<HeaderProps> = ({
   onPressConfig,
 }) => {
   const router = useRouter();
+  const { clima, loadingClima } = useHeaderClimaDashboard();
 
   return (
     <View style={styles.header}>
@@ -75,13 +84,84 @@ export const HeaderDashboard: React.FC<HeaderProps> = ({
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.btnConfig}
-          activeOpacity={0.7}
-          onPress={onPressConfig}
+        {/* Container para alinhar o Clima e as Configurações à direita */}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 12,
+          }}
         >
-          <Settings size={20} color="#444" />
-        </TouchableOpacity>
+          {/* Widget de Previsão do Tempo para Amanhã */}
+          {!loadingClima && clima && (
+            <View
+              style={{
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  color: '#888',
+                  fontSize: 8,
+                  fontWeight: 'bold',
+                  marginBottom: 2,
+                  textTransform: 'uppercase',
+                }}
+              >
+                Previsão de Amanhã
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 6,
+                }}
+              >
+                {clima.condicao === 'sol' && (
+                  <Sun size={16} color="#FFEB3B" />
+                )}
+                {clima.condicao === 'nublado' && (
+                  <Cloud size={16} color="#9E9E9E" />
+                )}
+                {clima.condicao === 'chuva' && (
+                  <CloudRain size={16} color="#03A9F4" />
+                )}
+                <Text
+                  style={{
+                    color: '#FFF',
+                    fontSize: 11,
+                    fontWeight: '900',
+                  }}
+                >
+                  {clima.max}° / {clima.min}°
+                </Text>
+              </View>
+              {clima.condicao === 'chuva' &&
+                clima.horaChuva && (
+                  <Text
+                    style={{
+                      color: '#03A9F4',
+                      fontSize: 9,
+                      fontWeight: 'bold',
+                      marginTop: 2,
+                    }}
+                  >
+                    {clima.horaChuva} (
+                    {clima.probabilidadeChuva}%)
+                  </Text>
+                )}
+            </View>
+          )}
+
+          <TouchableOpacity
+            style={styles.btnConfig}
+            activeOpacity={0.7}
+            onPress={onPressConfig}
+          >
+            <Settings size={20} color="#444" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
