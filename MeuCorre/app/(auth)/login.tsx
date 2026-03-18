@@ -62,7 +62,12 @@ const LoginScreen: React.FC = () => {
           shadowRadius: 3.84,
           elevation: 5,
         }}
-        onPress={() => router.push('/calculadora')}
+        onPress={() =>
+          router.push({
+            pathname: '/calculadora',
+            params: { origem: 'login' },
+          } as any)
+        }
         activeOpacity={0.7}
       >
         <Fuel size={24} color="#00C853" />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'expo-router';
 import {
   View,
   ScrollView,
@@ -55,6 +56,7 @@ export default function CadastroScreen() {
     erro,
     salvarCadastro,
   } = useCadastro();
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -118,9 +120,10 @@ export default function CadastroScreen() {
             <View style={styles.footer}>
               <TouchableOpacity
                 style={styles.termosContainer}
+                activeOpacity={0.8}
                 onPress={() =>
                   setAceitouTermos(!aceitouTermos)
-                }
+                } // Clicar na linha toda marca o check
               >
                 <View
                   style={[
@@ -137,7 +140,13 @@ export default function CadastroScreen() {
                 </View>
                 <Text style={styles.termosText}>
                   Aceito os{' '}
-                  <Text style={styles.termosDestaque}>
+                  <Text
+                    style={styles.termosDestaque}
+                    onPress={(e) => {
+                      e.stopPropagation(); // Evita que o clique no texto marque o checkbox sem querer
+                      router.push('/termos'); // <-- Redireciona para a tela de Termos
+                    }}
+                  >
                     Termos de Uso
                   </Text>{' '}
                   e confirmo o armazenamento local.

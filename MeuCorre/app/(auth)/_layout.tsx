@@ -6,6 +6,7 @@ export default function AuthLayout() {
       {/* Aqui definimos as telas que pertencem ao grupo de autenticação */}
       <Stack.Screen name="login" />
       <Stack.Screen name="cadastro" />
+      <Stack.Screen name="termos" />
     </Stack>
   );
 }

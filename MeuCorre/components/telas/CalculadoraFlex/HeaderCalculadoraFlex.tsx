@@ -11,15 +11,25 @@ import { useTema } from '../../../hooks/modo_tema';
 
 export default function HeaderCalculadoraFlex({
   setModalAjuda,
+  origem,
 }: {
   setModalAjuda: React.Dispatch<
     React.SetStateAction<boolean>
   >;
+  origem?: string;
 }) {
   const router = useRouter();
 
   const { tema } = useTema();
   const isDark = tema === 'escuro';
+
+  const handleBack = () => {
+    if (origem === 'login') {
+      router.replace('/(auth)/login');
+    } else {
+      router.replace('/dashboard');
+    }
+  };
 
   return (
     <View
@@ -39,12 +49,12 @@ export default function HeaderCalculadoraFlex({
           },
         ]}
         activeOpacity={0.8}
+        onPress={handleBack}
       >
         <Ionicons
           name="arrow-back"
           size={20}
           color={isDark ? '#666' : '#333'}
-          onPress={() => router.back()}
         />
       </TouchableOpacity>
       <Text style={styles.headerTitle}>
