@@ -61,7 +61,9 @@ export const DatabaseInit = () => {
         nome TEXT NOT NULL,
         icone TEXT DEFAULT 'Wrench',
         ultima_troca_km INTEGER NOT NULL DEFAULT 0,
-        intervalo_km INTEGER NOT NULL,
+        intervalo_km INTEGER,
+        ultima_troca_data DATE DEFAULT (date('now', 'localtime')),
+        intervalo_meses INTEGER,
         criticidade TEXT CHECK(criticidade IN ('baixa', 'media', 'alta')) DEFAULT 'media',
         FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE CASCADE
       );
@@ -73,6 +75,7 @@ export const DatabaseInit = () => {
         descricao TEXT NOT NULL,
         valor REAL DEFAULT 0,
         km_servico INTEGER NOT NULL,
+        direfenca_tempo_meses INTEGER,
         data_servico DATE DEFAULT (date('now', 'localtime')),
         FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE CASCADE,
         FOREIGN KEY (item_id) REFERENCES itens_manutencao (id) ON DELETE SET NULL
@@ -87,6 +90,23 @@ export const DatabaseInit = () => {
         data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
       );
     `);
+
+    // --- MIGRAÇÃO SEGURA PARA ADICIONAR COLUNAS EM TABELAS EXISTENTES ---
+    try {
+      db.execSync(
+        `ALTER TABLE itens_manutencao ADD COLUMN ultima_troca_data DATE DEFAULT (date('now', 'localtime'));`,
+      );
+    } catch (e) {
+      /* Ignora se a coluna já existir */
+    }
+
+    try {
+      db.execSync(
+        `ALTER TABLE itens_manutencao ADD COLUMN intervalo_meses INTEGER;`,
+      );
+    } catch (e) {
+      /* Ignora se a coluna já existir */
+    }
 
     console.log(
       '[BANCO] Esquema de tabelas criado/verificado com sucesso.',

@@ -11,6 +11,7 @@ import { dashboardStyles as styles } from '../../styles/telas/Dashboard/dashboar
 // Importação do Hook Personalizado
 import { useDashboard } from '../../hooks/dashboard/useDashboard';
 import { useTema } from '../../hooks/modo_tema';
+import { useOficina } from '../../hooks/oficina/useOficina';
 
 // Importação dos Componentes (Caminhos atualizados)
 import { FinanceiroMensal } from '../../components/telas/Dashboard/FinanceiroMensal';
@@ -52,6 +53,54 @@ export default function DashboardScreen() {
 
   const { tema } = useTema();
   const isDark = tema === 'escuro';
+
+  // Trazemos a inteligência da Oficina para verificar a próxima manutenção
+  const { itensVisiveis, calcularProgresso } = useOficina();
+
+  let statusManutencao: 'critical' | 'warning' | 'ok' =
+    'ok';
+  let descManutencao = 'Sem manutenções';
+
+  if (itensVisiveis && itensVisiveis.length > 0) {
+    const analisados = itensVisiveis.map((item) => {
+      const prog = calcularProgresso(
+        item,
+        veiculo?.km_atual,
+      );
+      return {
+        ...item,
+        statusItem: prog.status,
+        perc: prog.percentagemDesgaste,
+      };
+    });
+
+    const criticos = analisados.filter(
+      (i) => i.statusItem === 'Crítico',
+    );
+    const atencao = analisados.filter(
+      (i) => i.statusItem === 'Atenção',
+    );
+
+    if (criticos.length > 0) {
+      statusManutencao = 'critical';
+      descManutencao =
+        criticos.length === 1
+          ? `Atrasada: ${criticos[0].nome}`
+          : `${criticos.length} manutenções atrasadas`;
+    } else if (atencao.length > 0) {
+      statusManutencao = 'warning';
+      descManutencao =
+        atencao.length === 1
+          ? `Atenção: ${atencao[0].nome}`
+          : `${atencao.length} manutenções próximas`;
+    } else {
+      statusManutencao = 'ok';
+      const proxima = analisados.reduce((prev, current) =>
+        prev.perc > current.perc ? prev : current,
+      );
+      descManutencao = `Próxima: ${proxima.nome}`;
+    }
+  }
 
   if (loading) {
     return (
@@ -97,11 +146,11 @@ export default function DashboardScreen() {
         />
 
         <StatusGrid
-          kmAtual={veiculo?.km_atual || 12500}
-          statusManutencao="warning"
-          descManutencao="Verifique o óleo"
+          kmAtual={veiculo?.km_atual ?? 0}
+          statusManutencao={statusManutencao}
+          descManutencao={descManutencao}
           onUpdateKm={onUpdateKm}
-          onOpenOficina={() => {}}
+          onOpenOficina={onIrParaOficina}
         />
 
         <GanhosCard

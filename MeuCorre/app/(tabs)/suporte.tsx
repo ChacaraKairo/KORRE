@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Linking,
-  Alert,
   SafeAreaView, // <-- Importado para respeitar a área segura da tela
   Platform, // <-- Importado para saber se é Android ou iOS
   StatusBar, // <-- Importado para pegar o tamanho da barra de status
@@ -92,7 +91,7 @@ export default function SuporteScreen() {
     Linking.openURL(
       'https://youtube.com/@SeuCanalMotoboy',
     ).catch(() => {
-      Alert.alert(
+      showCustomAlert(
         'Erro',
         'Não foi possível abrir o YouTube.',
       );
@@ -106,7 +105,7 @@ export default function SuporteScreen() {
     Linking.openURL(
       `whatsapp://send?phone=${numero}&text=${encodeURIComponent(mensagem)}`,
     ).catch(() => {
-      Alert.alert(
+      showCustomAlert(
         'Erro',
         'WhatsApp não está instalado neste dispositivo.',
       );

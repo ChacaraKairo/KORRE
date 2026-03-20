@@ -12,11 +12,13 @@ import { useTema } from '../../../hooks/modo_tema';
 interface Props {
   usuario: any;
   onEditPress: () => void;
+  onCameraPress?: () => void; // <-- Nova propriedade
 }
 
 export const CardUsuario = ({
   usuario,
   onEditPress,
+  onCameraPress, // <-- Recebe a função aqui
 }: Props) => {
   const { tema } = useTema();
   const isDark = tema === 'escuro';
@@ -33,7 +35,10 @@ export const CardUsuario = ({
       ]}
     >
       <View style={styles.avatarContainer}>
-        <View
+        {/* Adicionei o onPress aqui na bolinha da foto caso ele clique nela toda */}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onCameraPress}
           style={[
             styles.avatar,
             {
@@ -49,7 +54,7 @@ export const CardUsuario = ({
               style={{
                 width: '100%',
                 height: '100%',
-                borderRadius: 48,
+                borderRadius: 48, // Ajuste para o tamanho exato da sua borda
               }}
             />
           ) : (
@@ -58,8 +63,12 @@ export const CardUsuario = ({
               color={isDark ? '#666' : '#999'}
             />
           )}
-        </View>
+        </TouchableOpacity>
+
+        {/* E adicionei o onPress no ícone verde da câmara */}
         <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onCameraPress}
           style={[
             styles.avatarBadge,
             { backgroundColor: '#00C853' },

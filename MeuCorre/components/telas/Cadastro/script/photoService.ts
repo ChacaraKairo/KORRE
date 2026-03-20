@@ -6,15 +6,18 @@ export const PhotoService = {
     fotoAntigaUri?: string | null,
   ): Promise<string | null> {
     try {
+      // 1. Pedir permissão
       const { status } =
         await ImagePicker.requestCameraPermissionsAsync();
-      if (status !== 'granted')
+      if (status !== 'granted') {
         throw new Error('Sem permissão de câmera');
+      }
 
+      // 2. Abrir câmara
       const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.7,
+        allowsEditing: true, // Permite cortar a foto
+        aspect: [1, 1], // Quadrado, ideal para perfil
+        quality: 0.7, // Comprime a foto para poupar espaço
       });
 
       if (
@@ -24,24 +27,23 @@ export const PhotoService = {
       ) {
         const tempUri = result.assets[0].uri;
 
-        // Tenta o Document, se falhar tenta o Cache (que é garantido no Mobile)
-        const baseDir =
-          FileSystem.documentDirectory ||
-          FileSystem.cacheDirectory;
+        // 3. Definir o local de destino (DocumentDirectory é o ideal)
+        const baseDir = FileSystem.documentDirectory;
 
         if (!baseDir) {
-          // Se não conseguir acessar pastas locais (ex: Web), usa o URI temporário
-          // Isso evita o crash e permite continuar o cadastro
-          return tempUri;
+          return tempUri; // Fallback se der erro no FileSystem
         }
 
         const fileName = `profile_${Date.now()}.jpg`;
         const destPath = `${baseDir}${fileName}`;
 
-        // Copia o arquivo
-        await FileSystem.copyAsync(tempUri, destPath);
+        // 4. Mover a foto da cache temporária para a pasta segura da App
+        await FileSystem.copyAsync({
+          from: tempUri,
+          to: destPath,
+        });
 
-        // Deleta antiga se existir
+        // 5. Apagar a foto antiga para não encher a memória do telemóvel!
         if (
           fotoAntigaUri &&
           fotoAntigaUri.startsWith('file://')

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import * as Location from 'expo-location';
 
 export type CondicaoClima = 'sol' | 'nublado' | 'chuva';
 
@@ -19,10 +20,42 @@ export const useHeaderClimaDashboard = () => {
   useEffect(() => {
     const fetchClima = async () => {
       try {
-        // Coordenadas padrão (Ex: São Paulo).
-        // No futuro, pode substituir por expo-location para obter a localização real do utilizador.
-        const lat = -23.5505;
-        const lon = -46.6333;
+        // Coordenadas padrão (Ex: São Paulo) como fallback
+        let lat = -23.5505;
+        let lon = -46.6333;
+
+        try {
+          const { status } =
+            await Location.requestForegroundPermissionsAsync();
+          if (status === 'granted') {
+            const location =
+              await Location.getCurrentPositionAsync({});
+            lat = location.coords.latitude;
+            lon = location.coords.longitude;
+
+            // Realiza a geocodificação reversa para descobrir a cidade, estado e país
+            const geocodeResult =
+              await Location.reverseGeocodeAsync({
+                latitude: lat,
+                longitude: lon,
+              });
+            if (geocodeResult && geocodeResult.length > 0) {
+              const endereco = geocodeResult[0];
+              console.log(
+                `🌍 [GEO LOG] Lat: ${lat}, Lon: ${lon} | Cidade: ${endereco.city || endereco.subregion}, Estado: ${endereco.region}, País: ${endereco.country}`,
+              );
+            } else {
+              console.log(
+                `🌍 [GEO LOG] Lat: ${lat}, Lon: ${lon} | Endereço não encontrado.`,
+              );
+            }
+          }
+        } catch (locationError) {
+          console.warn(
+            'Não foi possível obter a localização. Usando padrão.',
+            locationError,
+          );
+        }
 
         // Busca previsão diária e horária para 2 dias (hoje e amanhã) usando fuso horário local
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=precipitation_probability,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&forecast_days=2`;

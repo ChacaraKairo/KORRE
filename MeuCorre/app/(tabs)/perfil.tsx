@@ -25,12 +25,13 @@ export default function PerfilScreen() {
     usuario,
     veiculo,
     meta,
-    setMeta,
     tipoMeta,
+    setMeta,
     loading,
     salvarMeta,
     realizarLogout,
-    carregarDados, // Certifique-se de que o hook usePerfil exporta esta função
+    carregarDados,
+    alterarFoto,
   } = usePerfil();
 
   const { tema } = useTema();
@@ -74,6 +75,7 @@ export default function PerfilScreen() {
         <CardUsuario
           usuario={usuario}
           onEditPress={() => setModalEditAberto(true)}
+          onCameraPress={alterarFoto}
         />
 
         <MetaFinanceira

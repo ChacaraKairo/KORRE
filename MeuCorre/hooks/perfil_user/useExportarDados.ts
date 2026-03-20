@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Alert } from 'react-native';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import db from '../../database/DatabaseInit';
+import { showCustomAlert } from '../alert/useCustomAlert';
 
 export function useExportarDados() {
   const [isExportando, setIsExportando] = useState(false);
@@ -77,7 +77,7 @@ export function useExportarDados() {
           UTI: 'public.json',
         });
       } else {
-        Alert.alert(
+        showCustomAlert(
           'Erro',
           'A partilha não está disponível neste dispositivo.',
         );
@@ -87,7 +87,7 @@ export function useExportarDados() {
         'Erro ao exportar Backup Completo (JSON):',
         error,
       );
-      Alert.alert(
+      showCustomAlert(
         'Erro',
         'Não foi possível gerar o ficheiro de backup.',
       );

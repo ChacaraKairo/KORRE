@@ -1,120 +1,389 @@
-import { useState } from 'react';
-import { useRouter } from 'expo-router';
+import { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
+import db from '../../database/DatabaseInit'; // Ajuste o caminho se necessário
+import { showCustomAlert } from '../alert/useCustomAlert';
 
 export function useOficina() {
-  const router = useRouter();
+  // Estados de Dados (Agora vêm do Banco de Dados)
+  const [frota, setFrota] = useState<any[]>([]);
+  const [veiculoConsultado, setVeiculoConsultado] =
+    useState<any>(null);
+  const [itensVisiveis, setItensVisiveis] = useState<any[]>(
+    [],
+  );
+  const [loading, setLoading] = useState(true);
 
-  // Lista de veículos (No futuro virá do SQLite: SELECT * FROM veiculos)
-  const [frota, setFrota] = useState([
-    {
-      id: 1,
-      tipo: 'moto',
-      marca: 'Honda',
-      modelo: 'CG 160 Fan',
-      kmAtual: 12840,
-      placa: 'ABC-1D23',
-    },
-    {
-      id: 2,
-      tipo: 'carro',
-      marca: 'Fiat',
-      modelo: 'Uno Mobi',
-      kmAtual: 45200,
-      placa: 'XYZ-9W87',
-    },
-  ]);
-
-  const [veiculoAtivo, setVeiculoAtivo] = useState(1);
-  const [abaAtiva, setAbaAtiva] = useState<
-    'pendentes' | 'historico'
-  >('pendentes');
-  const [modalReset, setModalReset] = useState({
+  // Estados dos Modais
+  const [listaAberta, setListaAberta] = useState(false);
+  const [modalNovoItem, setModalNovoItem] = useState(false);
+  const [modalReset, setModalReset] = useState<{
+    visivel: boolean;
+    item: any;
+  }>({
     visivel: false,
-    item: null as any,
+    item: null,
   });
 
-  const veiculoSelecionado = frota.find(
-    (v) => v.id === veiculoAtivo,
+  // Estados do Formulário
+  const [novoItemNome, setNovoItemNome] = useState('');
+  const [novoItemIntervalo, setNovoItemIntervalo] =
+    useState('');
+  const [novoItemTempo, setNovoItemTempo] = useState(''); // Meses
+  const [novoItemUltimaTrocaKm, setNovoItemUltimaTrocaKm] =
+    useState('');
+  const [
+    novoItemUltimaTrocaData,
+    setNovoItemUltimaTrocaData,
+  ] = useState('');
+  const [novoItemIcone, setNovoItemIcone] =
+    useState('wrench');
+  const [novoItemVeiculoId, setNovoItemVeiculoId] =
+    useState<number | null>(null);
+
+  // ==========================================
+  // 1. CARREGAR DADOS DO BANCO (VEÍCULOS E ITENS)
+  // ==========================================
+  const carregarDados = useCallback(async () => {
+    setLoading(true);
+    try {
+      // Busca o veículo ativo atualizado
+      const veiculoAtivo: any = await db.getFirstAsync(
+        'SELECT * FROM veiculos WHERE ativo = 1 LIMIT 1',
+      );
+
+      if (veiculoAtivo) {
+        setFrota([veiculoAtivo]);
+        setVeiculoConsultado(veiculoAtivo);
+        setNovoItemVeiculoId(veiculoAtivo.id);
+        await carregarItensManutencao(veiculoAtivo.id);
+      } else {
+        setVeiculoConsultado(null);
+        setItensVisiveis([]);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar veiculo ativo:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const carregarItensManutencao = async (
+    veiculoId: number,
+  ) => {
+    try {
+      const itens = await db.getAllAsync(
+        'SELECT * FROM itens_manutencao WHERE veiculo_id = ? ORDER BY criticidade DESC',
+        [veiculoId],
+      );
+      setItensVisiveis(itens);
+    } catch (error) {
+      console.error(
+        'Erro ao buscar itens de manutenção:',
+        error,
+      );
+    }
+  };
+
+  // Recarrega sempre que a tela receber foco
+  useFocusEffect(
+    useCallback(() => {
+      carregarDados();
+    }, [carregarDados]),
   );
 
-  // Itens de Manutenção (Simulação - depois virá do banco)
-  const [itensManutencao, setItensManutencao] = useState([
-    {
-      id: 101,
-      nome: 'Óleo do Motor',
-      icone: 'Droplets',
-      ultimaTrocaKm: 11000,
-      intervaloKm: 2000,
-      criticidade: 'alta',
-    },
-    {
-      id: 102,
-      nome: 'Pastilha de Freio',
-      icone: 'Disc',
-      ultimaTrocaKm: 8500,
-      intervaloKm: 5000,
-      criticidade: 'media',
-    },
-    {
-      id: 103,
-      nome: 'Pneu Traseiro',
-      icone: 'CircleDot',
-      ultimaTrocaKm: 5000,
-      intervaloKm: 10000,
-      criticidade: 'baixa',
-    },
-    {
-      id: 104,
-      nome: 'Relação (Corrente)',
-      icone: 'Cog',
-      ultimaTrocaKm: 2000,
-      intervaloKm: 15000,
-      criticidade: 'baixa',
-    },
-  ]);
+  // ==========================================
+  // 2. LÓGICA DE CÁLCULO E REGRAS DE NEGÓCIO
+  // ==========================================
+  const calcularProgresso = (
+    item: any,
+    currentKmOverride?: number,
+  ) => {
+    const kmAtual =
+      currentKmOverride !== undefined
+        ? currentKmOverride
+        : veiculoConsultado?.km_atual;
 
-  // Cálculos de Saúde e Progresso
-  const calcularProgresso = (item: any) => {
-    if (!veiculoSelecionado) return 0;
-    const kmRodados =
-      veiculoSelecionado.kmAtual - item.ultimaTrocaKm;
-    const progresso = (kmRodados / item.intervaloKm) * 100;
-    return Math.min(Math.max(progresso, 0), 100);
-  };
+    if (kmAtual === undefined)
+      return {
+        percentagemDesgaste: 0,
+        cor: '#00C853',
+        status: 'OK',
+        infoTexto: '',
+      };
 
-  const calcularSaudeGeral = () => {
-    if (!veiculoSelecionado || itensManutencao.length === 0)
-      return 100;
-    const progressos = itensManutencao.map(
-      calcularProgresso,
+    let isCritico = false;
+    let isAtencao = false;
+
+    // 1. Desgaste por KM
+    let percKm = 0;
+    let kmRestante = Infinity;
+    if (
+      item.intervalo_km &&
+      item.ultima_troca_km !== null
+    ) {
+      const rodado = kmAtual - item.ultima_troca_km;
+      percKm = (rodado / item.intervalo_km) * 100;
+      kmRestante = item.intervalo_km - rodado;
+      if (kmRestante <= 100) isCritico = true;
+      else if (kmRestante <= 500) isAtencao = true;
+    }
+
+    // 2. Desgaste por Tempo (meses -> dias)
+    let percTempo = 0;
+    let diasRestantes = Infinity;
+    if (item.intervalo_meses && item.ultima_troca_data) {
+      const ultimaTroca = new Date(item.ultima_troca_data);
+      const hoje = new Date();
+      const diasPassados = Math.floor(
+        (hoje.getTime() - ultimaTroca.getTime()) /
+          (1000 * 60 * 60 * 24),
+      );
+      const diasIntervalo = item.intervalo_meses * 30; // Aproximação 1 mês = 30 dias
+      percTempo = (diasPassados / diasIntervalo) * 100;
+      diasRestantes = diasIntervalo - diasPassados;
+      if (diasRestantes <= 5) isCritico = true;
+      else if (diasRestantes <= 15) isAtencao = true;
+    }
+
+    // 3. Avalia qual critério está mais crítico (mais perto ou acima de 100%)
+    const percentagemDesgaste = Math.max(
+      0,
+      Math.min(100, Math.max(percKm, percTempo)),
     );
-    const mediaDesgaste =
-      progressos.reduce((acc, curr) => acc + curr, 0) /
-      progressos.length;
-    return Math.max(0, Math.round(100 - mediaDesgaste));
+
+    let status = 'OK';
+    let cor = '#00C853';
+
+    if (isCritico) {
+      status = 'Crítico';
+      cor = '#EF4444';
+    } else if (isAtencao) {
+      status = 'Atenção';
+      cor = '#F59E0B';
+    }
+
+    let infoTexto = 'Sem limite definido';
+    const temKm =
+      item.intervalo_km && item.intervalo_km > 0;
+    const temTempo =
+      item.intervalo_meses && item.intervalo_meses > 0;
+
+    if (temKm && temTempo) {
+      // Prioriza a exibição do que tiver MAIOR percentagem de desgaste (mais perto do limite)
+      if (percTempo > percKm) {
+        infoTexto =
+          diasRestantes > 0
+            ? `Faltam ${diasRestantes} dias`
+            : `Excedido em ${Math.abs(diasRestantes)} dias`;
+      } else {
+        infoTexto =
+          kmRestante > 0
+            ? `Faltam ${kmRestante} km`
+            : `Excedido em ${Math.abs(kmRestante)} km`;
+      }
+    } else if (temTempo) {
+      infoTexto =
+        diasRestantes > 0
+          ? `Faltam ${diasRestantes} dias`
+          : `Excedido em ${Math.abs(diasRestantes)} dias`;
+    } else if (temKm) {
+      infoTexto =
+        kmRestante > 0
+          ? `Faltam ${kmRestante} km`
+          : `Excedido em ${Math.abs(kmRestante)} km`;
+    }
+
+    return {
+      percentagemDesgaste,
+      cor,
+      status,
+      infoTexto,
+    };
   };
 
-  const getStatusColor = (progresso: number) => {
-    if (progresso >= 90) return '#F44336'; // Vermelho (Crítico)
-    if (progresso >= 75) return '#FF9800'; // Laranja (Atenção)
-    return '#00C853'; // Verde (Ok)
+  const getStatusResumo = () => {
+    const pendentes = itensVisiveis.filter(
+      (item: any) =>
+        calcularProgresso(item).status !== 'OK',
+    ).length;
+
+    if (pendentes === 0) {
+      return {
+        texto: 'Tudo OK',
+        cor: '#00C853',
+        bg: 'rgba(0, 200, 83, 0.1)',
+      };
+    }
+    return {
+      texto: `${pendentes} ${pendentes === 1 ? 'item pendente' : 'itens pendentes'}`,
+      cor: '#EF4444',
+      bg: 'rgba(239, 68, 68, 0.1)',
+    };
   };
 
-  const handleVoltar = () => router.back();
+  // ==========================================
+  // 3. AÇÕES (INSERIR E ATUALIZAR)
+  // ==========================================
+  const handleReset = (item: any) => {
+    if (!veiculoConsultado) return;
+
+    showCustomAlert(
+      'Renovar Ciclo',
+      `Deseja registrar a manutenção de "${item.nome}" como realizada e reiniciar a contagem?`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Sim, registrar',
+          onPress: async () => {
+            try {
+              await db.runAsync(
+                'UPDATE itens_manutencao SET ultima_troca_km = ?, ultima_troca_data = ? WHERE id = ?',
+                [
+                  veiculoConsultado.km_atual,
+                  new Date().toISOString(),
+                  item.id,
+                ],
+              );
+
+              // Salvar no histórico de manutenções
+              await db.runAsync(
+                `INSERT INTO historico_manutencao (veiculo_id, item_id, descricao, valor, km_servico) 
+                 VALUES (?, ?, ?, ?, ?)`,
+                [
+                  veiculoConsultado.id,
+                  item.id,
+                  `Manutenção: ${item.nome}`,
+                  0, // Valor a 0 (poderá ser editável no futuro na tela de histórico)
+                  veiculoConsultado.km_atual,
+                ],
+              );
+
+              await carregarItensManutencao(
+                veiculoConsultado.id,
+              );
+              showCustomAlert(
+                'Sucesso',
+                'Manutenção registrada no histórico e ciclo renovado!',
+              );
+            } catch (error) {
+              console.error(
+                'Erro ao resetar manutenção:',
+                error,
+              );
+              showCustomAlert(
+                'Erro',
+                'Não foi possível registrar a manutenção.',
+              );
+            }
+          },
+        },
+      ],
+    );
+  };
+
+  const handleAddNovoItem = async () => {
+    if (
+      !novoItemNome ||
+      (!novoItemIntervalo && !novoItemTempo) ||
+      !novoItemVeiculoId
+    ) {
+      showCustomAlert(
+        'Aviso',
+        'Preencha o nome e pelo menos um intervalo (KM ou Meses).',
+      );
+      return;
+    }
+
+    // Procura o veículo na frota para pegar a KM atual dele
+    const veiculoAlvo = veiculoConsultado;
+    if (!veiculoAlvo) return;
+
+    try {
+      let dataUltimaTrocaIso = new Date().toISOString();
+      if (novoItemUltimaTrocaData) {
+        const partes = novoItemUltimaTrocaData.split('/');
+        if (partes.length === 3) {
+          const [dia, mes, ano] = partes;
+          dataUltimaTrocaIso = new Date(
+            `${ano}-${mes}-${dia}T12:00:00Z`,
+          ).toISOString();
+        }
+      }
+
+      const kmUltimaTroca = novoItemUltimaTrocaKm
+        ? parseInt(novoItemUltimaTrocaKm)
+        : veiculoAlvo.km_atual;
+
+      // 1. Insere o novo item no banco
+      await db.runAsync(
+        `INSERT INTO itens_manutencao (veiculo_id, nome, icone, ultima_troca_km, intervalo_km, ultima_troca_data, intervalo_meses) 
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          novoItemVeiculoId,
+          novoItemNome,
+          novoItemIcone,
+          kmUltimaTroca,
+          novoItemIntervalo
+            ? parseInt(novoItemIntervalo)
+            : null,
+          dataUltimaTrocaIso,
+          novoItemTempo ? parseInt(novoItemTempo) : null,
+        ],
+      );
+
+      // 2. Se adicionou no veículo que estamos a ver, recarrega a lista
+      if (novoItemVeiculoId === veiculoConsultado?.id) {
+        await carregarItensManutencao(veiculoConsultado.id);
+      }
+
+      setModalNovoItem(false);
+      setNovoItemNome('');
+      setNovoItemIntervalo('');
+      setNovoItemTempo('');
+      setNovoItemUltimaTrocaKm('');
+      setNovoItemUltimaTrocaData('');
+      showCustomAlert(
+        'Sucesso',
+        'Novo item de manutenção adicionado!',
+      );
+    } catch (error) {
+      console.error('Erro ao adicionar item:', error);
+      showCustomAlert(
+        'Erro',
+        'Não foi possível salvar a nova manutenção.',
+      );
+    }
+  };
 
   return {
+    loading,
     frota,
-    veiculoAtivo,
-    setVeiculoAtivo,
-    veiculoSelecionado,
-    abaAtiva,
-    setAbaAtiva,
-    itensManutencao,
+    veiculoConsultado,
+    setVeiculoConsultado,
+    itensVisiveis,
+    listaAberta,
+    setListaAberta,
+    modalNovoItem,
+    setModalNovoItem,
     modalReset,
     setModalReset,
+    novoItemNome,
+    setNovoItemNome,
+    novoItemIntervalo,
+    setNovoItemIntervalo,
+    novoItemTempo,
+    setNovoItemTempo,
+    novoItemUltimaTrocaKm,
+    setNovoItemUltimaTrocaKm,
+    novoItemUltimaTrocaData,
+    setNovoItemUltimaTrocaData,
+    novoItemIcone,
+    setNovoItemIcone,
+    novoItemVeiculoId,
+    setNovoItemVeiculoId,
     calcularProgresso,
-    calcularSaudeGeral,
-    getStatusColor,
-    handleVoltar,
+    getStatusResumo,
+    handleReset,
+    handleAddNovoItem,
   };
 }

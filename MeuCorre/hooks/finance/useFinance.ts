@@ -4,7 +4,7 @@ import {
   useRef,
   useCallback,
 } from 'react';
-import { TextInput, Alert } from 'react-native';
+import { TextInput } from 'react-native';
 import {
   useRouter,
   useLocalSearchParams,
@@ -12,6 +12,7 @@ import {
 } from 'expo-router';
 import * as Icons from 'lucide-react-native';
 import db from '../../database/DatabaseInit';
+import { showCustomAlert } from '../alert/useCustomAlert';
 
 export const useFinance = () => {
   const router = useRouter();
@@ -211,7 +212,7 @@ export const useFinance = () => {
       }, 2000);
     } catch (error) {
       console.error('Erro ao salvar transação:', error);
-      Alert.alert(
+      showCustomAlert(
         'Erro',
         'Não foi possível salvar. Verifique se a tabela de transações possui a coluna usuario_id.',
       );
@@ -261,7 +262,7 @@ export const useFinance = () => {
       );
     } catch (error) {
       console.error('Erro ao adicionar categoria:', error);
-      Alert.alert(
+      showCustomAlert(
         'Erro',
         'Não foi possível adicionar a categoria. Verifique se o nome já existe.',
       );

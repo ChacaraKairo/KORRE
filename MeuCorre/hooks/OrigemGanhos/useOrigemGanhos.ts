@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 // Importação do banco de dados ativada!
 import db from '../../database/DatabaseInit';
+import { showCustomAlert } from '../alert/useCustomAlert';
 
 export function useOrigemGanhos() {
   const router = useRouter();
@@ -143,7 +144,8 @@ export function useOrigemGanhos() {
         'Erro ao salvar as categorias financeiras: ',
         error,
       );
-      alert(
+      showCustomAlert(
+        'Erro',
         'Ops! Ocorreu um erro ao salvar suas origens. Tente novamente.',
       );
     }

@@ -180,6 +180,7 @@ export const StatusGrid: React.FC<StatusProps> = ({
                   color: '#333333', // Escrita escura na descrição
                 },
             ]}
+            numberOfLines={1}
           >
             {descManutencao}
           </Text>

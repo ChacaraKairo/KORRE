@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
-import { Alert } from 'react-native';
 import db from '../../database/DatabaseInit';
+import { PhotoService } from '../../components/telas/Cadastro/script/photoService';
+import { showCustomAlert } from '../alert/useCustomAlert';
 
 export function usePerfil() {
   const router = useRouter();
@@ -63,21 +64,45 @@ export function usePerfil() {
         `UPDATE perfil_usuario SET ${campo} = ? WHERE id = ?`,
         [valorFormatado, usuario.id],
       );
-      Alert.alert(
+      showCustomAlert(
         'Sucesso',
         'A tua meta diária foi atualizada!',
       );
     } catch (error) {
       console.error('Erro ao salvar meta:', error);
-      Alert.alert(
+      showCustomAlert(
         'Erro',
         'Não foi possível atualizar a meta.',
       );
     }
   };
+  const alterarFoto = async () => {
+    try {
+      const novaFotoUri = await PhotoService.takePhoto(
+        usuario?.foto_uri,
+      );
+
+      if (novaFotoUri) {
+        // Atualiza no banco de dados
+        await db.runAsync(
+          'UPDATE perfil_usuario SET foto_uri = ? WHERE id = ?',
+          [novaFotoUri, usuario.id],
+        );
+
+        // Atualiza a tela imediatamente (recarrega os dados do utilizador)
+        carregarDados();
+      }
+    } catch (error) {
+      console.error('Erro ao alterar foto:', error);
+      showCustomAlert(
+        'Erro',
+        'Não foi possível alterar a foto de perfil.',
+      );
+    }
+  };
 
   const realizarLogout = () => {
-    Alert.alert(
+    showCustomAlert(
       'Sair da Conta',
       'Tens a certeza que desejas sair?',
       [
@@ -99,6 +124,7 @@ export function usePerfil() {
     setMeta,
     tipoMeta,
     loading,
+    alterarFoto,
     salvarMeta,
     realizarLogout,
     carregarDados,
