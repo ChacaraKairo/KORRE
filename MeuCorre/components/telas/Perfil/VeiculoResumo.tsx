@@ -6,16 +6,16 @@ import {
   Alert,
 } from 'react-native';
 import {
-  Bike,
-  Motorbike,
-  Car,
-  Bus,
   ArrowLeftRight,
   Settings2,
-} from 'lucide-react-native'; // Atualizei os ícones
+} from 'lucide-react-native';
 import { useRouter } from 'expo-router'; // Adicionado para a navegação
 import { styles } from '../../../styles/telas/Perfil/perfilStyles';
 import { useTema } from '../../../hooks/modo_tema';
+import {
+  VEICULOS_CONFIG,
+  TipoVeiculo,
+} from '../../../type/typeVeiculos';
 
 interface Props {
   veiculo: any;
@@ -80,15 +80,14 @@ export const VeiculoResumo = ({
               },
             ]}
           >
-            {veiculo?.tipo === 'carro' ? (
-              <Car size={20} color="#00C853" />
-            ) : veiculo?.tipo === 'van' ? (
-              <Bus size={20} color="#00C853" />
-            ) : veiculo?.tipo === 'bicicleta' ? (
-              <Bike size={20} color="#00C853" />
-            ) : (
-              <Motorbike size={20} color="#00C853" />
-            )}
+            {(() => {
+              const tipo =
+                (veiculo?.tipo as TipoVeiculo) || 'moto';
+              const Icone =
+                VEICULOS_CONFIG[tipo]?.icone ||
+                VEICULOS_CONFIG.moto.icone;
+              return <Icone size={20} color="#00C853" />;
+            })()}
           </View>
 
           <View style={{ flex: 1 }}>

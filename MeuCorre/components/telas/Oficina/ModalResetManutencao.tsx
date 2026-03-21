@@ -17,11 +17,18 @@ import { IconeServico } from './ItemManutencaoCard';
 interface Props {
   visible: boolean;
   onClose: () => void;
-  onConfirm: (valor: number) => void;
+  onConfirm: (
+    valor: number,
+    novoIntKm: number | null,
+    novoIntMeses: number | null,
+  ) => void;
   itemNome: string;
   itemIcone: string;
+  itemIntervaloKm: number | null;
+  itemIntervaloMeses: number | null;
   kmAtual: number;
   ultimoValor: number;
+  isVirtual?: boolean;
 }
 
 export const ModalResetManutencao = ({
@@ -30,17 +37,22 @@ export const ModalResetManutencao = ({
   onConfirm,
   itemNome,
   itemIcone,
+  itemIntervaloKm,
+  itemIntervaloMeses,
   kmAtual,
   ultimoValor,
+  isVirtual,
 }: Props) => {
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
   const [valor, setValor] = useState('0,00');
+  const [intervaloKm, setIntervaloKm] = useState('');
+  const [intervaloMeses, setIntervaloMeses] = useState('');
 
-  // Atualiza o valor para o do último histórico registado (ou 0 se não houver)
   useEffect(() => {
     if (visible) {
+      // Atualiza o valor para o do último histórico registado (ou 0 se não houver)
       if (ultimoValor > 0) {
         let formattedValue = ultimoValor.toFixed(2);
         formattedValue = formattedValue.replace('.', ',');
@@ -52,8 +64,22 @@ export const ModalResetManutencao = ({
       } else {
         setValor('0,00');
       }
+
+      setIntervaloKm(
+        itemIntervaloKm ? itemIntervaloKm.toString() : '',
+      );
+      setIntervaloMeses(
+        itemIntervaloMeses
+          ? itemIntervaloMeses.toString()
+          : '',
+      );
     }
-  }, [visible, ultimoValor]);
+  }, [
+    visible,
+    ultimoValor,
+    itemIntervaloKm,
+    itemIntervaloMeses,
+  ]);
 
   const handleValueChange = (text: string) => {
     const cleanText = text.replace(/\D/g, '');
@@ -76,7 +102,20 @@ export const ModalResetManutencao = ({
     const valorNumerico = parseFloat(
       valor.replace(/\./g, '').replace(',', '.') || '0',
     );
-    onConfirm(valorNumerico);
+    const intKmNum = parseInt(
+      intervaloKm.replace(/\D/g, ''),
+      10,
+    );
+    const intMesesNum = parseInt(
+      intervaloMeses.replace(/\D/g, ''),
+      10,
+    );
+
+    onConfirm(
+      valorNumerico,
+      isNaN(intKmNum) ? null : intKmNum,
+      isNaN(intMesesNum) ? null : intMesesNum,
+    );
   };
 
   const dataAtual = new Date().toLocaleDateString('pt-BR');
@@ -231,6 +270,108 @@ export const ModalResetManutencao = ({
                       {kmAtual} km
                     </Text>
                   </View>
+                </View>
+              </View>
+
+              {isVirtual && (
+                <View
+                  style={{
+                    marginBottom: 16,
+                    padding: 12,
+                    backgroundColor:
+                      'rgba(255, 193, 7, 0.1)',
+                    borderRadius: 12,
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 193, 7, 0.3)',
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: '#FFC107',
+                      fontSize: 12,
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Primeira Vez: Confere os intervalos
+                    desta manutenção para a tua máquina.
+                    Podes alterá-los à vontade!
+                  </Text>
+                </View>
+              )}
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 12,
+                  marginBottom: 16,
+                }}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={[
+                      styles.label,
+                      { color: isDark ? '#888' : '#555' },
+                    ]}
+                  >
+                    REFAZER A CADA (KM)
+                  </Text>
+                  <TextInput
+                    style={[
+                      styles.input,
+                      {
+                        backgroundColor: isDark
+                          ? '#0A0A0A'
+                          : '#F5F5F5',
+                        borderColor: isDark
+                          ? '#333'
+                          : '#E0E0E0',
+                        color: isDark ? '#FFF' : '#000',
+                        fontSize: 16,
+                        padding: 12,
+                      },
+                    ]}
+                    placeholder="Ex: 5000"
+                    placeholderTextColor={
+                      isDark ? '#666' : '#999'
+                    }
+                    value={intervaloKm}
+                    onChangeText={setIntervaloKm}
+                    keyboardType="numeric"
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={[
+                      styles.label,
+                      { color: isDark ? '#888' : '#555' },
+                    ]}
+                  >
+                    REFAZER A CADA (MESES)
+                  </Text>
+                  <TextInput
+                    style={[
+                      styles.input,
+                      {
+                        backgroundColor: isDark
+                          ? '#0A0A0A'
+                          : '#F5F5F5',
+                        borderColor: isDark
+                          ? '#333'
+                          : '#E0E0E0',
+                        color: isDark ? '#FFF' : '#000',
+                        fontSize: 16,
+                        padding: 12,
+                      },
+                    ]}
+                    placeholder="Ex: 6"
+                    placeholderTextColor={
+                      isDark ? '#666' : '#999'
+                    }
+                    value={intervaloMeses}
+                    onChangeText={setIntervaloMeses}
+                    keyboardType="numeric"
+                  />
                 </View>
               </View>
 

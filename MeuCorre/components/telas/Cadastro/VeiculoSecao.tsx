@@ -6,22 +6,18 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {
-  Settings,
-  Bike, // Para Bicicleta
-  Motorbike, // Para Moto
-  Car,
-  Gauge,
-  Bus,
-} from 'lucide-react-native';
+import { Settings, Gauge } from 'lucide-react-native';
 import { Input } from '../../ui/inputs/Input';
 import { styles } from '../../../styles/telas/Cadastro/componentes/cadastroStyles';
+import {
+  VEICULOS_CONFIG,
+  VEICULOS_LISTA,
+  TipoVeiculo,
+} from '../../../type/typeVeiculos';
 
 interface VeiculoProps {
-  tipo: 'moto' | 'carro' | 'bicicleta' | 'van';
-  setTipo: (
-    t: 'moto' | 'carro' | 'bicicleta' | 'van',
-  ) => void;
+  tipo: TipoVeiculo;
+  setTipo: (t: TipoVeiculo) => void;
   marca: string;
   setMarca: (t: string) => void;
   modelo: string;
@@ -54,48 +50,9 @@ export const VeiculoSecao: React.FC<VeiculoProps> = ({
   setKm,
   erro,
 }) => {
-  // Mapeamento de placeholders baseados no tipo selecionado
-  const getPlaceholders = () => {
-    switch (tipo) {
-      case 'moto':
-        return {
-          marca: 'Ex: Honda',
-          modelo: 'Ex: CG Titan',
-          motor: 'Ex: 160cc',
-          placa: 'ABC1D23',
-        };
-      case 'carro':
-        return {
-          marca: 'Ex: Fiat',
-          modelo: 'Ex: Toro',
-          motor: 'Ex: 2.0',
-          placa: 'ABC1D23',
-        };
-      case 'bicicleta':
-        return {
-          marca: 'Ex: Caloi / Oggi',
-          modelo: 'Ex: Vulcan',
-          motor: 'Ex: N/A ou 250W', // Bicicletas normais não têm motor, elétricas sim
-          placa: 'Opcional para Bike',
-        };
-      case 'van':
-        return {
-          marca: 'Ex: Mercedes',
-          modelo: 'Ex: Sprinter',
-          motor: 'Ex: 2.2',
-          placa: 'ABC1D23',
-        };
-      default:
-        return {
-          marca: 'Marca',
-          modelo: 'Modelo',
-          motor: 'Motor',
-          placa: 'Placa',
-        };
-    }
-  };
-
-  const placeholders = getPlaceholders();
+  const configAtual =
+    VEICULOS_CONFIG[tipo] || VEICULOS_CONFIG.moto;
+  const placeholders = configAtual.placeholders;
 
   return (
     <View style={styles.card}>
@@ -104,104 +61,34 @@ export const VeiculoSecao: React.FC<VeiculoProps> = ({
         <Text style={styles.labelSecao}>TUA MÁQUINA</Text>
       </View>
 
-      {/* SELETOR DE TIPO EM GRID 2x2 */}
       <View style={localStyles.selectorGrid}>
-        <View style={localStyles.selectorRow}>
-          <TouchableOpacity
-            style={[
-              localStyles.selectBtn,
-              tipo === 'moto' && localStyles.selectBtnAtivo,
-            ]}
-            onPress={() => setTipo('moto')}
-          >
-            <Motorbike
-              size={24}
-              color={tipo === 'moto' ? '#00C853' : '#444'}
-            />
-            <Text
+        {VEICULOS_LISTA.map((vConfig) => {
+          const Icone = vConfig.icone;
+          const isAtivo = tipo === vConfig.id;
+          return (
+            <TouchableOpacity
+              key={vConfig.id}
               style={[
-                localStyles.selectLabel,
-                tipo === 'moto' &&
-                  localStyles.selectLabelAtivo,
+                localStyles.selectBtn,
+                isAtivo && localStyles.selectBtnAtivo,
               ]}
+              onPress={() => setTipo(vConfig.id)}
             >
-              MOTO
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              localStyles.selectBtn,
-              tipo === 'carro' &&
-                localStyles.selectBtnAtivo,
-            ]}
-            onPress={() => setTipo('carro')}
-          >
-            <Car
-              size={24}
-              color={tipo === 'carro' ? '#00C853' : '#444'}
-            />
-            <Text
-              style={[
-                localStyles.selectLabel,
-                tipo === 'carro' &&
-                  localStyles.selectLabelAtivo,
-              ]}
-            >
-              CARRO
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={localStyles.selectorRow}>
-          {/* BOTÃO DA BICICLETA (Substituiu o Caminhão) */}
-          <TouchableOpacity
-            style={[
-              localStyles.selectBtn,
-              tipo === 'bicicleta' &&
-                localStyles.selectBtnAtivo,
-            ]}
-            onPress={() => setTipo('bicicleta')}
-          >
-            <Bike
-              size={24}
-              color={
-                tipo === 'bicicleta' ? '#00C853' : '#444'
-              }
-            />
-            <Text
-              style={[
-                localStyles.selectLabel,
-                tipo === 'bicicleta' &&
-                  localStyles.selectLabelAtivo,
-              ]}
-            >
-              BICICLETA
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              localStyles.selectBtn,
-              tipo === 'van' && localStyles.selectBtnAtivo,
-            ]}
-            onPress={() => setTipo('van')}
-          >
-            <Bus
-              size={24}
-              color={tipo === 'van' ? '#00C853' : '#444'}
-            />
-            <Text
-              style={[
-                localStyles.selectLabel,
-                tipo === 'van' &&
-                  localStyles.selectLabelAtivo,
-              ]}
-            >
-              VAN
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Icone
+                size={24}
+                color={isAtivo ? '#00C853' : '#444'}
+              />
+              <Text
+                style={[
+                  localStyles.selectLabel,
+                  isAtivo && localStyles.selectLabelAtivo,
+                ]}
+              >
+                {vConfig.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
       {/* INPUTS COM EXEMPLOS DINÂMICOS */}
@@ -226,8 +113,7 @@ export const VeiculoSecao: React.FC<VeiculoProps> = ({
         </View>
       </View>
 
-      {/* Só exibe Ano e Motor se NÃO for bicicleta */}
-      {tipo !== 'bicicleta' && (
+      {configAtual.requerMotor && (
         <View style={localStyles.row}>
           <View style={localStyles.flex1}>
             <Input
@@ -244,15 +130,13 @@ export const VeiculoSecao: React.FC<VeiculoProps> = ({
               placeholder={placeholders.motor}
               value={motor}
               onChangeText={setMotor}
-              // Validação condicional já existente mantida
-              erro={erro && tipo !== 'bicicleta' && !motor}
+              erro={erro && !motor}
             />
           </View>
         </View>
       )}
 
-      {/* Oculta Placa se for bicicleta */}
-      {tipo !== 'bicicleta' && (
+      {configAtual.requerPlaca && (
         <Input
           label="Placa"
           placeholder={placeholders.placa}
@@ -263,7 +147,7 @@ export const VeiculoSecao: React.FC<VeiculoProps> = ({
         />
       )}
 
-      {tipo !== 'bicicleta' && (
+      {configAtual.requerOdometro && (
         <Input
           label="Quilometragem Atual"
           placeholder="Ex: 12500"
@@ -271,8 +155,6 @@ export const VeiculoSecao: React.FC<VeiculoProps> = ({
           onChangeText={setKm}
           keyboardType="numeric"
           Icone={Gauge}
-          // Se a pessoa usa bike sem ciclocomputador, pode não saber os Km iniciais.
-          // Mas mantive a validação caso você exija começar do zero.
           erro={erro && !km}
         />
       )}
@@ -288,12 +170,10 @@ const localStyles = StyleSheet.create({
     marginBottom: 16,
   },
   selectorGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 12,
     marginBottom: 20,
-  },
-  selectorRow: {
-    flexDirection: 'row',
-    gap: 12,
   },
   row: {
     flexDirection: 'row',
@@ -303,7 +183,8 @@ const localStyles = StyleSheet.create({
     flex: 1,
   },
   selectBtn: {
-    flex: 1,
+    flexBasis: '30%',
+    flexGrow: 1,
     height: 70,
     backgroundColor: '#202020',
     borderRadius: 16,

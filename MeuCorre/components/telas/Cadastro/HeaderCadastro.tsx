@@ -4,47 +4,28 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
-  Bike,
-  Motorbike,
-  Car,
-  Bus,
-} from 'lucide-react-native';
+  VEICULOS_CONFIG,
+  TipoVeiculo,
+} from '../../../type/typeVeiculos';
 
 interface HeaderProps {
-  tipoVeiculo: 'moto' | 'carro' | 'bicicleta' | 'van';
+  tipoVeiculo: TipoVeiculo;
 }
 
 export const HeaderCadastro: React.FC<HeaderProps> = ({
   tipoVeiculo,
 }) => {
+  const Icone =
+    VEICULOS_CONFIG[tipoVeiculo]?.icone ||
+    VEICULOS_CONFIG.moto.icone;
   return (
     <View style={headerStyles.header}>
       <View style={headerStyles.iconContainer}>
-        {tipoVeiculo === 'carro' ? (
-          <Car
-            size={40}
-            color="#0A0A0A"
-            strokeWidth={2.5}
-          />
-        ) : tipoVeiculo === 'van' ? (
-          <Bus
-            size={40}
-            color="#0A0A0A"
-            strokeWidth={2.5}
-          />
-        ) : tipoVeiculo === 'bicicleta' ? (
-          <Bike
-            size={40}
-            color="#0A0A0A"
-            strokeWidth={2.5}
-          />
-        ) : (
-          <Motorbike
-            size={40}
-            color="#0A0A0A"
-            strokeWidth={2.5}
-          />
-        )}
+        <Icone
+          size={40}
+          color="#0A0A0A"
+          strokeWidth={2.5}
+        />
       </View>
       <Text style={headerStyles.titulo}>MeuCorre</Text>
       <Text style={headerStyles.subtitulo}>

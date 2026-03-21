@@ -140,8 +140,15 @@ export default function OficinaScreen() {
         onConfirm={handleConfirmReset}
         itemNome={modalReset.item?.nome || ''}
         itemIcone={modalReset.item?.icone || 'wrench'}
+        itemIntervaloKm={
+          modalReset.item?.intervalo_km || null
+        }
+        itemIntervaloMeses={
+          modalReset.item?.intervalo_meses || null
+        }
         kmAtual={veiculoConsultado?.km_atual || 0}
         ultimoValor={modalReset.ultimoValor}
+        isVirtual={modalReset.item?.isVirtual}
       />
     </SafeAreaView>
   );

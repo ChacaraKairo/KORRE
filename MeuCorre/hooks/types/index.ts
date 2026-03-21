@@ -1,6 +1,7 @@
 // src/types/index.ts
+import { TipoVeiculo as TV } from '../../type/typeVeiculos';
 
-export type TipoVeiculo = 'moto' | 'carro';
+export type TipoVeiculo = TV;
 
 export interface Veiculo {
   id: number;

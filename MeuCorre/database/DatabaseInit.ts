@@ -22,7 +22,7 @@ export const DatabaseInit = () => {
 
       CREATE TABLE IF NOT EXISTS veiculos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        tipo TEXT CHECK(tipo IN ('moto', 'carro', 'caminhao', 'van', 'bicicleta')) NOT NULL,
+        tipo TEXT CHECK(tipo IN ('moto', 'carro', 'caminhao', 'van', 'bicicleta', 'carro_eletrico')) NOT NULL,
         marca TEXT,
         modelo TEXT NOT NULL,
         ano INTEGER,
@@ -90,23 +90,6 @@ export const DatabaseInit = () => {
         data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
       );
     `);
-
-    // --- MIGRAÇÃO SEGURA PARA ADICIONAR COLUNAS EM TABELAS EXISTENTES ---
-    try {
-      db.execSync(
-        `ALTER TABLE itens_manutencao ADD COLUMN ultima_troca_data DATE DEFAULT (date('now', 'localtime'));`,
-      );
-    } catch (e) {
-      /* Ignora se a coluna já existir */
-    }
-
-    try {
-      db.execSync(
-        `ALTER TABLE itens_manutencao ADD COLUMN intervalo_meses INTEGER;`,
-      );
-    } catch (e) {
-      /* Ignora se a coluna já existir */
-    }
 
     console.log(
       '[BANCO] Esquema de tabelas criado/verificado com sucesso.',

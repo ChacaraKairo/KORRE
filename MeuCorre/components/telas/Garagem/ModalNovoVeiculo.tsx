@@ -14,10 +14,6 @@ import {
 } from 'react-native';
 import {
   X,
-  Bike,
-  Motorbike,
-  Car,
-  Bus,
   Settings,
   Hash,
   Wrench,
@@ -25,6 +21,11 @@ import {
   Check,
 } from 'lucide-react-native';
 import { useTema } from '../../../hooks/modo_tema';
+import {
+  TipoVeiculo,
+  VEICULOS_CONFIG,
+  VEICULOS_LISTA,
+} from '../../../type/typeVeiculos';
 
 interface Props {
   visible: boolean;
@@ -40,9 +41,7 @@ export const ModalNovoVeiculo = ({
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
-  const [tipo, setTipo] = useState<
-    'moto' | 'carro' | 'bicicleta' | 'van'
-  >('moto');
+  const [tipo, setTipo] = useState<TipoVeiculo>('moto');
   const [marca, setMarca] = useState('');
   const [modelo, setModelo] = useState('');
   const [ano, setAno] = useState('');
@@ -53,15 +52,16 @@ export const ModalNovoVeiculo = ({
   const [salvando, setSalvando] = useState(false);
 
   const handleSalvar = async () => {
-    const isBicicleta = tipo === 'bicicleta';
+    const config = VEICULOS_CONFIG[tipo];
     if (
       !marca ||
       !modelo ||
-      (!isBicicleta && (!placa || !kmAtual))
+      (config.requerPlaca && !placa) ||
+      (config.requerOdometro && !kmAtual)
     ) {
       Alert.alert(
         'Erro',
-        isBicicleta
+        config.requerPlaca
           ? 'Por favor, preenche os campos obrigatórios: Marca e Modelo.'
           : 'Por favor, preenche os campos obrigatórios: Marca, Modelo, Placa e KM.',
       );
@@ -101,42 +101,9 @@ export const ModalNovoVeiculo = ({
   const textSecondary = isDark ? '#888' : '#555';
   const inputBg = isDark ? '#0A0A0A' : '#F5F5F5';
 
-  const getPlaceholders = () => {
-    switch (tipo) {
-      case 'moto':
-        return {
-          marca: 'Ex: Honda',
-          modelo: 'Ex: CG Titan',
-          placa: 'ABC-1D23',
-        };
-      case 'carro':
-        return {
-          marca: 'Ex: Fiat',
-          modelo: 'Ex: Toro',
-          placa: 'ABC-1D23',
-        };
-      case 'bicicleta':
-        return {
-          marca: 'Ex: Caloi / Oggi',
-          modelo: 'Ex: Vulcan',
-          placa: '',
-        };
-      case 'van':
-        return {
-          marca: 'Ex: Mercedes',
-          modelo: 'Ex: Sprinter',
-          placa: 'ABC-1D23',
-        };
-      default:
-        return {
-          marca: 'Marca',
-          modelo: 'Modelo',
-          placa: 'Placa',
-        };
-    }
-  };
-
-  const placeholders = getPlaceholders();
+  // Agora resgatamos as configurações do dicionário
+  const configAtual = VEICULOS_CONFIG[tipo];
+  const placeholders = configAtual.placeholders;
 
   return (
     <Modal
@@ -192,146 +159,46 @@ export const ModalNovoVeiculo = ({
                 >
                   Tipo de Veículo
                 </Text>
-                <View style={styles.row}>
-                  <TouchableOpacity
-                    onPress={() => setTipo('moto')}
-                    style={[
-                      styles.btnTipo,
-                      {
-                        backgroundColor: bgCard,
-                        borderColor,
-                      },
-                      tipo === 'moto' &&
-                        styles.btnTipoAtivo,
-                    ]}
-                  >
-                    <Motorbike
-                      size={32}
-                      color={
-                        tipo === 'moto'
-                          ? '#00C853'
-                          : textSecondary
-                      }
-                    />
-                    <Text
-                      style={[
-                        styles.txtTipo,
-                        {
-                          color:
-                            tipo === 'moto'
+                <View style={styles.gridTipos}>
+                  {VEICULOS_LISTA.map((vConfig) => {
+                    const Icone = vConfig.icone;
+                    const isAtivo = tipo === vConfig.id;
+                    return (
+                      <TouchableOpacity
+                        key={vConfig.id}
+                        onPress={() => setTipo(vConfig.id)}
+                        style={[
+                          styles.btnTipo,
+                          {
+                            backgroundColor: bgCard,
+                            borderColor,
+                          },
+                          isAtivo && styles.btnTipoAtivo,
+                        ]}
+                      >
+                        <Icone
+                          size={32}
+                          color={
+                            isAtivo
                               ? '#00C853'
-                              : textSecondary,
-                        },
-                      ]}
-                    >
-                      MOTO
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => setTipo('carro')}
-                    style={[
-                      styles.btnTipo,
-                      {
-                        backgroundColor: bgCard,
-                        borderColor,
-                      },
-                      tipo === 'carro' &&
-                        styles.btnTipoAtivo,
-                    ]}
-                  >
-                    <Car
-                      size={32}
-                      color={
-                        tipo === 'carro'
-                          ? '#00C853'
-                          : textSecondary
-                      }
-                    />
-                    <Text
-                      style={[
-                        styles.txtTipo,
-                        {
-                          color:
-                            tipo === 'carro'
-                              ? '#00C853'
-                              : textSecondary,
-                        },
-                      ]}
-                    >
-                      CARRO
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View
-                  style={[styles.row, { marginTop: 12 }]}
-                >
-                  <TouchableOpacity
-                    onPress={() => setTipo('bicicleta')}
-                    style={[
-                      styles.btnTipo,
-                      {
-                        backgroundColor: bgCard,
-                        borderColor,
-                      },
-                      tipo === 'bicicleta' &&
-                        styles.btnTipoAtivo,
-                    ]}
-                  >
-                    <Bike
-                      size={32}
-                      color={
-                        tipo === 'bicicleta'
-                          ? '#00C853'
-                          : textSecondary
-                      }
-                    />
-                    <Text
-                      style={[
-                        styles.txtTipo,
-                        {
-                          color:
-                            tipo === 'bicicleta'
-                              ? '#00C853'
-                              : textSecondary,
-                        },
-                      ]}
-                    >
-                      BICICLETA
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => setTipo('van')}
-                    style={[
-                      styles.btnTipo,
-                      {
-                        backgroundColor: bgCard,
-                        borderColor,
-                      },
-                      tipo === 'van' && styles.btnTipoAtivo,
-                    ]}
-                  >
-                    <Bus
-                      size={32}
-                      color={
-                        tipo === 'van'
-                          ? '#00C853'
-                          : textSecondary
-                      }
-                    />
-                    <Text
-                      style={[
-                        styles.txtTipo,
-                        {
-                          color:
-                            tipo === 'van'
-                              ? '#00C853'
-                              : textSecondary,
-                        },
-                      ]}
-                    >
-                      VAN
-                    </Text>
-                  </TouchableOpacity>
+                              : textSecondary
+                          }
+                        />
+                        <Text
+                          style={[
+                            styles.txtTipo,
+                            {
+                              color: isAtivo
+                                ? '#00C853'
+                                : textSecondary,
+                            },
+                          ]}
+                        >
+                          {vConfig.label}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
                 </View>
               </View>
 
@@ -405,7 +272,7 @@ export const ModalNovoVeiculo = ({
                   </View>
                 </View>
 
-                {tipo !== 'bicicleta' && (
+                {configAtual.requerPlaca && (
                   <View
                     style={[
                       styles.inputWrapper,
@@ -449,7 +316,7 @@ export const ModalNovoVeiculo = ({
               </View>
 
               {/* Técnico e Consumo */}
-              {tipo !== 'bicicleta' && (
+              {configAtual.requerOdometro && (
                 <View
                   style={[
                     styles.card,
@@ -604,8 +471,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   row: { flexDirection: 'row', gap: 12 },
+  gridTipos: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
   btnTipo: {
-    flex: 1,
+    flexBasis: '47%',
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,

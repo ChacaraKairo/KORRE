@@ -1,10 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import {
-  Bike,
-  Motorbike,
-  Car,
-  Bus,
   CheckCircle2,
   Gauge,
   AlertCircle,
@@ -15,6 +11,10 @@ import {
 import { styles } from '../../../styles/telas/Garagem/garagemStyles';
 import { useRouter } from 'expo-router';
 import { useTema } from '../../../hooks/modo_tema';
+import {
+  VEICULOS_CONFIG,
+  TipoVeiculo,
+} from '../../../type/typeVeiculos';
 
 interface Props {
   v: any;
@@ -33,13 +33,12 @@ export const CardVeiculoGaragem = ({
   const isAtivo = v.ativo === 1;
 
   const renderIcon = (size: number, color: string) => {
-    if (v.tipo === 'carro')
-      return <Car size={size} color={color} />;
-    if (v.tipo === 'van')
-      return <Bus size={size} color={color} />;
-    if (v.tipo === 'bicicleta')
-      return <Bike size={size} color={color} />;
-    return <Motorbike size={size} color={color} />;
+    // Pega as definições do veículo do nosso dicionário ou cai no padrão 'moto'
+    const tipo = (v.tipo as TipoVeiculo) || 'moto';
+    const config =
+      VEICULOS_CONFIG[tipo] || VEICULOS_CONFIG.moto;
+    const Icone = config.icone;
+    return <Icone size={size} color={color} />;
   };
 
   return (

@@ -212,7 +212,7 @@ export const useDashboard = () => {
 
   // Handlers de Ação (Funções de clique)
   const onPressConfig = () =>
-    Alert.alert('Definições', 'Abrir definições');
+    router.push('/configuracoes' as any);
   const onTrocarVeiculo = () =>
     Alert.alert('Navegação', 'Ir para Garagem');
   const onIrParaOficina = () => router.push('/oficina');

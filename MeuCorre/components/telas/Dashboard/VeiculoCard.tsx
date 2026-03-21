@@ -1,10 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import {
-  Bike,
-  Car,
-  Motorbike,
-  Bus,
   Warehouse,
   ClipboardList,
   X,
@@ -13,10 +9,14 @@ import { dashboardStyles as styles } from '../../../styles/telas/Dashboard/dashb
 import { useTema } from '../../../hooks/modo_tema';
 import db from '../../../database/DatabaseInit';
 import { useRouter } from 'expo-router';
+import {
+  VEICULOS_CONFIG,
+  TipoVeiculo,
+} from '../../../type/typeVeiculos';
 
 interface VeiculoProps {
   veiculo: {
-    tipo: 'moto' | 'carro' | 'bicicleta' | 'van';
+    tipo: TipoVeiculo;
     modelo: string;
     placa: string;
   } | null;
@@ -55,19 +55,15 @@ export const VeiculoCard: React.FC<VeiculoProps> = ({
           }}
         >
           <View style={styles.veiculoIconeBadge}>
-            {/* Lógica de Ícones Dinâmica */}
-            {(!veiculo || veiculo.tipo === 'moto') && (
-              <Motorbike size={32} color="#0A0A0A" />
-            )}
-            {veiculo?.tipo === 'bicicleta' && (
-              <Bike size={32} color="#0A0A0A" />
-            )}
-            {veiculo?.tipo === 'carro' && (
-              <Car size={32} color="#0A0A0A" />
-            )}
-            {veiculo?.tipo === 'van' && (
-              <Bus size={32} color="#0A0A0A" />
-            )}
+            {(() => {
+              // Lógica de Ícones Dinâmica baseada no typeVeiculos
+              const tipo =
+                (veiculo?.tipo as TipoVeiculo) || 'moto';
+              const Icone =
+                VEICULOS_CONFIG[tipo]?.icone ||
+                VEICULOS_CONFIG.moto.icone;
+              return <Icone size={32} color="#0A0A0A" />;
+            })()}
           </View>
           <View>
             <Text
