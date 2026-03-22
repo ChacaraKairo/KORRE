@@ -215,7 +215,7 @@ export const useDashboard = () => {
   const onPressConfig = () =>
     router.push('/configuracoes' as any);
   const onTrocarVeiculo = () =>
-    showCustomAlert('Navegação', 'Ir para Garagem');
+    router.push('/garagem' as any);
   const onIrParaOficina = () => router.push('/oficina');
   const router = useRouter();
 

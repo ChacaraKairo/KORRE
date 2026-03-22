@@ -5,6 +5,10 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Modal,
+  ActivityIndicator,
+  RefreshControl,
+  Platform,
 } from 'react-native';
 import { ArrowLeft, Plus } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
@@ -22,9 +26,12 @@ import { ModalResetManutencao } from '../../components/telas/Oficina/ModalResetM
 export default function OficinaScreen() {
   const router = useRouter();
   const {
+    logs,
+    loading,
+    refreshing,
+    onRefresh,
     veiculoConsultado,
     itensVisiveis,
-    setListaAberta,
     modalNovoItem,
     setModalNovoItem,
     modalReset,
@@ -87,27 +94,104 @@ export default function OficinaScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <CardVeiculoOficina
-          veiculo={veiculoConsultado}
-          statusResumo={statusResumo}
-          onOpenSelector={() => setListaAberta(true)}
-        />
-
-        <View>
-          {itensVisiveis.map((item: any) => (
-            <ItemManutencaoCard
-              key={item.id}
-              item={item}
-              info={calcularProgresso(item)}
-              onResetPress={() => handleReset(item)}
-            />
-          ))}
+      {loading ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ActivityIndicator size="large" color="#00C853" />
         </View>
-      </ScrollView>
+      ) : (
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#00C853']}
+              tintColor="#00C853"
+            />
+          }
+        >
+          <CardVeiculoOficina
+            veiculo={veiculoConsultado}
+            statusResumo={statusResumo}
+            onOpenSelector={() => router.push('/garagem')}
+          />
+
+          <View>
+            {itensVisiveis.map((item: any) => (
+              <ItemManutencaoCard
+                // A chave dinâmica com o id do veículo força o re-render total dos itens na troca
+                key={`${veiculoConsultado?.id || 'v'}_${item.id}`}
+                item={item}
+                info={calcularProgresso(item)}
+                onResetPress={() => handleReset(item)}
+              />
+            ))}
+
+            {/* Console de Logs na Tela */}
+            <View
+              style={{
+                marginTop: 24,
+                padding: 16,
+                backgroundColor: isDark
+                  ? '#111'
+                  : '#E0E0E0',
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: isDark ? '#333' : '#CCC',
+              }}
+            >
+              <Text
+                style={{
+                  color: isDark ? '#00C853' : '#007A33',
+                  fontWeight: 'bold',
+                  marginBottom: 8,
+                  fontSize: 14,
+                }}
+              >
+                Terminal de Logs do Sistema
+              </Text>
+              {logs.length === 0 ? (
+                <Text
+                  style={{
+                    color: isDark ? '#888' : '#666',
+                    fontSize: 12,
+                  }}
+                >
+                  Nenhum evento registado ainda.
+                </Text>
+              ) : (
+                logs.map((log: string, index: number) => (
+                  <Text
+                    key={index}
+                    style={{
+                      color: log.includes('[ERRO]')
+                        ? '#EF4444'
+                        : isDark
+                          ? '#FFF'
+                          : '#000',
+                      fontSize: 10,
+                      marginBottom: 4,
+                      fontFamily:
+                        Platform.OS === 'ios'
+                          ? 'Courier'
+                          : 'monospace',
+                    }}
+                  >
+                    {log}
+                  </Text>
+                ))
+              )}
+            </View>
+          </View>
+        </ScrollView>
+      )}
 
       {/* Modal de Criação de Item */}
       <ModalNovoItem

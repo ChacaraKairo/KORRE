@@ -5,9 +5,11 @@ import {
   MapPin,
   Clock,
   ChevronRight,
+  HelpCircle,
 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTema } from '../../../hooks/modo_tema';
+import { showCustomAlert } from '../../../hooks/alert/useCustomAlert';
 import { styles } from '../../../styles/telas/Dashboard/indicesMCCardStyles';
 
 interface Props {
@@ -61,16 +63,52 @@ export const IndicesMCCard = ({
           </Text>
         </View>
         <View
-          style={[
-            styles.badge,
-            { backgroundColor: 'rgba(0, 200, 83, 0.1)' },
-          ]}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 8,
+          }}
         >
-          <Text
-            style={[styles.badgeText, { color: '#00C853' }]}
+          <View
+            style={[
+              styles.badge,
+              { backgroundColor: 'rgba(0, 200, 83, 0.1)' },
+            ]}
           >
-            Meu Custo Base
-          </Text>
+            <Text
+              style={[
+                styles.badgeText,
+                { color: '#00C853' },
+              ]}
+            >
+              Meu Custo Base
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              const exKm = 8;
+              const exMin = 15;
+              const calcKm = (custoPorKm * exKm)
+                .toFixed(2)
+                .replace('.', ',');
+              const calcMin = (custoPorMinuto * exMin)
+                .toFixed(2)
+                .replace('.', ',');
+              const calcTotal = (
+                custoPorKm * exKm +
+                custoPorMinuto * exMin
+              )
+                .toFixed(2)
+                .replace('.', ',');
+
+              showCustomAlert(
+                'Como calcular o custo da corrida?',
+                `A conta para saberes o teu custo numa viagem é simples:\n\n1️⃣ Multiplica o "Custo / KM" pela distância total da viagem.\n2️⃣ Multiplica o "Custo / Min" pelo tempo estimado.\n3️⃣ Soma os dois resultados!\n\nExemplo para uma corrida de 8km e 15min:\n• ${exKm}km x R$ ${custoPorKm.toFixed(2).replace('.', ',')} = R$ ${calcKm}\n• ${exMin}min x R$ ${custoPorMinuto.toFixed(2).replace('.', ',')} = R$ ${calcMin}\n• Custo Total: R$ ${calcTotal}\n\nPronto! Para teres lucro de verdade nesta corrida, o aplicativo tem de te pagar um valor MAIOR do que R$ ${calcTotal}.`,
+              );
+            }}
+          >
+            <HelpCircle size={20} color={textMuted} />
+          </TouchableOpacity>
         </View>
       </View>
 
