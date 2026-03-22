@@ -1,0 +1,61 @@
+{
+  "configuracoes": {
+    "titulo": "Paramètres de l'App",
+    "aparencia": "Apparence et Notifications",
+    "modo_visualizacao": "Mode d'Affichage",
+    "escuro": "Sombre",
+    "claro": "Clair",
+    "notificacoes": "Notifications Push",
+    "notificacoes_sub": "Alertes d'objectifs et entretien",
+    "regional": "Régional",
+    "idioma": "Langue du Système",
+    "idioma_sub": "Formats de date et de texte",
+    "privacidade": "Confidentialité",
+    "privacidade_dados": "Confidentialité des Données",
+    "privacidade_sub": "Gérer la sécurité locale",
+    "ver": "Voir",
+    "suporte": "Support et Infos",
+    "central_ajuda": "Centre d'Aide",
+    "central_ajuda_sub": "Questions et tutoriels",
+    "termos": "Termes et Conditions",
+    "termos_sub": "Politiques d'utilisation",
+    "versao": "Version de l'Application",
+    "atualizado": "À jour",
+    "selecione_idioma": "Sélectionner la Langue",
+    "cancelar": "Annuler"
+  },
+  "tabs": {
+    "dashboard": "Tableau de Bord",
+    "dados": "Données"
+  },
+  "dashboard": {
+    "boas_vindas": "Pilote",
+    "sem_manutencao": "Aucun entretien",
+    "atrasada": "En retard : {{item}}",
+    "manutencoes_atrasadas": "{{count}} entretiens en retard",
+    "atencao": "Attention : {{item}}",
+    "manutencoes_proximas": "{{count}} entretiens à venir",
+    "proxima": "Prochain : {{item}}",
+    "previsao_amanha": "Prévisions de Demain"
+  },
+  "veiculo_card": {
+    "sem_veiculo": "Aucun Véhicule",
+    "eficiencia": "EFFICACITÉ",
+    "garagem": "Garage",
+    "oficina": "Atelier"
+  },
+  "garagem": {
+    "titulo": "Mon Garage",
+    "frota": "Flotte Enregistrée",
+    "maquinas": "Machines",
+    "nota_1": "En changeant de véhicule, votre ",
+    "nota_dashboard": "Tableau de bord",
+    "nota_2": " surveillera automatiquement l'odomètre et les gains de la machine sélectionnée.",
+    "ativo": "Actif",
+    "saude": "Santé",
+    "excelente": "Excellent",
+    "inativo": "Inactif",
+    "ativar": "Activer la Machine",
+    "gerir": "Gérer l'Atelier"
+  }
+}

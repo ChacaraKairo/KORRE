@@ -4,9 +4,9 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
-  Alert,
+  Modal,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Bell,
   Globe,
@@ -17,8 +17,11 @@ import {
   ShieldCheck,
   HelpCircle,
   FileText,
+  Check,
 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import { showCustomAlert } from '../../hooks/alert/useCustomAlert';
 
 // Lógica e Estilos
 import { useTema } from '../../hooks/modo_tema';
@@ -29,6 +32,7 @@ import { SettingItem } from '../../components/telas/Configuracoes/SettingItem';
 
 export default function ConfiguracoesScreen() {
   const router = useRouter();
+  const { t, i18n } = useTranslation();
 
   // Usando o seu Hook global de Tema
   const { tema, setTema } = useTema();
@@ -36,13 +40,28 @@ export default function ConfiguracoesScreen() {
 
   // Estados locais para outras configurações
   const [notificacoes, setNotificacoes] = useState(true);
-  const [idioma, setIdioma] = useState('Português (PT)');
+  const [modalIdioma, setModalIdioma] = useState(false);
 
   // Cores dinâmicas para a base da tela
   const bgColor = isDark ? '#0A0A0A' : '#F5F5F5';
   const cardColor = isDark ? '#161616' : '#FFFFFF';
   const borderColor = isDark ? '#222' : '#E0E0E0';
   const textMuted = isDark ? '#666' : '#888';
+
+  // Mapeamento dos idiomas disponíveis
+  const idiomas = [
+    { code: 'pt', label: 'Português (PT)' },
+    { code: 'en', label: 'English (EN)' },
+    { code: 'es', label: 'Español (ES)' },
+    { code: 'fr', label: 'Français (FR)' },
+  ];
+
+  const getIdiomaAtual = () => {
+    const lang = idiomas.find(
+      (l) => l.code === i18n.language,
+    );
+    return lang ? lang.label : 'Português (PT)';
+  };
 
   // Função para lidar com a troca de tema
   const handleToggleTema = () => {
@@ -80,9 +99,9 @@ export default function ConfiguracoesScreen() {
           />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>
-          Ajustes do App
+          {t('configuracoes.titulo')}
         </Text>
-        <View style={{ width: 36 }} /> {/* Espaçador */}
+        <View style={{ width: 36 }} />
       </View>
 
       <ScrollView
@@ -97,7 +116,7 @@ export default function ConfiguracoesScreen() {
               { color: textMuted },
             ]}
           >
-            Aparência e Notificações
+            {t('configuracoes.aparencia')}
           </Text>
           <View
             style={[
@@ -108,8 +127,12 @@ export default function ConfiguracoesScreen() {
             <SettingItem
               isDark={isDark}
               icon={isDark ? Moon : Sun}
-              title="Modo de Visualização"
-              subtitle={isDark ? 'Escuro' : 'Claro'}
+              title={t('configuracoes.modo_visualizacao')}
+              subtitle={
+                isDark
+                  ? t('configuracoes.escuro')
+                  : t('configuracoes.claro')
+              }
               action="toggle"
               value={{
                 current: isDark,
@@ -120,8 +143,8 @@ export default function ConfiguracoesScreen() {
               isDark={isDark}
               isLast={true}
               icon={Bell}
-              title="Notificações Push"
-              subtitle="Alertas de metas e manutenção"
+              title={t('configuracoes.notificacoes')}
+              subtitle={t('configuracoes.notificacoes_sub')}
               action="toggle"
               value={{
                 current: notificacoes,
@@ -139,7 +162,7 @@ export default function ConfiguracoesScreen() {
               { color: textMuted },
             ]}
           >
-            Regional
+            {t('configuracoes.regional')}
           </Text>
           <View
             style={[
@@ -151,15 +174,10 @@ export default function ConfiguracoesScreen() {
               isDark={isDark}
               isLast={true}
               icon={Globe}
-              title="Idioma do Sistema"
-              subtitle="Formatos de data e moeda"
-              value={{ label: idioma }}
-              onClick={() =>
-                Alert.alert(
-                  'Idioma',
-                  'Apenas Português disponível no momento.',
-                )
-              }
+              title={t('configuracoes.idioma')}
+              subtitle={t('configuracoes.idioma_sub')}
+              value={{ label: getIdiomaAtual() }}
+              onClick={() => setModalIdioma(true)}
             />
           </View>
         </View>
@@ -172,7 +190,7 @@ export default function ConfiguracoesScreen() {
               { color: textMuted },
             ]}
           >
-            Privacidade
+            {t('configuracoes.privacidade')}
           </Text>
           <View
             style={[
@@ -184,11 +202,11 @@ export default function ConfiguracoesScreen() {
               isDark={isDark}
               isLast={true}
               icon={ShieldCheck}
-              title="Privacidade de Dados"
-              subtitle="Gerir segurança local"
-              value={{ label: 'Ver' }}
+              title={t('configuracoes.privacidade_dados')}
+              subtitle={t('configuracoes.privacidade_sub')}
+              value={{ label: t('configuracoes.ver') }}
               onClick={() =>
-                Alert.alert(
+                showCustomAlert(
                   'Privacidade',
                   'Seus dados são salvos apenas no seu celular.',
                 )
@@ -205,7 +223,7 @@ export default function ConfiguracoesScreen() {
               { color: textMuted },
             ]}
           >
-            Suporte e Info
+            {t('configuracoes.suporte')}
           </Text>
           <View
             style={[
@@ -216,15 +234,17 @@ export default function ConfiguracoesScreen() {
             <SettingItem
               isDark={isDark}
               icon={HelpCircle}
-              title="Central de Ajuda"
-              subtitle="Dúvidas e tutoriais"
+              title={t('configuracoes.central_ajuda')}
+              subtitle={t(
+                'configuracoes.central_ajuda_sub',
+              )}
               onClick={() => router.push('/suporte')} // Link para a tela de Suporte que já criamos!
             />
             <SettingItem
               isDark={isDark}
               icon={FileText}
-              title="Termos e Condições"
-              subtitle="Políticas de uso"
+              title={t('configuracoes.termos')}
+              subtitle={t('configuracoes.termos_sub')}
               onClick={() => router.push('/termos')} // Link para a tela de Termos que já criamos!
             />
 
@@ -265,7 +285,7 @@ export default function ConfiguracoesScreen() {
                       },
                     ]}
                   >
-                    Versão do Aplicativo
+                    {t('configuracoes.versao')}
                   </Text>
                   <Text
                     style={[
@@ -278,12 +298,111 @@ export default function ConfiguracoesScreen() {
                 </View>
               </View>
               <Text style={styles.versaoBadge}>
-                Atualizado
+                {t('configuracoes.atualizado')}
               </Text>
             </View>
           </View>
         </View>
       </ScrollView>
+
+      {/* MODAL DE IDIOMA */}
+      <Modal
+        visible={modalIdioma}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalIdioma(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.6)',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 20,
+          }}
+        >
+          <View
+            style={{
+              width: '100%',
+              backgroundColor: cardColor,
+              borderRadius: 24,
+              padding: 20,
+              borderWidth: 1,
+              borderColor,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: isDark ? '#FFF' : '#000',
+                marginBottom: 20,
+                textAlign: 'center',
+              }}
+            >
+              {t('configuracoes.selecione_idioma')}
+            </Text>
+            {idiomas.map((lang) => (
+              <TouchableOpacity
+                key={lang.code}
+                style={{
+                  paddingVertical: 16,
+                  borderBottomWidth: 1,
+                  borderBottomColor: borderColor,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  i18n.changeLanguage(lang.code);
+                  setModalIdioma(false);
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color:
+                      i18n.language === lang.code
+                        ? '#00C853'
+                        : isDark
+                          ? '#FFF'
+                          : '#000',
+                    fontWeight:
+                      i18n.language === lang.code
+                        ? 'bold'
+                        : 'normal',
+                  }}
+                >
+                  {lang.label}
+                </Text>
+                {i18n.language === lang.code && (
+                  <Check size={20} color="#00C853" />
+                )}
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={{
+                marginTop: 20,
+                paddingVertical: 14,
+                backgroundColor: '#00C853',
+                borderRadius: 12,
+                alignItems: 'center',
+              }}
+              onPress={() => setModalIdioma(false)}
+            >
+              <Text
+                style={{
+                  color: '#0A0A0A',
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                }}
+              >
+                {t('configuracoes.cancelar')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }

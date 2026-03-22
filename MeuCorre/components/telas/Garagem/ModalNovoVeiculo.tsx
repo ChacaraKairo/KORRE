@@ -10,7 +10,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import {
   X,
@@ -26,6 +25,7 @@ import {
   VEICULOS_CONFIG,
   VEICULOS_LISTA,
 } from '../../../type/typeVeiculos';
+import { showCustomAlert } from '../../../hooks/alert/useCustomAlert';
 
 interface Props {
   visible: boolean;
@@ -59,7 +59,10 @@ export const ModalNovoVeiculo = ({
       (config.requerPlaca && !placa) ||
       (config.requerOdometro && !kmAtual)
     ) {
-      Alert.alert(
+      console.log(
+        '[ModalNovoVeiculo] Validação falhou: Campos obrigatórios ausentes.',
+      );
+      showCustomAlert(
         'Erro',
         config.requerPlaca
           ? 'Por favor, preenche os campos obrigatórios: Marca e Modelo.'
@@ -69,6 +72,10 @@ export const ModalNovoVeiculo = ({
     }
 
     setSalvando(true);
+    console.log(
+      '[ModalNovoVeiculo] Coletando dados para salvar...',
+      { tipo, marca, modelo, placa, km_atual: kmAtual },
+    );
     try {
       await onSave({
         tipo,
@@ -88,7 +95,10 @@ export const ModalNovoVeiculo = ({
       setPlaca('');
       setKmAtual('');
     } catch (error) {
-      console.error(error);
+      console.error(
+        '[ModalNovoVeiculo] Erro reportado ao salvar:',
+        error,
+      );
     } finally {
       setSalvando(false);
     }

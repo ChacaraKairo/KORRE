@@ -1,0 +1,61 @@
+{
+  "configuracoes": {
+    "titulo": "App Settings",
+    "aparencia": "Appearance & Notifications",
+    "modo_visualizacao": "Display Mode",
+    "escuro": "Dark",
+    "claro": "Light",
+    "notificacoes": "Push Notifications",
+    "notificacoes_sub": "Goal and maintenance alerts",
+    "regional": "Regional",
+    "idioma": "System Language",
+    "idioma_sub": "Date and text formats",
+    "privacidade": "Privacy",
+    "privacidade_dados": "Data Privacy",
+    "privacidade_sub": "Manage local security",
+    "ver": "View",
+    "suporte": "Support & Info",
+    "central_ajuda": "Help Center",
+    "central_ajuda_sub": "FAQs and tutorials",
+    "termos": "Terms & Conditions",
+    "termos_sub": "Usage policies",
+    "versao": "App Version",
+    "atualizado": "Up to date",
+    "selecione_idioma": "Select Language",
+    "cancelar": "Cancel"
+  },
+  "tabs": {
+    "dashboard": "Dashboard",
+    "dados": "Data"
+  },
+  "dashboard": {
+    "boas_vindas": "Rider",
+    "sem_manutencao": "No maintenance",
+    "atrasada": "Overdue: {{item}}",
+    "manutencoes_atrasadas": "{{count}} overdue maintenance",
+    "atencao": "Attention: {{item}}",
+    "manutencoes_proximas": "{{count}} upcoming maintenance",
+    "proxima": "Next: {{item}}",
+    "previsao_amanha": "Tomorrow's Forecast"
+  },
+  "veiculo_card": {
+    "sem_veiculo": "No Vehicle",
+    "eficiencia": "EFFICIENCY",
+    "garagem": "Garage",
+    "oficina": "Workshop"
+  },
+  "garagem": {
+    "titulo": "My Garage",
+    "frota": "Registered Fleet",
+    "maquinas": "Machines",
+    "nota_1": "When switching between vehicles, your ",
+    "nota_dashboard": "Dashboard",
+    "nota_2": " will automatically monitor the selected machine's odometer and earnings.",
+    "ativo": "Active",
+    "saude": "Health",
+    "excelente": "Excellent",
+    "inativo": "Inactive",
+    "ativar": "Activate Machine",
+    "gerir": "Manage Workshop"
+  }
+}

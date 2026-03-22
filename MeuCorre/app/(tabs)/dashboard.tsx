@@ -16,6 +16,7 @@ import { useOficina } from '../../hooks/oficina/useOficina';
 // Importação dos Componentes (Caminhos atualizados)
 import { FinanceiroMensal } from '../../components/telas/Dashboard/FinanceiroMensal';
 import { FooterCalculadora } from '../../components/telas/Dashboard/FooterCalculadora';
+import { IndicesMCCard } from '../../components/telas/Dashboard/IndicesMCCard';
 import { GanhosCard } from '../../components/telas/Dashboard/GanhosCard';
 import { GastosCard } from '../../components/telas/Dashboard/GastosCard';
 import { HeaderDashboard } from '../../components/telas/Dashboard/HeaderDashboard';
@@ -152,6 +153,15 @@ export default function DashboardScreen() {
           onUpdateKm={onUpdateKm}
           onOpenOficina={onIrParaOficina}
         />
+
+        {/* --- COMPONENTE INSERIDO AQUI --- */}
+        <IndicesMCCard
+          custoPorKm={veiculo?.custo_km_calculado || 0}
+          custoPorMinuto={
+            veiculo?.custo_minuto_calculado || 0
+          }
+        />
+        {/* ------------------------------- */}
 
         <GanhosCard
           ganhosTotal={ganhos}

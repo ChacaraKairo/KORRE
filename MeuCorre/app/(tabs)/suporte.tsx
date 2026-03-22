@@ -19,6 +19,7 @@ import {
 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTema } from '../../hooks/modo_tema';
+import { showCustomAlert } from '../../hooks/alert/useCustomAlert';
 
 import { styles } from '../../styles/telas/Suporte/suporteStyles';
 

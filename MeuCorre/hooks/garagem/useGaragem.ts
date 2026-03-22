@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Alert } from 'react-native';
 import db from '../../database/DatabaseInit';
+import { showCustomAlert } from '../alert/useCustomAlert';
 
 export function useGaragem() {
   const [veiculos, setVeiculos] = useState<any[]>([]);
@@ -23,10 +23,16 @@ export function useGaragem() {
       const lista = await db.getAllAsync(
         'SELECT * FROM veiculos ORDER BY ativo DESC, id ASC',
       );
+      console.log(
+        `[Garagem] ${lista.length} veículos carregados do banco.`,
+      );
       setVeiculos(lista);
     } catch (error) {
-      console.error('Erro ao buscar veículos:', error);
-      Alert.alert(
+      console.error(
+        '[Garagem] Erro ao buscar veículos:',
+        error,
+      );
+      showCustomAlert(
         'Erro',
         'Não foi possível carregar a sua garagem.',
       );
@@ -42,6 +48,9 @@ export function useGaragem() {
   // --- LÓGICA DE TROCA ---
   const ativarVeiculo = async (veiculo: any) => {
     try {
+      console.log(
+        `[Garagem] Tentando ativar veículo ID: ${veiculo.id} (${veiculo.modelo})`,
+      );
       // 1. Desativa todos
       await db.runAsync('UPDATE veiculos SET ativo = 0');
       // 2. Ativa apenas o selecionado
@@ -50,10 +59,16 @@ export function useGaragem() {
         [veiculo.id],
       );
 
+      console.log(
+        `[Garagem] Veículo ID: ${veiculo.id} ativado com sucesso!`,
+      );
       await carregarVeiculos(); // Recarrega a lista
     } catch (error) {
-      console.error('Erro ao trocar veículo ativo:', error);
-      Alert.alert(
+      console.error(
+        '[Garagem] Erro ao trocar veículo ativo:',
+        error,
+      );
+      showCustomAlert(
         'Erro',
         'Não foi possível ativar o veículo.',
       );
@@ -63,6 +78,10 @@ export function useGaragem() {
   // --- LÓGICA DE ADIÇÃO ---
   const adicionarVeiculo = async (novoVeiculo: any) => {
     try {
+      console.log(
+        '[Garagem] Tentando inserir novo veículo no banco de dados...',
+        novoVeiculo,
+      );
       await db.runAsync(
         `INSERT INTO veiculos (tipo, modelo, placa, km_atual, ativo) VALUES (?, ?, ?, ?, ?)`,
         [
@@ -73,11 +92,17 @@ export function useGaragem() {
           veiculos.length === 0 ? 1 : 0, // Se for o primeiro registo, já fica ativo
         ],
       );
+      console.log(
+        '[Garagem] Veículo inserido com sucesso!',
+      );
       await carregarVeiculos(); // Recarrega a lista
       setModalNovo(false);
     } catch (error) {
-      console.error('Erro ao adicionar veículo:', error);
-      Alert.alert(
+      console.error(
+        '[Garagem] ERRO CRÍTICO ao adicionar veículo:',
+        error,
+      );
+      showCustomAlert(
         'Erro',
         'Não foi possível adicionar a nova máquina.',
       );
@@ -101,6 +126,9 @@ export function useGaragem() {
       modalDelete.veiculo.placa.toUpperCase()
     ) {
       try {
+        console.log(
+          `[Garagem] Removendo veículo ID: ${modalDelete.veiculo.id} (${modalDelete.veiculo.placa})`,
+        );
         // O "ON DELETE CASCADE" no seu SQLite vai apagar automaticamente
         // as manutenções e histórico atrelados a este veículo!
         await db.runAsync(
@@ -110,13 +138,16 @@ export function useGaragem() {
 
         await carregarVeiculos(); // Recarrega a lista
         setModalDelete({ visivel: false, veiculo: null });
-        Alert.alert(
+        showCustomAlert(
           'Sucesso',
           'Veículo removido da garagem.',
         );
       } catch (error) {
-        console.error('Erro ao apagar veículo:', error);
-        Alert.alert(
+        console.error(
+          '[Garagem] Erro ao apagar veículo:',
+          error,
+        );
+        showCustomAlert(
           'Erro',
           'Não foi possível remover o veículo.',
         );

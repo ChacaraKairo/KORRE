@@ -4,8 +4,8 @@ import {
   useRouter,
 } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { Alert } from 'react-native';
 import db from '../../database/DatabaseInit';
+import { showCustomAlert } from '../alert/useCustomAlert';
 import { getFraseDoMomento } from './frasesService';
 
 export const useDashboard = () => {
@@ -80,6 +80,9 @@ export const useDashboard = () => {
             'SELECT * FROM veiculos WHERE ativo = 1 LIMIT 1',
           );
           if (veiculoSalvo) {
+            console.log(
+              `[Dashboard] Veículo em uso carregado: ID ${veiculoSalvo.id} - ${veiculoSalvo.modelo}`,
+            );
             setVeiculo(veiculoSalvo);
 
             // --- BUSCA DE GANHOS (Lógica Financeira) ---
@@ -189,16 +192,14 @@ export const useDashboard = () => {
                 `SELECT t.id, t.tipo, t.valor, c.nome as categoria, strftime('%H:%M', t.data_transacao) as hora 
              FROM transacoes_financeiras t
              LEFT JOIN categorias_financeiras c ON t.categoria_id = c.id
-             WHERE t.veiculo_id = ? 
              ORDER BY t.data_transacao DESC, t.id DESC 
              LIMIT 5`,
-                [veiculoSalvo.id],
               );
             setMovimentacoes(ultimosRegistros);
           }
         } catch (error) {
           console.error(
-            'Erro ao carregar dados do dashboard:',
+            '[Dashboard] Erro ao carregar dados:',
             error,
           );
         } finally {
@@ -214,7 +215,7 @@ export const useDashboard = () => {
   const onPressConfig = () =>
     router.push('/configuracoes' as any);
   const onTrocarVeiculo = () =>
-    Alert.alert('Navegação', 'Ir para Garagem');
+    showCustomAlert('Navegação', 'Ir para Garagem');
   const onIrParaOficina = () => router.push('/oficina');
   const router = useRouter();
 
@@ -229,11 +230,18 @@ export const useDashboard = () => {
     if (!novoKm || isNaN(Number(novoKm)) || !veiculo)
       return;
 
+    console.log(
+      `[Dashboard] Tentativa de atualização de KM do veículo ${veiculo.id}. Novo valor: ${novoKm}`,
+    );
+
     const kmNumerico = Number(novoKm);
 
     // Validação: Impede quilometragem menor que a atual
     if (kmNumerico < (veiculo.km_atual || 0)) {
-      Alert.alert(
+      console.log(
+        `[Dashboard] Atualização bloqueada: KM informado (${kmNumerico}) é menor que o atual (${veiculo.km_atual}).`,
+      );
+      showCustomAlert(
         'Atenção',
         'A nova quilometragem não pode ser menor que a atual.',
       );
@@ -247,9 +255,15 @@ export const useDashboard = () => {
       );
       setVeiculo({ ...veiculo, km_atual: kmNumerico });
       setModalKmAberto(false);
+      console.log(
+        '[Dashboard] KM atualizado com sucesso no banco de dados.',
+      );
     } catch (error) {
-      console.error('Erro ao atualizar KM:', error);
-      Alert.alert(
+      console.error(
+        '[Dashboard] Erro ao salvar novo KM:',
+        error,
+      );
+      showCustomAlert(
         'Erro',
         'Não foi possível atualizar a quilometragem.',
       );

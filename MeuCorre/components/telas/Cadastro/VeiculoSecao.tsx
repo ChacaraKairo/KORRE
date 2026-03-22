@@ -98,7 +98,8 @@ export const VeiculoSecao: React.FC<VeiculoProps> = ({
             label="Marca"
             placeholder={placeholders.marca}
             value={marca}
-            onChangeText={setMarca}
+            onChangeText={(t) => setMarca(t.toUpperCase())}
+            autoCapitalize="characters"
             erro={erro && !marca}
           />
         </View>
@@ -107,7 +108,8 @@ export const VeiculoSecao: React.FC<VeiculoProps> = ({
             label="Modelo"
             placeholder={placeholders.modelo}
             value={modelo}
-            onChangeText={setModelo}
+            onChangeText={(t) => setModelo(t.toUpperCase())}
+            autoCapitalize="characters"
             erro={erro && !modelo}
           />
         </View>
@@ -129,7 +131,10 @@ export const VeiculoSecao: React.FC<VeiculoProps> = ({
               label="Motor"
               placeholder={placeholders.motor}
               value={motor}
-              onChangeText={setMotor}
+              onChangeText={(t) =>
+                setMotor(t.toUpperCase())
+              }
+              autoCapitalize="characters"
               erro={erro && !motor}
             />
           </View>

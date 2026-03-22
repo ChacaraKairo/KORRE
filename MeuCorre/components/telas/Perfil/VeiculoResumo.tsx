@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import {
   ArrowLeftRight,
   Settings2,
@@ -16,6 +11,7 @@ import {
   VEICULOS_CONFIG,
   TipoVeiculo,
 } from '../../../type/typeVeiculos';
+import { showCustomAlert } from '../../../hooks/alert/useCustomAlert';
 
 interface Props {
   veiculo: any;
@@ -132,7 +128,7 @@ export const VeiculoResumo = ({
             onPress={
               onTrocarVeiculo ||
               (() =>
-                Alert.alert(
+                showCustomAlert(
                   'Trocar',
                   'Abrir modal de troca de veículo',
                 ))

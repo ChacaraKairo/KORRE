@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Alert } from 'react-native';
 import db from '../../database/DatabaseInit';
+import { showCustomAlert } from '../alert/useCustomAlert';
 
 export function useEditarPerfil(
   visivel: boolean,
@@ -38,10 +38,13 @@ export function useEditarPerfil(
       const listaVeiculos = await db.getAllAsync(
         'SELECT * FROM veiculos',
       );
+      console.log(
+        `[EditarPerfil] Dados carregados. Usuário: ${user?.nome}. Veículos na conta: ${listaVeiculos.length}`,
+      );
       setVeiculos(listaVeiculos);
     } catch (error) {
       console.error(
-        'Erro ao carregar dados para edição:',
+        '[EditarPerfil] Erro ao carregar dados para edição:',
         error,
       );
     }
@@ -49,18 +52,30 @@ export function useEditarPerfil(
 
   const salvarDados = async () => {
     if (!nome.trim()) {
-      Alert.alert('Aviso', 'O nome não pode estar vazio.');
+      console.log(
+        '[EditarPerfil] Erro de validação: Nome vazio.',
+      );
+      showCustomAlert(
+        'Aviso',
+        'O nome não pode estar vazio.',
+      );
       return;
     }
 
     setLoading(true);
     try {
+      console.log(
+        '[EditarPerfil] Tentando atualizar dados do usuário...',
+      );
       await db.runAsync(
         'UPDATE perfil_usuario SET nome = ?, senha = ?, tipo_meta = ?',
         [nome.trim(), senha, tipoMeta],
       );
 
-      Alert.alert(
+      console.log(
+        '[EditarPerfil] Perfil atualizado com sucesso.',
+      );
+      showCustomAlert(
         'Sucesso',
         'Os teus dados foram atualizados!',
       );
@@ -68,10 +83,10 @@ export function useEditarPerfil(
       onClose(); // Fecha o modal
     } catch (error) {
       console.error(
-        'Erro ao salvar edição de perfil:',
+        '[EditarPerfil] Erro ao salvar edição de perfil:',
         error,
       );
-      Alert.alert(
+      showCustomAlert(
         'Erro',
         'Ocorreu um problema ao salvar os dados.',
       );
@@ -81,7 +96,7 @@ export function useEditarPerfil(
   };
 
   const apagarVeiculo = (id: number, modelo: string) => {
-    Alert.alert(
+    showCustomAlert(
       'Apagar Veículo',
       `Tens a certeza que queres apagar o veículo ${modelo}? Esta ação não pode ser desfeita.`,
       [
@@ -91,16 +106,26 @@ export function useEditarPerfil(
           style: 'destructive',
           onPress: async () => {
             try {
+              console.log(
+                `[EditarPerfil] Removendo veículo ID: ${id} a pedido do usuário.`,
+              );
               await db.runAsync(
                 'DELETE FROM veiculos WHERE id = ?',
                 [id],
+              );
+              console.log(
+                '[EditarPerfil] Veículo removido com sucesso da conta.',
               );
               // Remove da lista atual da tela para não precisar recarregar tudo
               setVeiculos((prev) =>
                 prev.filter((v) => v.id !== id),
               );
             } catch (error) {
-              Alert.alert(
+              console.error(
+                '[EditarPerfil] Erro ao tentar apagar o veículo:',
+                error,
+              );
+              showCustomAlert(
                 'Erro',
                 'Não foi possível apagar o veículo.',
               );

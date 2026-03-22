@@ -4,9 +4,9 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   ArrowLeft,
   Plus,
@@ -70,8 +70,7 @@ export default function GaragemScreen() {
         >
           Minha Garagem
         </Text>
-        <View style={{ width: 36 }} />{' '}
-        {/* Espaçador para alinhar o título ao centro */}
+        <View style={{ width: 36 }} />
       </View>
 
       {loading ? (

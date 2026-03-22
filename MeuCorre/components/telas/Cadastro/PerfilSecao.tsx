@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
-  Alert,
 } from 'react-native';
 import { User, Camera, X, Lock } from 'lucide-react-native';
 import { Input } from '../../ui/inputs/Input';
 import { styles } from '../../../styles/telas/Cadastro/componentes/cadastroStyles';
 import { PhotoService } from './script/photoService';
+import { showCustomAlert } from '../../../hooks/alert/useCustomAlert';
 
 interface PerfilProps {
   nome: string;
@@ -40,7 +40,7 @@ export const PerfilSecao: React.FC<PerfilProps> = ({
         setFoto(savedUri);
       }
     } catch (error: any) {
-      Alert.alert(
+      showCustomAlert(
         'Erro',
         error.message ||
           'Não foi possível capturar a foto.',
@@ -63,18 +63,12 @@ export const PerfilSecao: React.FC<PerfilProps> = ({
       </View>
 
       <View style={localStyles.photoContainer}>
-        <TouchableOpacity
-          style={localStyles.btnCamera}
-          onPress={handleTakeAction}
-        >
-          <Camera size={24} color="#444" />
-          <Text style={localStyles.btnCameraLabel}>
-            FOTO
-          </Text>
-        </TouchableOpacity>
-
         <View style={localStyles.avatarWrapper}>
-          <View style={localStyles.avatar}>
+          <TouchableOpacity
+            style={localStyles.avatar}
+            onPress={handleTakeAction}
+            activeOpacity={0.8}
+          >
             {foto ? (
               <Image
                 source={{ uri: foto }}
@@ -82,9 +76,16 @@ export const PerfilSecao: React.FC<PerfilProps> = ({
                 key={foto} // Força o refresh da imagem se o URI mudar
               />
             ) : (
-              <User size={32} color="#252525" />
+              <User size={40} color="#252525" />
             )}
-          </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={localStyles.btnSmallCamera}
+            onPress={handleTakeAction}
+          >
+            <Camera size={14} color="#0A0A0A" />
+          </TouchableOpacity>
 
           {foto && (
             <TouchableOpacity
@@ -101,7 +102,8 @@ export const PerfilSecao: React.FC<PerfilProps> = ({
         label="Nome de Usuário"
         placeholder="Ex: João Silva"
         value={nome}
-        onChangeText={setNome}
+        onChangeText={(t) => setNome(t.toUpperCase())}
+        autoCapitalize="characters"
         Icone={User}
         erro={erro && nome.length < 3}
       />
@@ -135,29 +137,13 @@ const localStyles = StyleSheet.create({
     marginVertical: 10,
     marginBottom: 20,
   },
-  btnCamera: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#202020',
-    borderWidth: 1,
-    borderColor: '#333',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  btnCameraLabel: {
-    fontSize: 10,
-    color: '#444',
-    fontWeight: 'bold',
-    marginTop: 4,
-  },
   avatarWrapper: {
     position: 'relative',
   },
   avatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     borderWidth: 2,
     borderColor: '#00C853',
     backgroundColor: '#1a1a1a',
@@ -169,10 +155,23 @@ const localStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  btnSmallCamera: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    backgroundColor: '#00C853',
+    borderRadius: 16,
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: '#161616',
+  },
   btnRemovePhoto: {
     position: 'absolute',
-    top: -4,
-    right: -4,
+    top: 0,
+    right: 0,
     backgroundColor: '#EF4444',
     borderRadius: 12,
     padding: 4,

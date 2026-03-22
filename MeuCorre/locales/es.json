@@ -1,0 +1,61 @@
+{
+  "configuracoes": {
+    "titulo": "Ajustes de la App",
+    "aparencia": "Apariencia y Notificaciones",
+    "modo_visualizacao": "Modo de Visualización",
+    "escuro": "Oscuro",
+    "claro": "Claro",
+    "notificacoes": "Notificaciones Push",
+    "notificacoes_sub": "Alertas de metas y mantenimiento",
+    "regional": "Regional",
+    "idioma": "Idioma del Sistema",
+    "idioma_sub": "Formatos de fecha y texto",
+    "privacidade": "Privacidad",
+    "privacidade_dados": "Privacidad de Datos",
+    "privacidade_sub": "Gestionar seguridad local",
+    "ver": "Ver",
+    "suporte": "Soporte e Información",
+    "central_ajuda": "Centro de Ayuda",
+    "central_ajuda_sub": "Preguntas y tutoriales",
+    "termos": "Términos y Condiciones",
+    "termos_sub": "Políticas de uso",
+    "versao": "Versión de la Aplicación",
+    "atualizado": "Actualizado",
+    "selecione_idioma": "Seleccionar Idioma",
+    "cancelar": "Cancelar"
+  },
+  "tabs": {
+    "dashboard": "Panel",
+    "dados": "Datos"
+  },
+  "dashboard": {
+    "boas_vindas": "Piloto",
+    "sem_manutencao": "Sin mantenimiento",
+    "atrasada": "Atrasado: {{item}}",
+    "manutencoes_atrasadas": "{{count}} mantenimientos atrasados",
+    "atencao": "Atención: {{item}}",
+    "manutencoes_proximas": "{{count}} mantenimientos próximos",
+    "proxima": "Próximo: {{item}}",
+    "previsao_amanha": "Pronóstico de Mañana"
+  },
+  "veiculo_card": {
+    "sem_veiculo": "Sin Vehículo",
+    "eficiencia": "EFICIENCIA",
+    "garagem": "Garaje",
+    "oficina": "Taller"
+  },
+  "garagem": {
+    "titulo": "Mi Garaje",
+    "frota": "Flota Registrada",
+    "maquinas": "Máquinas",
+    "nota_1": "Al cambiar de vehículo, tu ",
+    "nota_dashboard": "Panel",
+    "nota_2": " pasará a monitorear automáticamente el odómetro y las ganancias de la máquina seleccionada.",
+    "ativo": "Activo",
+    "saude": "Salud",
+    "excelente": "Excelente",
+    "inativo": "Inactivo",
+    "ativar": "Activar Máquina",
+    "gerir": "Gestionar Taller"
+  }
+}

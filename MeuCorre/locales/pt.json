@@ -1,0 +1,61 @@
+{
+  "configuracoes": {
+    "titulo": "Ajustes do App",
+    "aparencia": "Aparência e Notificações",
+    "modo_visualizacao": "Modo de Visualização",
+    "escuro": "Escuro",
+    "claro": "Claro",
+    "notificacoes": "Notificações Push",
+    "notificacoes_sub": "Alertas de metas e manutenção",
+    "regional": "Regional",
+    "idioma": "Idioma do Sistema",
+    "idioma_sub": "Formatos de data e texto",
+    "privacidade": "Privacidade",
+    "privacidade_dados": "Privacidade de Dados",
+    "privacidade_sub": "Gerir segurança local",
+    "ver": "Ver",
+    "suporte": "Suporte e Info",
+    "central_ajuda": "Central de Ajuda",
+    "central_ajuda_sub": "Dúvidas e tutoriais",
+    "termos": "Termos e Condições",
+    "termos_sub": "Políticas de uso",
+    "versao": "Versão do Aplicativo",
+    "atualizado": "Atualizado",
+    "selecione_idioma": "Selecione o Idioma",
+    "cancelar": "Cancelar"
+  },
+  "tabs": {
+    "dashboard": "Dashboard",
+    "dados": "Dados"
+  },
+  "dashboard": {
+    "boas_vindas": "Piloto",
+    "sem_manutencao": "Sem manutenções",
+    "atrasada": "Atrasada: {{item}}",
+    "manutencoes_atrasadas": "{{count}} manutenções atrasadas",
+    "atencao": "Atenção: {{item}}",
+    "manutencoes_proximas": "{{count}} manutenções próximas",
+    "proxima": "Próxima: {{item}}",
+    "previsao_amanha": "Previsão de Amanhã"
+  },
+  "veiculo_card": {
+    "sem_veiculo": "Sem Veículo",
+    "eficiencia": "EFICIÊNCIA",
+    "garagem": "Garagem",
+    "oficina": "Oficina"
+  },
+  "garagem": {
+    "titulo": "Minha Garagem",
+    "frota": "Frota Registada",
+    "maquinas": "Máquinas",
+    "nota_1": "Ao alternar entre veículos, o seu ",
+    "nota_dashboard": "Dashboard",
+    "nota_2": " passará a monitorizar automaticamente o odómetro e os ganhos da máquina selecionada.",
+    "ativo": "Ativo",
+    "saude": "Saúde",
+    "excelente": "Excelente",
+    "inativo": "Inativo",
+    "ativar": "Ativar Máquina",
+    "gerir": "Gerir Oficina"
+  }
+}
