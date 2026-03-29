@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Animated } from 'react-native';
+import { Alert, Animated } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useRouter } from 'expo-router';
 import db from '../../database/DatabaseInit';
@@ -141,6 +141,25 @@ export const useLogin = () => {
     }
   };
 
+  const recuperarSenha = async () => {
+    try {
+      const usuario: any = await db.getFirstAsync(
+        'SELECT nome, senha FROM perfil_usuario LIMIT 1',
+      );
+      if (usuario) {
+        Alert.alert(
+          'Sua senha',
+          `Usuário: ${usuario.nome}\nSenha: ${usuario.senha}`,
+          [{ text: 'OK' }],
+        );
+      } else {
+        Alert.alert('Sem cadastro', 'Nenhum usuário encontrado no dispositivo.');
+      }
+    } catch (e) {
+      Alert.alert('Erro', 'Não foi possível recuperar a senha.');
+    }
+  };
+
   return {
     nome,
     setNome,
@@ -155,5 +174,6 @@ export const useLogin = () => {
     bounceAnim,
     realizarLoginManual,
     realizarLoginBiometrico,
+    recuperarSenha,
   };
 };
