@@ -26,7 +26,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { showCustomAlert } from '../../hooks/alert/useCustomAlert';
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import db from '../../database/DatabaseInit';
 
@@ -81,19 +81,31 @@ export default function ConfiguracoesScreen() {
   const exportarBackup = async () => {
     try {
       const tabelas = [
-        'categorias_financeiras',
+        'perfil_usuario',
         'veiculos',
+        'parametros_financeiros',
+        'categorias_financeiras',
+        'transacoes_financeiras',
         'itens_manutencao',
         'historico_manutencao',
-        'transacoes_financeiras',
+        'notificacoes',
+        'app_config',
       ];
-      const backupData: any = {};
+      const backupData: any = {
+        versao: '1.0',
+        data_exportacao: new Date().toISOString(),
+        tabelas: {},
+      };
 
       for (const tabela of tabelas) {
-        const rows = await db.getAllAsync(
-          `SELECT * FROM ${tabela}`,
-        );
-        backupData[tabela] = rows;
+        try {
+          const rows = await db.getAllAsync(
+            `SELECT * FROM ${tabela}`,
+          );
+          backupData.tabelas[tabela] = rows;
+        } catch {
+          backupData.tabelas[tabela] = [];
+        }
       }
 
       const jsonStr = JSON.stringify(backupData, null, 2);
@@ -103,14 +115,14 @@ export default function ConfiguracoesScreen() {
       await FileSystem.writeAsStringAsync(
         fileUri,
         jsonStr,
-        {
-          encoding: FileSystem.EncodingType.UTF8,
-        },
+        { encoding: FileSystem.EncodingType.UTF8 },
       );
 
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(fileUri, {
-          dialogTitle: 'Salvar Backup',
+          mimeType: 'application/json',
+          dialogTitle: 'Salvar Backup MeuCorre',
+          UTI: 'public.json',
         });
       } else {
         showCustomAlert(
@@ -128,41 +140,55 @@ export default function ConfiguracoesScreen() {
   };
 
   const executarRestauracao = async (data: any) => {
+    // Suporta o formato antigo (object direto) e novo (com wrapper tabelas)
+    const tabelas_data = data.tabelas ?? data;
+
     try {
       await db.execAsync('BEGIN TRANSACTION;');
 
-      const tabelas = [
+      const ordemRestauracao = [
         'transacoes_financeiras',
         'historico_manutencao',
         'itens_manutencao',
+        'parametros_financeiros',
         'veiculos',
         'categorias_financeiras',
+        'perfil_usuario',
+        'notificacoes',
+        'app_config',
       ];
 
-      for (const tabela of tabelas) {
-        await db.execAsync(`DELETE FROM ${tabela};`); // Limpa a tabela atual
+      for (const tabela of ordemRestauracao) {
+        try {
+          await db.execAsync(`DELETE FROM ${tabela};`);
 
-        if (data[tabela] && data[tabela].length > 0) {
-          const colunas = Object.keys(data[tabela][0]);
-          const placeholders = colunas
-            .map(() => '?')
-            .join(', ');
-          const colunasStr = colunas.join(', ');
+          const rows = tabelas_data[tabela];
+          if (rows && rows.length > 0) {
+            const colunas = Object.keys(rows[0]);
+            const placeholders = colunas
+              .map(() => '?')
+              .join(', ');
+            const colunasStr = colunas.join(', ');
 
-          for (const row of data[tabela]) {
-            const valores = colunas.map((col) => row[col]);
-            await db.runAsync(
-              `INSERT INTO ${tabela} (${colunasStr}) VALUES (${placeholders})`,
-              valores,
-            );
+            for (const row of rows) {
+              const valores = colunas.map(
+                (col) => row[col],
+              );
+              await db.runAsync(
+                `INSERT OR REPLACE INTO ${tabela} (${colunasStr}) VALUES (${placeholders})`,
+                valores,
+              );
+            }
           }
+        } catch {
+          // Tabela não existe ainda (ex: app_config), ignora e continua
         }
       }
 
       await db.execAsync('COMMIT;');
       showCustomAlert(
-        'Sucesso',
-        'Backup restaurado! Reinicia o aplicativo para recarregar todos os dados visuais.',
+        'Sucesso ✅',
+        'Backup restaurado com sucesso! Reinicie o aplicativo para recarregar todos os dados.',
       );
     } catch (error) {
       await db.execAsync('ROLLBACK;');

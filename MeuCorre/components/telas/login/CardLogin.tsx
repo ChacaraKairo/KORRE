@@ -25,7 +25,8 @@ interface CardLoginProps {
   biometriaDisponivel: boolean;
   onLogin: () => void;
   onBiometria: () => void;
-  onNavigateCadastro: () => void;
+  onNavigateCadastro?: () => void;
+  onEsqueciSenha?: () => void;
 }
 
 export const CardLogin: React.FC<CardLoginProps> = ({
@@ -39,6 +40,7 @@ export const CardLogin: React.FC<CardLoginProps> = ({
   onLogin,
   onBiometria,
   onNavigateCadastro,
+  onEsqueciSenha,
 }) => {
   return (
     <View style={styles.card}>
@@ -112,17 +114,32 @@ export const CardLogin: React.FC<CardLoginProps> = ({
         )}
       </View>
 
-      <TouchableOpacity
-        style={styles.linkCadastro}
-        onPress={onNavigateCadastro}
-      >
-        <Text style={styles.linkCadastroText}>
-          Ainda não tens conta?{' '}
-          <Text style={styles.linkCadastroBold}>
-            Registra-te aqui
+      {onEsqueciSenha && (
+        <TouchableOpacity
+          style={[styles.linkCadastro, { marginBottom: 4 }]}
+          onPress={onEsqueciSenha}
+        >
+          <Text style={styles.linkCadastroText}>
+            <Text style={styles.linkCadastroBold}>
+              Esqueci minha senha
+            </Text>
           </Text>
-        </Text>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      )}
+
+      {onNavigateCadastro && (
+        <TouchableOpacity
+          style={styles.linkCadastro}
+          onPress={onNavigateCadastro}
+        >
+          <Text style={styles.linkCadastroText}>
+            Ainda não tens conta?{' '}
+            <Text style={styles.linkCadastroBold}>
+              Registra-te aqui
+            </Text>
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
