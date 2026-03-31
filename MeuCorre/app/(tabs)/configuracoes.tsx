@@ -26,7 +26,12 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { showCustomAlert } from '../../hooks/alert/useCustomAlert';
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import {
+  documentDirectory,
+  writeAsStringAsync,
+  readAsStringAsync,
+  EncodingType,
+} from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import db from '../../database/DatabaseInit';
 
@@ -98,15 +103,10 @@ export default function ConfiguracoesScreen() {
 
       const jsonStr = JSON.stringify(backupData, null, 2);
       const fileUri =
-        FileSystem.documentDirectory +
-        'meucorre_backup.json';
-      await FileSystem.writeAsStringAsync(
-        fileUri,
-        jsonStr,
-        {
-          encoding: FileSystem.EncodingType.UTF8,
-        },
-      );
+        documentDirectory + 'meucorre_backup.json';
+      await writeAsStringAsync(fileUri, jsonStr, {
+        encoding: EncodingType.UTF8,
+      });
 
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(fileUri, {
@@ -182,11 +182,10 @@ export default function ConfiguracoesScreen() {
       });
       if (result.canceled) return;
 
-      const fileContent =
-        await FileSystem.readAsStringAsync(
-          result.assets[0].uri,
-          { encoding: FileSystem.EncodingType.UTF8 },
-        );
+      const fileContent = await readAsStringAsync(
+        result.assets[0].uri,
+        { encoding: EncodingType.UTF8 },
+      );
       const data = JSON.parse(fileContent);
 
       Alert.alert(
