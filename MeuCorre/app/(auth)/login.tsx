@@ -16,8 +16,8 @@ import {
 import { useLogin } from '../../hooks/login/useLogin';
 
 // Importação dos seus componentes modulares
-import { CardLogin } from '../../components/telas/login/CardLogin';
-import { FooterLogin } from '../../components/telas/login/FooterLogin';
+import { CardLogin } from '../../components/telas/Login/CardLogin';
+import { FooterLogin } from '../../components/telas/Login/FooterLogin';
 
 // Importação dos estilos centralizados
 import { loginStyles as styles } from '../../styles/telas/login/LoginStyles';
@@ -122,7 +122,9 @@ const LoginScreen: React.FC = () => {
             biometriaDisponivel={biometriaDisponivel}
             onLogin={realizarLoginManual}
             onBiometria={realizarLoginBiometrico}
-            onEsqueciSenha={temUsuario ? recuperarSenha : undefined}
+            onEsqueciSenha={
+              temUsuario ? recuperarSenha : undefined
+            }
             onNavigateCadastro={
               !temUsuario
                 ? () => router.push('/(auth)/cadastro')

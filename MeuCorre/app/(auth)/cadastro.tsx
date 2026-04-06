@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react'; // Removido o useState daqui
 import { useRouter } from 'expo-router';
 import {
   View,
@@ -9,6 +9,9 @@ import {
   Keyboard,
   TouchableOpacity,
   Text,
+  Animated,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
 import {
   ShieldCheck,
@@ -29,8 +32,14 @@ export default function CadastroScreen() {
   const {
     nome,
     setNome,
+    email,
+    setEmail,
+    cpf,
+    setCpf,
     senha,
     setSenha,
+    confirmarSenha,
+    setConfirmarSenha, // <-- Agora pegamos direto do Hook
     foto,
     setFoto,
     tipoVeiculo,
@@ -56,7 +65,50 @@ export default function CadastroScreen() {
     erro,
     salvarCadastro,
   } = useCadastro();
+
   const router = useRouter();
+
+  // Removida a linha: const [confirmarSenha, setConfirmarSenha] = useState('');
+  // O erro acontecia porque você digitava no estado local daqui,
+  // mas o salvarCadastro olhava para o estado vazio lá do Hook.
+
+  // ===== CONFIGURAÇÃO DA ANIMAÇÃO DO FOOTER =====
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const isVisible = useRef(false);
+
+  const translateY = fadeAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [50, 0],
+  });
+
+  const handleScroll = (
+    event: NativeSyntheticEvent<NativeScrollEvent>,
+  ) => {
+    const {
+      layoutMeasurement,
+      contentOffset,
+      contentSize,
+    } = event.nativeEvent;
+    const isNearBottom =
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - 450;
+
+    if (isNearBottom && !isVisible.current) {
+      isVisible.current = true;
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    } else if (!isNearBottom && isVisible.current) {
+      isVisible.current = false;
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -74,8 +126,9 @@ export default function CadastroScreen() {
             <ScrollView
               contentContainerStyle={styles.scrollContent}
               showsVerticalScrollIndicator={false}
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
             >
-              {/* TODO: Atualizar tipagem interna do HeaderCadastro para aceitar 'caminhao' | 'van' */}
               <HeaderCadastro
                 tipoVeiculo={tipoVeiculo as any}
               />
@@ -83,8 +136,14 @@ export default function CadastroScreen() {
               <PerfilSecao
                 nome={nome}
                 setNome={setNome}
+                email={email}
+                setEmail={setEmail}
+                cpf={cpf}
+                setCpf={setCpf}
                 senha={senha}
                 setSenha={setSenha}
+                confirmarSenha={confirmarSenha} // Agora sincronizado com o Hook
+                setConfirmarSenha={setConfirmarSenha} // Agora sincronizado com o Hook
                 foto={foto}
                 setFoto={setFoto}
                 erro={erro}
@@ -115,65 +174,76 @@ export default function CadastroScreen() {
                 setTipoMeta={setTipoMeta}
                 erro={erro}
               />
-            </ScrollView>
 
-            <View style={styles.footer}>
-              <TouchableOpacity
-                style={styles.termosContainer}
-                activeOpacity={0.8}
-                onPress={() =>
-                  setAceitouTermos(!aceitouTermos)
-                } // Clicar na linha toda marca o check
-              >
-                <View
-                  style={[
-                    styles.checkbox,
-                    aceitouTermos && styles.checkboxAtivo,
-                  ]}
-                >
-                  {aceitouTermos && (
-                    <ShieldCheck
-                      size={14}
-                      {...({ color: '#0A0A0A' } as any)}
-                    />
-                  )}
-                </View>
-                <Text style={styles.termosText}>
-                  Aceito os{' '}
-                  <Text
-                    style={styles.termosDestaque}
-                    onPress={(e) => {
-                      e.stopPropagation(); // Evita que o clique no texto marque o checkbox sem querer
-                      router.push('/termos'); // <-- Redireciona para a tela de Termos
-                    }}
-                  >
-                    Termos de Uso
-                  </Text>{' '}
-                  e confirmo o armazenamento local.
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
+              {/* FOOTER ANIMADO */}
+              <Animated.View
                 style={[
-                  styles.btnSalvar,
+                  styles.footer,
                   {
-                    backgroundColor: aceitouTermos
-                      ? '#00C853'
-                      : '#222',
+                    paddingBottom: 40,
+                    paddingTop: 20,
+                    opacity: fadeAnim,
+                    transform: [{ translateY: translateY }],
                   },
                 ]}
-                onPress={salvarCadastro}
-                disabled={!aceitouTermos}
               >
-                <Text style={styles.btnSalvarText}>
-                  Começar o corre
-                </Text>
-                <ChevronRight
-                  size={24}
-                  {...({ color: '#0A0A0A' } as any)}
-                />
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity
+                  style={styles.termosContainer}
+                  activeOpacity={0.8}
+                  onPress={() =>
+                    setAceitouTermos(!aceitouTermos)
+                  }
+                >
+                  <View
+                    style={[
+                      styles.checkbox,
+                      aceitouTermos && styles.checkboxAtivo,
+                    ]}
+                  >
+                    {aceitouTermos && (
+                      <ShieldCheck
+                        size={14}
+                        {...({ color: '#0A0A0A' } as any)}
+                      />
+                    )}
+                  </View>
+                  <Text style={styles.termosText}>
+                    Aceito os{' '}
+                    <Text
+                      style={styles.termosDestaque}
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        router.push('/termos');
+                      }}
+                    >
+                      Termos de Uso
+                    </Text>{' '}
+                    e confirmo o armazenamento local.
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.btnSalvar,
+                    {
+                      backgroundColor: aceitouTermos
+                        ? '#00C853'
+                        : '#222',
+                    },
+                  ]}
+                  onPress={salvarCadastro}
+                  disabled={!aceitouTermos}
+                >
+                  <Text style={styles.btnSalvarText}>
+                    Começar o corre
+                  </Text>
+                  <ChevronRight
+                    size={24}
+                    {...({ color: '#0A0A0A' } as any)}
+                  />
+                </TouchableOpacity>
+              </Animated.View>
+            </ScrollView>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

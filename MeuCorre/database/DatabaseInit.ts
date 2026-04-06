@@ -4,7 +4,7 @@ const db = SQLite.openDatabaseSync('meucorre.db');
 
 export const DatabaseInit = () => {
   try {
-    // Criação de todas as tabelas e colunas numa única execução limpa
+    // Execução limpa: Cria as tabelas do zero com a estrutura completa
     db.execSync(`
       PRAGMA journal_mode = WAL;
       PRAGMA foreign_keys = ON;
@@ -12,6 +12,8 @@ export const DatabaseInit = () => {
       CREATE TABLE IF NOT EXISTS perfil_usuario (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
+        email TEXT UNIQUE,
+        cpf TEXT UNIQUE,
         senha TEXT,
         foto_uri TEXT,
         meta_diaria REAL DEFAULT 0,
@@ -32,29 +34,17 @@ export const DatabaseInit = () => {
         combustivel_padrao TEXT DEFAULT 'flex',
         id_user INTEGER,
         ativo INTEGER DEFAULT 0,
-        
-        -- VARIÁVEIS DE INTELIGÊNCIA FINANCEIRA (Pré-calculadas para velocidade)
         custo_km_calculado REAL DEFAULT 0,
         custo_minuto_calculado REAL DEFAULT 0,
         meta_ganho_minuto_calculado REAL DEFAULT 0,
-        
-        -- GAMIFICAÇÃO: Para mudar a cor do Dashboard (Vermelho, Laranja, Verde)
         taxa_completude REAL DEFAULT 0,
-
         FOREIGN KEY (id_user) REFERENCES perfil_usuario (id) ON DELETE CASCADE
       );
 
-      -- ======================================================================
-      -- NOVA TABELA: MEMÓRIA DA CALCULADORA / AUDITORIA FINANCEIRA
-      -- Guarda tudo o que o utilizador preencheu para não ter que digitar de novo
-      -- ======================================================================
       CREATE TABLE IF NOT EXISTS parametros_financeiros (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         veiculo_id INTEGER UNIQUE NOT NULL,
-
         estado_uf TEXT DEFAULT 'SP',
-
-        -- Capital e Aquisição
         tipo_aquisicao TEXT DEFAULT 'proprio_quitado',
         valor_veiculo_fipe REAL,
         depreciacao_real_estimada REAL,
@@ -64,21 +54,15 @@ export const DatabaseInit = () => {
         caucao_aluguel_mensalizado REAL,
         taxa_administracao_consorcio REAL,
         custo_reparacao_emprestimo REAL,
-
-        -- Burocracia
         ipva_anual REAL,
         licenciamento_detran_anual REAL,
         imposto_mei_mensal REAL,
         imposto_renda_mensal REAL,
         taxa_vistoria_gnv_anual REAL,
         taxas_alvaras_municipais_anual REAL,
-
-        -- Fixos
         seguro_comercial_anual REAL,
         rastreador_telemetria_mensal REAL,
         plano_dados_mensal REAL,
-
-        -- Variáveis (Desgaste e Energia)
         rendimento_energia_unidade REAL,
         preco_energia_unidade REAL,
         valor_oleo_filtros REAL,
@@ -92,8 +76,6 @@ export const DatabaseInit = () => {
         fundo_depreciacao_bateria_por_km REAL,
         manutencao_imprevista_mensal REAL,
         limpeza_higienizacao_mensal REAL,
-
-        -- Fator Humano (O Motorista)
         alimentacao_diaria REAL,
         consumo_apoio_diario REAL,
         plano_saude_mensal REAL,
@@ -101,16 +83,12 @@ export const DatabaseInit = () => {
         provisao_ferias_mensal REAL,
         provisao_decimo_terceiro_mensal REAL,
         salario_liquido_mensal_desejado REAL,
-
-        -- Equipamentos
         valor_smartphone REAL,
         vida_util_smartphone_meses REAL,
         custo_powerbanks_cabos_mensal REAL,
         custo_suportes_capas_mensal REAL,
         custo_bag_mochila_mensal REAL,
         custo_vestuario_protecao_mensal REAL,
-
-        -- Plataforma e Operação
         percentual_dead_miles REAL,
         tempo_espera_medio_minutos REAL,
         taxas_saque_antecipacao_mensal REAL,
@@ -118,7 +96,6 @@ export const DatabaseInit = () => {
         dias_trabalhados_semana REAL,
         horas_por_dia REAL,
         km_por_dia REAL,
-
         FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE CASCADE
       );
 
@@ -178,49 +155,12 @@ export const DatabaseInit = () => {
       );
     `);
 
-    // --- MIGRAÇÕES ---
-    try {
-      db.execSync(
-        `ALTER TABLE parametros_financeiros ADD COLUMN seguro_comercial_anual REAL;`,
-      );
-    } catch (e) {
-      /* Ignora se a coluna já existir */
-    }
-    try {
-      db.execSync(
-        `ALTER TABLE parametros_financeiros ADD COLUMN manutencao_imprevista_mensal REAL;`,
-      );
-    } catch (e) {
-      /* Ignora se a coluna já existir */
-    }
-    try {
-      db.execSync(
-        `ALTER TABLE parametros_financeiros ADD COLUMN dias_trabalhados_semana REAL;`,
-      );
-    } catch (e) {
-      /* Ignora se a coluna já existir */
-    }
-    try {
-      db.execSync(
-        `ALTER TABLE parametros_financeiros ADD COLUMN horas_por_dia REAL;`,
-      );
-    } catch (e) {
-      /* Ignora se a coluna já existir */
-    }
-    try {
-      db.execSync(
-        `ALTER TABLE parametros_financeiros ADD COLUMN km_por_dia REAL;`,
-      );
-    } catch (e) {
-      /* Ignora se a coluna já existir */
-    }
-
     console.log(
-      '[BANCO] Esquema de tabelas criado com sucesso (Modo Teste - Estrutura Limpa).',
+      '[BANCO] Estrutura inicializada com sucesso.',
     );
   } catch (error) {
     console.error(
-      '[ERRO] Falha crítica na inicialização do banco:',
+      '[ERRO] Falha na inicialização do banco:',
       error,
     );
   }

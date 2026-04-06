@@ -1,115 +1,90 @@
-🏍️ Meu-Corre (Central do Motoboy)
+# 🏍️ MeuCorre - App Mobile
 
-O Meu-Corre é um ecossistema digital concebido para ser o "escritório de bolso" dos profissionais de entrega e transporte em duas rodas. O projeto foca-se na produtividade, economia e segurança, permitindo ao motoboy gerir as suas finanças, prever manutenções e aceder a um marketplace especializado.
+![Expo](https://img.shields.io/badge/Expo-1C1E24?style=for-the-badge&logo=expo&logoColor=white)
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Vers%C3%A3o_1.0.1-success?style=for-the-badge)
 
-🚀 Como Testar o Projeto
+> **O painel de controlo definitivo para a operação de motoristas e motoboys. Calcule lucros, controle despesas e faça a gestão da manutenção do veículo diretamente do smartphone.**
 
-Este repositório contém um protótipo funcional desenvolvido com React Native e Expo. Siga os passos abaixo para executar o projeto no seu dispositivo ou emulador.
+---
 
-1. Pré-requisitos
+## 🎯 Sobre o Projeto
 
-Antes de começar, certifique-se de que tem instalado:
+O **MeuCorre** é uma ferramenta de gestão financeira e de frota focada em profissionais de transporte (apps de entrega e passageiros). Desenhado para resolver a dor de "pagar para trabalhar", o app substitui blocos de notas confusos por cálculos automatizados.
 
-Node.js (versão 18 ou superior)
+**Mudança Arquitetural Recente:** O aplicativo adotou o modelo _Premium Direct_ (pagamento único via Google Play Store). Isso eliminou a necessidade de barreiras de autenticação complexas (sistemas de token de terceiros), permitindo que o utilizador aceda às ferramentas imediatamente após a instalação.
 
-npm ou yarn
+## ✨ Funcionalidades Principais
 
-Expo Go (aplicação disponível na Play Store ou App Store no seu telemóvel)
+- 🧮 **Calculadora IKM (Índice por KM):** O motor de cálculo em tempo real. O utilizador digita o valor, distância e tempo da corrida solicitada, e o app devolve imediatamente a margem de lucro (Verde) ou prejuízo (Vermelho).
+- 🔧 **Garagem Digital:** Registo completo da manutenção preventiva e corretiva (óleo, pneus, kit relação), com base na quilometragem rodada.
+- 📊 **Balanço Financeiro (DRE):** Visão geral do fluxo de caixa. Subtrai automaticamente as despesas (combustível, alimentação, manutenção) dos ganhos diários/semanais.
+- 📴 **Arquitetura Offline-First:** Toda a base de dados funciona localmente, garantindo zero latência e uso completo do app mesmo em áreas sem sinal de internet.
 
-2. Instalação
+## 🛠️ Stack Tecnológico
 
-Clone o repositório e aceda à pasta do protótipo:
+- **Framework:** [React Native](https://reactnative.dev/) com [Expo](https://expo.dev/) (SDK +48)
+- **Linguagem:** [TypeScript](https://www.typescriptlang.org/)
+- **Navegação:** Expo Router (File-based routing)
+- **Base de Dados Local:** SQLite (`expo-sqlite`)
+- **Build System:** EAS (Expo Application Services) para binários Android (`.apk` e `.aab`)
 
-# Clonar o repositório
-git clone [https://github.com/ChacaraKairo/Meu-Corre.git](https://github.com/ChacaraKairo/Meu-Corre.git)
+## ⚙️ Estrutura do Projeto
 
-# Aceder à pasta do projeto
-cd Meu-Corre/Prototipo/MeuCorre
+````text
+MeuCorre/
+├── app/                  # Rotas da aplicação (Expo Router)
+│   ├── (tabs)/           # Ecrãs principais (Dashboard, Calculadora, Oficina)
+│   └── _layout.tsx       # Layout raiz da navegação
+├── assets/               # Imagens, splash screen e ícones adaptativos (512x512)
+├── components/           # Componentes UI reutilizáveis
+├── eas.json              # Perfis de build para APK (preview) e Play Store (production)
+├── app.json              # Configurações do manifesto Android (VersionCode, Package)
+└── package.json          # Dependências do projeto# 🏍️ MeuCorre - App Mobile
 
+![Expo](https://img.shields.io/badge/Expo-1C1E24?style=for-the-badge&logo=expo&logoColor=white)
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Vers%C3%A3o_1.0.1-success?style=for-the-badge)
 
-3. Instalar Dependências
+> **O painel de controlo definitivo para a operação de motoristas e motoboys. Calcule lucros, controle despesas e faça a gestão da manutenção do veículo diretamente do smartphone.**
 
-Execute o comando para instalar todas as bibliotecas necessárias:
+---
 
-npm install
-# ou
-yarn install
+## 🎯 Sobre o Projeto
 
+O **MeuCorre** é uma ferramenta de gestão financeira e de frota focada em profissionais de transporte (apps de entrega e passageiros). Desenhado para resolver a dor de "pagar para trabalhar", o app substitui blocos de notas confusos por cálculos automatizados.
 
-4. Execução
+**Mudança Arquitetural Recente:** O aplicativo adotou o modelo *Premium Direct* (pagamento único via Google Play Store). Isso eliminou a necessidade de barreiras de autenticação complexas (sistemas de token de terceiros), permitindo que o utilizador aceda às ferramentas imediatamente após a instalação.
 
-Inicie o servidor de desenvolvimento do Expo:
+## ✨ Funcionalidades Principais
 
-npx expo start
+* 🧮 **Calculadora IKM (Índice por KM):** O motor de cálculo em tempo real. O utilizador digita o valor, distância e tempo da corrida solicitada, e o app devolve imediatamente a margem de lucro (Verde) ou prejuízo (Vermelho).
+* 🔧 **Garagem Digital:** Registo completo da manutenção preventiva e corretiva (óleo, pneus, kit relação), com base na quilometragem rodada.
+* 📊 **Balanço Financeiro (DRE):** Visão geral do fluxo de caixa. Subtrai automaticamente as despesas (combustível, alimentação, manutenção) dos ganhos diários/semanais.
+* 📴 **Arquitetura Offline-First:** Toda a base de dados funciona localmente, garantindo zero latência e uso completo do app mesmo em áreas sem sinal de internet.
 
+## 🛠️ Stack Tecnológico
 
-5. Visualização
+* **Framework:** [React Native](https://reactnative.dev/) com [Expo](https://expo.dev/) (SDK +48)
+* **Linguagem:** [TypeScript](https://www.typescriptlang.org/)
+* **Navegação:** Expo Router (File-based routing)
+* **Base de Dados Local:** SQLite (`expo-sqlite`)
+* **Build System:** EAS (Expo Application Services) para binários Android (`.apk` e `.aab`)
 
-No Telemóvel (Recomendado): Abra a aplicação Expo Go, clique em "Scan QR Code" e aponte para o código que apareceu no seu terminal.
+## ⚙️ Estrutura do Projeto
 
-No Android/iOS Emulator: Pressione a para Android ou i para iOS no terminal (requer Android Studio ou Xcode configurado).
-
-No Navegador: Pressione w para abrir a versão web (algumas funcionalidades nativas como SQLite podem ter comportamento limitado no browser).
-
-📋 Funcionalidades Principais
-
-💰 Gestão Financeira (O "Corre" Diário)
-
-Diário de Bordo: Registo de KM Inicial e Final para cálculo automático de rodagem.
-
-Fluxo de Caixa: Lançamento rápido de ganhos por plataforma (iFood, Uber, etc.) e despesas (combustível, alimentação).
-
-Lucro Real: Cálculo instantâneo do que sobra no bolso após descontar os custos operacionais.
-
-🔧 Manutenção Preventiva
-
-Alertas por KM: O sistema utiliza a rodagem acumulada para sugerir trocas de óleo, pneus e revisões, evitando quebras inesperadas.
-
-🛒 Marketplace & Proteção (Em desenvolvimento)
-
-Loja Curada: Peças e acessórios com foco em custo-benefício.
-
-Seguros: Planos de proteção contra roubo, furto e assistência 24h.
-
-🛠️ Stack Técnica (Foco em Performance)
-
-Para garantir que o app rode de forma fluida em aparelhos de entrada (com pouca RAM), escolhemos as tecnologias mais leves do mercado:
-
-Framework: React Native + Expo.
-
-Estilização: NativeWind (Tailwind CSS) - Estilos estáticos que não sobrecarregam a CPU.
-
-Estado: Zustand - Gestão de dados ultraleve (superior ao Redux em performance).
-
-Banco de Dados: SQLite - Armazenamento local rápido e resiliente (funciona offline).
-
-Listas: FlashList (Shopify) - Renderização de alto desempenho para históricos longos.
-
-Ícones: Lucide React Native (Vetorizados em SVG).
-
-🏗️ Estrutura de Pastas
-
-Meu-Corre/
-├── Documentação/        # Planos de visão, guias UX e especificações
-├── Prototipo/           # Código fonte do aplicativo
-│   └── MeuCorre/
-│       ├── src/
-│       │   ├── components/  # Componentes reutilizáveis (Botões, Inputs)
-│       │   ├── screens/     # Telas do App (Dashboard, Login, Cadastro)
-│       │   ├── database/    # Configuração do SQLite
-│       │   └── styles/      # Definições visuais
-│       └── App.tsx          # Ponto de entrada
-└── README.md            # Este ficheiro
-
-
-📈 Roadmap do Projeto
-
-[x] Fase 1 (MVP): Gestão financeira offline, KM e histórico local.
-
-[ ] Fase 2: Dashboards gráficos de performance e exportação de relatórios em PDF.
-
-[ ] Fase 3: Integração com APIs de pagamento para o Marketplace e Seguros.
-
-Autor: ChacaraKairo
-
-Projeto focado em dignidade e eficiência para quem faz a economia girar sobre duas rodas.
+```text
+MeuCorre/
+├── app/                  # Rotas da aplicação (Expo Router)
+│   ├── (tabs)/           # Ecrãs principais (Dashboard, Calculadora, Oficina)
+│   └── _layout.tsx       # Layout raiz da navegação
+├── assets/               # Imagens, splash screen e ícones adaptativos (512x512)
+├── components/           # Componentes UI reutilizáveis
+├── eas.json              # Perfis de build para APK (preview) e Play Store (production)
+├── app.json              # Configurações do manifesto Android (VersionCode, Package)
+└── package.json          # Dependências do projeto
+````

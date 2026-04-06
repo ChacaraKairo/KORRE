@@ -19,7 +19,7 @@ export function useOrigemGanhos() {
   const [novoIcone, setNovoIcone] = useState('Briefcase');
   const [novaCor, setNovaCor] = useState('#00C853');
 
-  // Array de origens
+  // Array de origens (Nomes simplificados)
   const [origens, setOrigens] = useState([
     {
       id: 1,
@@ -30,14 +30,14 @@ export function useOrigemGanhos() {
     },
     {
       id: 2,
-      nome: 'Uber Moto',
+      nome: 'Uber',
       categoria: 'Transporte',
       cor: '#000000',
       iconId: 'Navigation',
     },
     {
       id: 3,
-      nome: '99Moto',
+      nome: '99',
       categoria: 'Transporte',
       cor: '#FFCC00',
       iconId: 'Smartphone',
