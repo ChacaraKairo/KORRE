@@ -13,9 +13,8 @@ export function useModalNovoItem(
   const [ultimaTrocaKm, setUltimaTrocaKm] = useState('');
   const [ultimaTrocaData, setUltimaTrocaData] =
     useState('');
-  const [icone, setIcone] = useState('wrench');
+  const [icone, setIcone] = useState('Wrench'); // Padronizado para CamelCase
 
-  // NOVOS ESTADOS
   const [preco, setPreco] = useState('');
   const [salvarNoFinanceiro, setSalvarNoFinanceiro] =
     useState(true);
@@ -26,7 +25,7 @@ export function useModalNovoItem(
     setTempo('');
     setUltimaTrocaKm('');
     setUltimaTrocaData('');
-    setIcone('wrench');
+    setIcone('Wrench');
     setPreco('');
     setSalvarNoFinanceiro(true);
   };
@@ -70,7 +69,7 @@ export function useModalNovoItem(
 
       // 2. Se o usuário quiser salvar no financeiro e houver um preço
       if (salvarNoFinanceiro && valorNumerico > 0) {
-        // Criar registro no histórico
+        // Criar registro no histórico de manutenção
         await db.runAsync(
           `INSERT INTO historico_manutencao (veiculo_id, item_id, descricao, valor, km_servico) VALUES (?, ?, ?, ?, ?)`,
           [
@@ -92,8 +91,9 @@ export function useModalNovoItem(
         if (categoria) {
           categoriaId = categoria.id;
         } else {
+          // CORREÇÃO: Alterado 'icone_id' para 'icone' para bater com DatabaseInit.ts
           const resultCat: any = await db.runAsync(
-            "INSERT INTO categorias_financeiras (nome, tipo, icone_id, cor) VALUES (?, 'despesa', 'Wrench', '#795548')",
+            "INSERT INTO categorias_financeiras (nome, tipo, icone, cor) VALUES (?, 'despesa', 'Wrench', '#795548')",
             [nome],
           );
           categoriaId = resultCat.lastInsertRowId;
@@ -116,7 +116,10 @@ export function useModalNovoItem(
       onSucesso();
     } catch (error) {
       console.error(error);
-      showCustomAlert('Erro', 'Falha ao salvar.');
+      showCustomAlert(
+        'Erro',
+        'Falha ao salvar a manutenção.',
+      );
     }
   };
 

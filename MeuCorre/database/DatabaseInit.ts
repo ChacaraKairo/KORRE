@@ -2,12 +2,11 @@ import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabaseSync('meucorre.db');
 
-// Versão atual do esquema do seu banco de dados
+// Versão atualizada para 1, focando na criação limpa
 const DATABASE_VERSION = 1;
 
 export const DatabaseInit = () => {
   try {
-    // 1. Pega a versão atual que está salva no arquivo .db do usuário
     let { user_version: currentDbVersion } =
       db.getFirstSync<{ user_version: number }>(
         'PRAGMA user_version;',
@@ -17,37 +16,28 @@ export const DatabaseInit = () => {
       `[BANCO] Versão atual: ${currentDbVersion} | Versão esperada: ${DATABASE_VERSION}`,
     );
 
-    if (currentDbVersion >= DATABASE_VERSION) {
+    // Ativa modos de segurança e performance sempre
+    db.execSync(`
+      PRAGMA journal_mode = WAL;
+      PRAGMA foreign_keys = ON;
+    `);
+
+    if (currentDbVersion < DATABASE_VERSION) {
       console.log(
-        '[BANCO] Banco de dados já está atualizado.',
+        '[BANCO] Inicializando estrutura das tabelas...',
       );
-    } else {
-      // Ativa modos de segurança e performance
-      db.execSync(`
-        PRAGMA journal_mode = WAL;
-        PRAGMA foreign_keys = ON;
-      `);
+      initV1();
 
-      // 2. Executa as Migrations em ordem
-      if (currentDbVersion === 0) {
-        console.log(
-          '[BANCO] Criando tabelas iniciais (v1)...',
-        );
-        initV1();
-        currentDbVersion = 1;
-      }
-
-      // 3. Atualiza a versão interna do banco para a nova
       db.execSync(
-        `PRAGMA user_version = ${currentDbVersion};`,
+        `PRAGMA user_version = ${DATABASE_VERSION};`,
       );
       console.log(
-        `[BANCO] Upgrade para versão ${currentDbVersion} concluído.`,
+        `[BANCO] Estrutura pronta na versão ${DATABASE_VERSION}.`,
       );
     }
   } catch (error) {
     console.error(
-      '[ERRO] Falha na inicialização/migração do banco:',
+      '[ERRO] Falha na inicialização do banco:',
       error,
     );
   }
@@ -93,55 +83,55 @@ const initV1 = () => {
       estado_uf TEXT DEFAULT 'SP',
       tipo_aquisicao TEXT DEFAULT 'proprio_quitado',
       valor_veiculo_fipe REAL,
-      depreciacao_real_estimada REAL,
-      custo_oportunidade_selic REAL,
-      juros_financiamento_mensal REAL,
-      diaria_aluguel REAL,
-      caucao_aluguel_mensalizado REAL,
-      taxa_administracao_consorcio REAL,
-      custo_reparacao_emprestimo REAL,
-      ipva_anual REAL,
-      licenciamento_detran_anual REAL,
-      imposto_mei_mensal REAL,
-      imposto_renda_mensal REAL,
-      taxa_vistoria_gnv_anual REAL,
-      taxas_alvaras_municipais_anual REAL,
-      seguro_comercial_anual REAL,
-      rastreador_telemetria_mensal REAL,
-      plano_dados_mensal REAL,
-      rendimento_energia_unidade REAL,
-      preco_energia_unidade REAL,
-      valor_oleo_filtros REAL,
-      intervalo_oleo_filtros_km REAL,
-      valor_jogo_pneus REAL,
-      durabilidade_pneus_km REAL,
-      valor_manutencao_freios REAL,
-      intervalo_freios_km REAL,
-      valor_kit_transmissao REAL,
-      durabilidade_transmissao_km REAL,
-      fundo_depreciacao_bateria_por_km REAL,
-      manutencao_imprevista_mensal REAL,
-      limpeza_higienizacao_mensal REAL,
-      alimentacao_diaria REAL,
-      consumo_apoio_diario REAL,
-      plano_saude_mensal REAL,
-      fundo_emergencia_percentual REAL,
-      provisao_ferias_mensal REAL,
-      provisao_decimo_terceiro_mensal REAL,
-      salario_liquido_mensal_desejado REAL,
-      valor_smartphone REAL,
-      vida_util_smartphone_meses REAL,
-      custo_powerbanks_cabos_mensal REAL,
-      custo_suportes_capas_mensal REAL,
-      custo_bag_mochila_mensal REAL,
-      custo_vestuario_protecao_mensal REAL,
-      percentual_dead_miles REAL,
-      tempo_espera_medio_minutos REAL,
-      taxas_saque_antecipacao_mensal REAL,
-      provisao_multas_mensal REAL,
-      dias_trabalhados_semana REAL,
-      horas_por_dia REAL,
-      km_por_dia REAL,
+      depreciacao_real_estimada REAL DEFAULT 0,
+      custo_oportunidade_selic REAL DEFAULT 0,
+      juros_financiamento_mensal REAL DEFAULT 0,
+      diaria_aluguel REAL DEFAULT 0,
+      caucao_aluguel_mensalizado REAL DEFAULT 0,
+      taxa_administracao_consorcio REAL DEFAULT 0,
+      custo_reparacao_emprestimo REAL DEFAULT 0,
+      ipva_anual REAL DEFAULT 0,
+      licenciamento_detran_anual REAL DEFAULT 0,
+      imposto_mei_mensal REAL DEFAULT 0,
+      imposto_renda_mensal REAL DEFAULT 0,
+      taxa_vistoria_gnv_anual REAL DEFAULT 0,
+      taxas_alvaras_municipais_anual REAL DEFAULT 0,
+      seguro_comercial_anual REAL DEFAULT 0,
+      rastreador_telemetria_mensal REAL DEFAULT 0,
+      plano_dados_mensal REAL DEFAULT 0,
+      rendimento_energia_unidade REAL DEFAULT 0,
+      preco_energia_unidade REAL DEFAULT 0,
+      valor_oleo_filtros REAL DEFAULT 0,
+      intervalo_oleo_filtros_km REAL DEFAULT 0,
+      valor_jogo_pneus REAL DEFAULT 0,
+      durabilidade_pneus_km REAL DEFAULT 0,
+      valor_manutencao_freios REAL DEFAULT 0,
+      intervalo_freios_km REAL DEFAULT 0,
+      valor_kit_transmissao REAL DEFAULT 0,
+      durabilidade_transmissao_km REAL DEFAULT 0,
+      fundo_depreciacao_bateria_por_km REAL DEFAULT 0,
+      manutencao_imprevista_mensal REAL DEFAULT 0,
+      limpeza_higienizacao_mensal REAL DEFAULT 0,
+      alimentacao_diaria REAL DEFAULT 0,
+      consumo_apoio_diario REAL DEFAULT 0,
+      plano_saude_mensal REAL DEFAULT 0,
+      fundo_emergencia_percentual REAL DEFAULT 0,
+      provisao_ferias_mensal REAL DEFAULT 0,
+      provisao_decimo_terceiro_mensal REAL DEFAULT 0,
+      salario_liquido_mensal_desejado REAL DEFAULT 0,
+      valor_smartphone REAL DEFAULT 0,
+      vida_util_smartphone_meses REAL DEFAULT 0,
+      custo_powerbanks_cabos_mensal REAL DEFAULT 0,
+      custo_suportes_capas_mensal REAL DEFAULT 0,
+      custo_bag_mochila_mensal REAL DEFAULT 0,
+      custo_vestuario_protecao_mensal REAL DEFAULT 0,
+      percentual_dead_miles REAL DEFAULT 0,
+      tempo_espera_medio_minutos REAL DEFAULT 0,
+      taxas_saque_antecipacao_mensal REAL DEFAULT 0,
+      provisao_multas_mensal REAL DEFAULT 0,
+      dias_trabalhados_semana REAL DEFAULT 0,
+      horas_por_dia REAL DEFAULT 0,
+      km_por_dia REAL DEFAULT 0,
       FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE CASCADE
     );
 
@@ -149,7 +139,7 @@ const initV1 = () => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL UNIQUE,
       tipo TEXT CHECK(tipo IN ('ganho', 'despesa')) NOT NULL,
-      icon_id TEXT, -- Nome da coluna ajustado para bater com a query do Hook
+      icone TEXT,
       cor TEXT       
     );
 
@@ -159,7 +149,7 @@ const initV1 = () => {
       categoria_id INTEGER NOT NULL,
       descricao TEXT,
       valor REAL NOT NULL,
-      data_transacao DATETIME DEFAULT (datetime('now', 'localtime')), -- Ajustado para DATETIME para salvar hora
+      data_transacao DATETIME DEFAULT (datetime('now', 'localtime')), 
       tipo TEXT CHECK(tipo IN ('ganho', 'despesa')) NOT NULL,
       FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE SET NULL,
       FOREIGN KEY (categoria_id) REFERENCES categorias_financeiras (id)
@@ -199,6 +189,17 @@ const initV1 = () => {
       lida INTEGER DEFAULT 0,
       data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
+    -- Categorias padrão
+    INSERT OR IGNORE INTO categorias_financeiras (nome, tipo, icone, cor) VALUES 
+    ('Combustível', 'despesa', 'Fuel', '#EF4444'),
+    ('Manutenção', 'despesa', 'Wrench', '#F59E0B'),
+    ('Alimentação', 'despesa', 'Utensils', '#3B82F6'),
+    ('iFood', 'ganho', 'ShoppingBag', '#00C853'),
+    ('Uber', 'ganho', 'Navigation', '#00C853'),
+    ('99', 'ganho', 'Navigation2', '#00C853'),
+    ('Outros Ganhos', 'ganho', 'PlusCircle', '#00C853'),
+    ('Outras Despesas', 'despesa', 'MinusCircle', '#6B7280');
   `);
 };
 

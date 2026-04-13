@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'; // Importamos useEffect
+import { useState, useCallback, useEffect } from 'react';
 import { Alert } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import db from '../../database/DatabaseInit';
@@ -41,13 +41,15 @@ export function useHistorico() {
   const [modalEdicao, setModalEdicao] = useState(false);
   const [modalFiltro, setModalFiltro] = useState(false);
 
-  const formatSQL = (d: Date) =>
-    d.toISOString().split('T')[0];
+  // Formatação baseada na data local para evitar problemas de fuso horário (Timezone UTC)
+  const formatSQL = (d: Date) => {
+    const pad = (n: number) =>
+      n.toString().padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  };
 
-  // 1. Reset inteligente para evitar loop
   const resetarFiltros = useCallback(() => {
     setFiltros((prev) => {
-      // Se já estiver no estado inicial (hoje), não atualiza para não causar re-render
       const hoje = new Date().toDateString();
       if (
         prev.periodo === 'dia' &&
@@ -107,15 +109,16 @@ export function useHistorico() {
         return;
       }
 
+      // CORREÇÃO: Usando a coluna 'icone' em vez de 'icone_id'
       const cats = await db.getAllAsync(`
-        SELECT DISTINCT c.id, c.nome, c.cor, c.icon_id, t.tipo
+        SELECT DISTINCT c.id, c.nome, c.cor, c.icone as icon_id, t.tipo
         FROM categorias_financeiras c
         JOIN transacoes_financeiras t ON t.categoria_id = c.id
       `);
       setCategoriasDisponiveis(cats);
 
       let query = `
-        SELECT t.*, c.nome as categoria_nome, c.cor as categoria_cor, c.icon_id as categoria_icon
+        SELECT t.*, c.nome as categoria_nome, c.cor as categoria_cor, c.icone as categoria_icon
         FROM transacoes_financeiras t
         LEFT JOIN categorias_financeiras c ON t.categoria_id = c.id
         WHERE t.data_transacao >= ? AND t.data_transacao <= ?
@@ -183,12 +186,10 @@ export function useHistorico() {
     }
   }, [filtros, calcularIntervalo]);
 
-  // 2. DISPARO DE CARGA: Carrega sempre que o filtro mudar
   useEffect(() => {
     carregarDados();
   }, [carregarDados]);
 
-  // 3. FOCO: Apenas reseta para o padrão ao entrar na tela
   useFocusEffect(
     useCallback(() => {
       resetarFiltros();
@@ -277,10 +278,10 @@ export function useHistorico() {
     data: Date,
   ) => {
     try {
-      const sqlData = data
-        .toISOString()
-        .replace('T', ' ')
-        .split('.')[0];
+      const pad = (n: number) =>
+        n.toString().padStart(2, '0');
+      const sqlData = `${data.getFullYear()}-${pad(data.getMonth() + 1)}-${pad(data.getDate())} ${pad(data.getHours())}:${pad(data.getMinutes())}:${pad(data.getSeconds())}`;
+
       await db.runAsync(
         'UPDATE transacoes_financeiras SET valor = ?, data_transacao = ? WHERE id = ?',
         [valor, sqlData, id],

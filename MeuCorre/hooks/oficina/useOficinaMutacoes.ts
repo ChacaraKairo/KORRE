@@ -18,6 +18,15 @@ export function useOficinaMutacoes(
   }>({ visivel: false, item: null, ultimoValor: 0 });
 
   /**
+   * Helper para formatar data local (YYYY-MM-DD) e evitar erro de fuso horário
+   */
+  const formatarDataLocal = (d: Date) => {
+    const pad = (n: number) =>
+      n.toString().padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  };
+
+  /**
    * Prepara os dados para abrir o modal de confirmação de manutenção realizada
    */
   const handleReset = async (item: any) => {
@@ -54,7 +63,8 @@ export function useOficinaMutacoes(
 
     try {
       let itemIdToUse = item.id;
-      const agoraIso = new Date().toISOString();
+      // CORREÇÃO: Usar data local em vez de ISOString para evitar erro de fuso
+      const agoraLocal = formatarDataLocal(new Date());
 
       // 1. Se o item era virtual (sugerido), primeiro transformamos em item real no banco
       if (item.isVirtual) {
@@ -66,7 +76,7 @@ export function useOficinaMutacoes(
             item.icone,
             veiculoConsultado.km_atual,
             novoIntKm,
-            agoraIso,
+            agoraLocal,
             novoIntMeses,
             item.criticidade || 'media',
           ],
@@ -78,7 +88,7 @@ export function useOficinaMutacoes(
           'UPDATE itens_manutencao SET ultima_troca_km = ?, ultima_troca_data = ?, intervalo_km = ?, intervalo_meses = ? WHERE id = ?',
           [
             veiculoConsultado.km_atual,
-            agoraIso,
+            agoraLocal,
             novoIntKm,
             novoIntMeses,
             itemIdToUse,
@@ -88,13 +98,14 @@ export function useOficinaMutacoes(
 
       // 2. Registra no histórico de manutenções
       await db.runAsync(
-        `INSERT INTO historico_manutencao (veiculo_id, item_id, descricao, valor, km_servico) VALUES (?, ?, ?, ?, ?)`,
+        `INSERT INTO historico_manutencao (veiculo_id, item_id, descricao, valor, km_servico, data_servico) VALUES (?, ?, ?, ?, ?, ?)`,
         [
           veiculoConsultado.id,
           itemIdToUse,
           `Manutenção: ${item.nome}`,
           valorPago,
           veiculoConsultado.km_atual,
+          agoraLocal,
         ],
       );
 
@@ -118,8 +129,9 @@ export function useOficinaMutacoes(
               .join('')
           : 'Wrench';
 
+        // CORREÇÃO: Alterado de icone_id para icone
         const result: any = await db.runAsync(
-          "INSERT INTO categorias_financeiras (nome, tipo, icone_id, cor) VALUES (?, 'despesa', ?, '#795548')",
+          "INSERT INTO categorias_financeiras (nome, tipo, icone, cor) VALUES (?, 'despesa', ?, '#795548')",
           [item.nome, iconeFormatado],
         );
         categoriaId = result.lastInsertRowId;
@@ -144,7 +156,7 @@ export function useOficinaMutacoes(
       });
       showCustomAlert(
         'Sucesso',
-        'Manutenção registada e ciclo renovado!',
+        'Manutenção registrada e ciclo renovado!',
       );
     } catch (error) {
       console.error('Erro ao resetar manutenção:', error);

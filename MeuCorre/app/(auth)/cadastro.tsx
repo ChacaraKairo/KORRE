@@ -20,10 +20,16 @@ import {
 import { Stack } from 'expo-router';
 import { useCadastro } from '../../hooks/cadastro/useCadastro';
 import { styles } from '../../styles/telas/Cadastro/componentes/cadastroStyles';
+
+// Componentes da tela
+import { RestaurarFluxoCadastro } from '../../components/telas/Cadastro/RestaurarFluxoCadastro';
 import { HeaderCadastro } from '../../components/telas/Cadastro/HeaderCadastro';
 import { PerfilSecao } from '../../components/telas/Cadastro/PerfilSecao';
 import { VeiculoSecao } from '../../components/telas/Cadastro/VeiculoSecao';
 import { MetasSecao } from '../../components/telas/Cadastro/MetasSecao';
+
+// IMPORTAÇÃO DO ALERTA PERSONALIZADO
+import { CustomAlert } from '../../components/telas/Cadastro/CustomAlert';
 
 export default function CadastroScreen() {
   const {
@@ -104,6 +110,10 @@ export default function CadastroScreen() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
+
+      {/* 1. ADICIONADO: Componente visual que renderiza o Alerta da Store (Zustand) */}
+      <CustomAlert />
+
       <KeyboardAvoidingView
         behavior={
           Platform.OS === 'ios' ? 'padding' : 'height'
@@ -123,6 +133,9 @@ export default function CadastroScreen() {
               <HeaderCadastro
                 tipoVeiculo={tipoVeiculo as any}
               />
+
+              {/* O RestaurarFluxoCadastro agora conseguirá mostrar o alerta nesta tela */}
+              <RestaurarFluxoCadastro />
 
               <PerfilSecao
                 nome={nome}
@@ -193,7 +206,7 @@ export default function CadastroScreen() {
                     {aceitouTermos && (
                       <ShieldCheck
                         size={14}
-                        {...({ color: '#0A0A0A' } as any)}
+                        color="#0A0A0A"
                       />
                     )}
                   </View>
@@ -227,10 +240,7 @@ export default function CadastroScreen() {
                   <Text style={styles.btnSalvarText}>
                     Começar o corre
                   </Text>
-                  <ChevronRight
-                    size={24}
-                    {...({ color: '#0A0A0A' } as any)}
-                  />
+                  <ChevronRight size={24} color="#0A0A0A" />
                 </TouchableOpacity>
               </Animated.View>
             </ScrollView>

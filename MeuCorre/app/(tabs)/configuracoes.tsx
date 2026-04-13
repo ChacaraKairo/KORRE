@@ -1,240 +1,48 @@
+// src/app/(telas)/configuracoes.tsx
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Modal,
-  Alert,
-} from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Bell,
   Globe,
-  Info,
   ArrowLeft,
   Moon,
   Sun,
-  ShieldCheck,
   HelpCircle,
   FileText,
-  Check,
   DownloadCloud,
   UploadCloud,
+  Trash2,
 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { showCustomAlert } from '../../hooks/alert/useCustomAlert';
-import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system/legacy';
-import * as Sharing from 'expo-sharing';
-import db from '../../database/DatabaseInit';
 
-// Lógica e Estilos
 import { useTema } from '../../hooks/modo_tema';
+import { useExportarDados } from '../../hooks/configuracao/useExportarDados';
+import { useGerenciarDados } from '../../hooks/configuracao/useGerenciarDados';
+import { showCustomAlert } from '../../hooks/alert/useCustomAlert';
 import { styles } from '../../styles/telas/Configuracoes/configuracoesStyles';
 
-// Componentes
+// Importando os componentes
 import { SettingItem } from '../../components/telas/Configuracoes/SettingItem';
+import { HeaderConfiguracoes } from '../../components/telas/Configuracoes/HeaderConfiguracoes';
 
 export default function ConfiguracoesScreen() {
   const router = useRouter();
-  const { t, i18n } = useTranslation();
-
-  // Usando o seu Hook global de Tema
+  const { t } = useTranslation();
   const { tema, setTema } = useTema();
   const isDark = tema === 'escuro';
 
-  // Estados locais para outras configurações
-  const [notificacoes, setNotificacoes] = useState(true);
-  const [modalIdioma, setModalIdioma] = useState(false);
+  const { exportarDados } = useExportarDados();
+  const { importarBackup, limparTodosOsDados } =
+    useGerenciarDados();
 
-  // Cores dinâmicas para a base da tela
+  const [notificacoes, setNotificacoes] = useState(true);
+
   const bgColor = isDark ? '#0A0A0A' : '#F5F5F5';
   const cardColor = isDark ? '#161616' : '#FFFFFF';
   const borderColor = isDark ? '#222' : '#E0E0E0';
   const textMuted = isDark ? '#666' : '#888';
-
-  // Mapeamento dos idiomas disponíveis
-  const idiomas = [
-    { code: 'pt', label: 'Português (PT)' },
-    { code: 'en', label: 'English (EN)' },
-    { code: 'es', label: 'Español (ES)' },
-    { code: 'fr', label: 'Français (FR)' },
-  ];
-
-  const getIdiomaAtual = () => {
-    const lang = idiomas.find(
-      (l) => l.code === i18n.language,
-    );
-    return lang ? lang.label : 'Português (PT)';
-  };
-
-  // Função para lidar com a troca de tema
-  const handleToggleTema = () => {
-    if (setTema) setTema(isDark ? 'claro' : 'escuro');
-  };
-
-  // ==========================================
-  // FUNÇÕES DE BACKUP E RESTAURAÇÃO DE DADOS
-  // ==========================================
-  const exportarBackup = async () => {
-    try {
-      const tabelas = [
-        'perfil_usuario',
-        'veiculos',
-        'parametros_financeiros',
-        'categorias_financeiras',
-        'transacoes_financeiras',
-        'itens_manutencao',
-        'historico_manutencao',
-        'notificacoes',
-        'app_config',
-      ];
-      const backupData: any = {
-        versao: '1.0',
-        data_exportacao: new Date().toISOString(),
-        tabelas: {},
-      };
-
-      for (const tabela of tabelas) {
-        try {
-          const rows = await db.getAllAsync(
-            `SELECT * FROM ${tabela}`,
-          );
-          backupData.tabelas[tabela] = rows;
-        } catch {
-          backupData.tabelas[tabela] = [];
-        }
-      }
-
-      const jsonStr = JSON.stringify(backupData, null, 2);
-      const fileUri =
-        FileSystem.documentDirectory +
-        'meucorre_backup.json';
-      await FileSystem.writeAsStringAsync(
-        fileUri,
-        jsonStr,
-        { encoding: FileSystem.EncodingType.UTF8 },
-      );
-
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(fileUri, {
-          mimeType: 'application/json',
-          dialogTitle: 'Salvar Backup MeuCorre',
-          UTI: 'public.json',
-        });
-      } else {
-        showCustomAlert(
-          'Aviso',
-          'O partilhamento não está disponível no dispositivo.',
-        );
-      }
-    } catch (error) {
-      console.error('Erro ao exportar backup:', error);
-      showCustomAlert(
-        'Erro',
-        'Não foi possível criar o ficheiro de backup.',
-      );
-    }
-  };
-
-  const executarRestauracao = async (data: any) => {
-    // Suporta o formato antigo (object direto) e novo (com wrapper tabelas)
-    const tabelas_data = data.tabelas ?? data;
-
-    try {
-      await db.execAsync('BEGIN TRANSACTION;');
-
-      const ordemRestauracao = [
-        'transacoes_financeiras',
-        'historico_manutencao',
-        'itens_manutencao',
-        'parametros_financeiros',
-        'veiculos',
-        'categorias_financeiras',
-        'perfil_usuario',
-        'notificacoes',
-        'app_config',
-      ];
-
-      for (const tabela of ordemRestauracao) {
-        try {
-          await db.execAsync(`DELETE FROM ${tabela};`);
-
-          const rows = tabelas_data[tabela];
-          if (rows && rows.length > 0) {
-            const colunas = Object.keys(rows[0]);
-            const placeholders = colunas
-              .map(() => '?')
-              .join(', ');
-            const colunasStr = colunas.join(', ');
-
-            for (const row of rows) {
-              const valores = colunas.map(
-                (col) => row[col],
-              );
-              await db.runAsync(
-                `INSERT OR REPLACE INTO ${tabela} (${colunasStr}) VALUES (${placeholders})`,
-                valores,
-              );
-            }
-          }
-        } catch {
-          // Tabela não existe ainda (ex: app_config), ignora e continua
-        }
-      }
-
-      await db.execAsync('COMMIT;');
-      showCustomAlert(
-        'Sucesso ✅',
-        'Backup restaurado com sucesso! Reinicie o aplicativo para recarregar todos os dados.',
-      );
-    } catch (error) {
-      await db.execAsync('ROLLBACK;');
-      console.error('Erro ao restaurar:', error);
-      showCustomAlert(
-        'Erro',
-        'Falha ao restaurar dados. O ficheiro pode estar corrompido.',
-      );
-    }
-  };
-
-  const importarBackup = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/json',
-        copyToCacheDirectory: true,
-      });
-      if (result.canceled) return;
-
-      const fileContent =
-        await FileSystem.readAsStringAsync(
-          result.assets[0].uri,
-          { encoding: FileSystem.EncodingType.UTF8 },
-        );
-      const data = JSON.parse(fileContent);
-
-      Alert.alert(
-        'Restaurar Backup',
-        'Isto irá APAGAR todos os teus dados atuais e substituí-los pelos dados do ficheiro. Desejas continuar?',
-        [
-          { text: 'Cancelar', style: 'cancel' },
-          {
-            text: 'Restaurar',
-            style: 'destructive',
-            onPress: () => executarRestauracao(data),
-          },
-        ],
-      );
-    } catch (error) {
-      console.error('Erro ao ler backup:', error);
-      showCustomAlert(
-        'Erro',
-        'Não foi possível ler o ficheiro de backup.',
-      );
-    }
-  };
 
   return (
     <SafeAreaView
@@ -243,40 +51,20 @@ export default function ConfiguracoesScreen() {
         { backgroundColor: bgColor },
       ]}
     >
-      {/* HEADER */}
-      <View
-        style={[
-          styles.header,
-          {
-            borderBottomColor: isDark
-              ? '#161616'
-              : '#EAEAEA',
-          },
-        ]}
-      >
-        <TouchableOpacity
-          style={[
-            styles.btnVoltar,
-            { backgroundColor: cardColor, borderColor },
-          ]}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft
-            size={20}
-            color={isDark ? '#FFF' : '#1A1A1A'}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>
-          {t('configuracoes.titulo')}
-        </Text>
-        <View style={{ width: 36 }} />
-      </View>
+      <HeaderConfiguracoes
+        isDark={isDark}
+        cardColor={cardColor}
+        borderColor={borderColor}
+      />
 
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { gap: 20 },
+        ]}
         showsVerticalScrollIndicator={false}
       >
-        {/* SECÇÃO: PERSONALIZAÇÃO */}
+        {/* SEÇÃO: APARÊNCIA */}
         <View>
           <Text
             style={[
@@ -284,7 +72,7 @@ export default function ConfiguracoesScreen() {
               { color: textMuted },
             ]}
           >
-            {t('configuracoes.aparencia')}
+            APARÊNCIA
           </Text>
           <View
             style={[
@@ -295,24 +83,19 @@ export default function ConfiguracoesScreen() {
             <SettingItem
               isDark={isDark}
               icon={isDark ? Moon : Sun}
-              title={t('configuracoes.modo_visualizacao')}
-              subtitle={
-                isDark
-                  ? t('configuracoes.escuro')
-                  : t('configuracoes.claro')
-              }
+              title="Tema Escuro"
               action="toggle"
               value={{
                 current: isDark,
-                setter: handleToggleTema,
+                setter: () =>
+                  setTema!(isDark ? 'claro' : 'escuro'),
               }}
             />
             <SettingItem
               isDark={isDark}
               isLast={true}
               icon={Bell}
-              title={t('configuracoes.notificacoes')}
-              subtitle={t('configuracoes.notificacoes_sub')}
+              title="Notificações"
               action="toggle"
               value={{
                 current: notificacoes,
@@ -322,7 +105,7 @@ export default function ConfiguracoesScreen() {
           </View>
         </View>
 
-        {/* SECÇÃO: LINGUAGEM */}
+        {/* SEÇÃO: PREFERÊNCIAS */}
         <View>
           <Text
             style={[
@@ -330,7 +113,7 @@ export default function ConfiguracoesScreen() {
               { color: textMuted },
             ]}
           >
-            {t('configuracoes.regional')}
+            PREFERÊNCIAS
           </Text>
           <View
             style={[
@@ -342,48 +125,19 @@ export default function ConfiguracoesScreen() {
               isDark={isDark}
               isLast={true}
               icon={Globe}
-              title={t('configuracoes.idioma')}
-              subtitle={t('configuracoes.idioma_sub')}
-              value={{ label: getIdiomaAtual() }}
-              onClick={() => setModalIdioma(true)}
-            />
-          </View>
-        </View>
-
-        {/* SECÇÃO: SEGURANÇA */}
-        <View>
-          <Text
-            style={[
-              styles.sectionTitle,
-              { color: textMuted },
-            ]}
-          >
-            {t('configuracoes.privacidade')}
-          </Text>
-          <View
-            style={[
-              styles.sectionContainer,
-              { borderColor },
-            ]}
-          >
-            <SettingItem
-              isDark={isDark}
-              isLast={true}
-              icon={ShieldCheck}
-              title={t('configuracoes.privacidade_dados')}
-              subtitle={t('configuracoes.privacidade_sub')}
-              value={{ label: t('configuracoes.ver') }}
+              title="Idioma do aplicativo"
+              value={{ label: 'Português (PT)' }}
               onClick={() =>
                 showCustomAlert(
-                  'Privacidade',
-                  'Seus dados são salvos apenas no seu celular.',
+                  'Em breve',
+                  'A seleção de novos idiomas será implementada em atualizações futuras.',
                 )
               }
             />
           </View>
         </View>
 
-        {/* SECÇÃO: BACKUP E DADOS */}
+        {/* SEÇÃO: DADOS */}
         <View>
           <Text
             style={[
@@ -391,7 +145,7 @@ export default function ConfiguracoesScreen() {
               { color: textMuted },
             ]}
           >
-            DADOS E BACKUP
+            SEGURANÇA E DADOS
           </Text>
           <View
             style={[
@@ -402,22 +156,26 @@ export default function ConfiguracoesScreen() {
             <SettingItem
               isDark={isDark}
               icon={UploadCloud}
-              title="Exportar Dados (Backup)"
-              subtitle="Cria um ficheiro JSON com todas as tuas informações"
-              onClick={exportarBackup}
+              title="Exportar Backup"
+              onClick={exportarDados}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={DownloadCloud}
+              title="Restaurar Dados"
+              onClick={importarBackup}
             />
             <SettingItem
               isDark={isDark}
               isLast={true}
-              icon={DownloadCloud}
-              title="Restaurar Backup"
-              subtitle="Importa informações de um ficheiro existente"
-              onClick={importarBackup}
+              icon={Trash2}
+              title="Zerar Aplicativo"
+              onClick={limparTodosOsDados}
             />
           </View>
         </View>
 
-        {/* SECÇÃO: SOBRE */}
+        {/* SEÇÃO: SUPORTE */}
         <View>
           <Text
             style={[
@@ -425,7 +183,7 @@ export default function ConfiguracoesScreen() {
               { color: textMuted },
             ]}
           >
-            {t('configuracoes.suporte')}
+            SUPORTE
           </Text>
           <View
             style={[
@@ -436,175 +194,37 @@ export default function ConfiguracoesScreen() {
             <SettingItem
               isDark={isDark}
               icon={HelpCircle}
-              title={t('configuracoes.central_ajuda')}
-              subtitle={t(
-                'configuracoes.central_ajuda_sub',
-              )}
-              onClick={() => router.push('/suporte')} // Link para a tela de Suporte que já criamos!
+              title="Central de Ajuda"
+              onClick={() => router.push('/suporte')}
             />
             <SettingItem
               isDark={isDark}
+              isLast={true}
               icon={FileText}
-              title={t('configuracoes.termos')}
-              subtitle={t('configuracoes.termos_sub')}
-              onClick={() => router.push('/termos')} // Link para a tela de Termos que já criamos!
+              title="Termos de Uso"
+              onClick={() => router.push('/termos')}
             />
-
-            {/* Versão do App (Rodapé da Seção) */}
-            <View
-              style={[
-                styles.versaoContainer,
-                { backgroundColor: cardColor },
-              ]}
-            >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 16,
-                }}
-              >
-                <View
-                  style={[
-                    styles.iconBox,
-                    {
-                      backgroundColor: isDark
-                        ? '#202020'
-                        : '#F0F0F0',
-                    },
-                  ]}
-                >
-                  <Info size={20} color="#00C853" />
-                </View>
-                <View>
-                  <Text
-                    style={[
-                      styles.itemTitle,
-                      {
-                        color: isDark
-                          ? '#FFFFFF'
-                          : '#1A1A1A',
-                      },
-                    ]}
-                  >
-                    {t('configuracoes.versao')}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.itemSubtitle,
-                      { color: textMuted },
-                    ]}
-                  >
-                    v1.0.4 Build Final
-                  </Text>
-                </View>
-              </View>
-              <Text style={styles.versaoBadge}>
-                {t('configuracoes.atualizado')}
-              </Text>
-            </View>
           </View>
         </View>
-      </ScrollView>
 
-      {/* MODAL DE IDIOMA */}
-      <Modal
-        visible={modalIdioma}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setModalIdioma(false)}
-      >
         <View
           style={{
-            flex: 1,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            justifyContent: 'center',
             alignItems: 'center',
-            padding: 20,
+            marginTop: 10,
+            marginBottom: 20,
           }}
         >
-          <View
+          <Text
             style={{
-              width: '100%',
-              backgroundColor: cardColor,
-              borderRadius: 24,
-              padding: 20,
-              borderWidth: 1,
-              borderColor,
+              color: textMuted,
+              fontSize: 12,
+              fontWeight: 'bold',
             }}
           >
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: isDark ? '#FFF' : '#000',
-                marginBottom: 20,
-                textAlign: 'center',
-              }}
-            >
-              {t('configuracoes.selecione_idioma')}
-            </Text>
-            {idiomas.map((lang) => (
-              <TouchableOpacity
-                key={lang.code}
-                style={{
-                  paddingVertical: 16,
-                  borderBottomWidth: 1,
-                  borderBottomColor: borderColor,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-                onPress={() => {
-                  i18n.changeLanguage(lang.code);
-                  setModalIdioma(false);
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    color:
-                      i18n.language === lang.code
-                        ? '#00C853'
-                        : isDark
-                          ? '#FFF'
-                          : '#000',
-                    fontWeight:
-                      i18n.language === lang.code
-                        ? 'bold'
-                        : 'normal',
-                  }}
-                >
-                  {lang.label}
-                </Text>
-                {i18n.language === lang.code && (
-                  <Check size={20} color="#00C853" />
-                )}
-              </TouchableOpacity>
-            ))}
-            <TouchableOpacity
-              style={{
-                marginTop: 20,
-                paddingVertical: 14,
-                backgroundColor: '#00C853',
-                borderRadius: 12,
-                alignItems: 'center',
-              }}
-              onPress={() => setModalIdioma(false)}
-            >
-              <Text
-                style={{
-                  color: '#0A0A0A',
-                  fontWeight: 'bold',
-                  fontSize: 16,
-                }}
-              >
-                {t('configuracoes.cancelar')}
-              </Text>
-            </TouchableOpacity>
-          </View>
+            MEUCORRE v1.0.4
+          </Text>
         </View>
-      </Modal>
+      </ScrollView>
     </SafeAreaView>
   );
 }
