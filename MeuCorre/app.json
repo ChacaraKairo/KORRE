@@ -2,7 +2,7 @@
   "expo": {
     "name": "MeuCorre",
     "slug": "MeuCorre",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "meucorre",
@@ -10,18 +10,20 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.chacara.MeuCorre"
+      "bundleIdentifier": "com.chacara.MeuCorre",
+      "buildNumber": "1.0.4"
     },
     "android": {
+      "package": "com.chacara.MeuCorre",
+      "versionCode": 4,
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png",
         "backgroundColor": "#000000"
-      },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
-      "package": "com.chacara.MeuCorre"
+      }
     },
     "web": {
       "output": "static",
