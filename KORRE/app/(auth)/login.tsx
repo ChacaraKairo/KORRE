@@ -13,9 +13,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useLogin } from '../../hooks/login/useLogin';
 import { CardLogin } from '../../components/telas/Login/CardLogin';
 import { FooterLogin } from '../../components/telas/Login/FooterLogin';
+import { useLogin } from '../../hooks/login/useLogin';
 import { loginStyles as styles } from '../../styles/telas/login/LoginStyles';
 
 const LoginScreen: React.FC = () => {
@@ -89,7 +89,11 @@ const LoginScreen: React.FC = () => {
           >
             <Image
               source={require('../../assets/images/android-icon-foreground.png')}
-              style={{ width: 220, height: 220 }}
+              style={{
+                width: 110,
+                height: 110,
+                marginBottom: 50,
+              }}
               resizeMode="contain"
             />
             <Text

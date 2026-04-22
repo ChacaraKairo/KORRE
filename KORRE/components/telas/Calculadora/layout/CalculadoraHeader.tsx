@@ -44,7 +44,6 @@ const getIconeVeiculo = (
       return <Car size={size} color={color} />;
   }
 };
-// --------------------------------------------------
 
 interface Veiculo {
   id: number;
@@ -63,7 +62,7 @@ interface Veiculo {
 interface CalculadoraHeaderProps {
   veiculoAtivo: Veiculo | null;
   veiculosDisponiveis: Veiculo[];
-  onMudarVeiculo: (id: number) => void;
+  onMudarVeiculo: (veiculo: Veiculo) => void; // Atualizado para receber o objeto completo
   percentualCompletude: number;
 }
 
@@ -128,7 +127,7 @@ export const CalculadoraHeader: React.FC<
             return (
               <TouchableOpacity
                 key={v.id}
-                onPress={() => onMudarVeiculo(v.id)}
+                onPress={() => onMudarVeiculo(v)}
                 style={[
                   styles.veiculoChip,
                   {
@@ -143,7 +142,6 @@ export const CalculadoraHeader: React.FC<
                   },
                 ]}
               >
-                {/* O Ícone agora é renderizado dinamicamente */}
                 {getIconeVeiculo(
                   v.tipo,
                   isActive,

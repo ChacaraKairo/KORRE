@@ -17,7 +17,7 @@ const ESTADO_INICIAL_VAZIO: Partial<FormularioViabilidade> =
     tipo_aquisicao: 'proprio_quitado',
     imposto_mei_mensal: 86,
     vida_util_smartphone_meses: 18,
-    // ... (mantenha os outros campos zerados aqui)
+    // Os demais campos serão preenchidos pelo banco ou manual
   };
 
 export function useCalculadora() {
@@ -38,7 +38,6 @@ export function useCalculadora() {
       campo: keyof FormularioViabilidade,
       valor: string | number,
     ) => {
-      // Ignora a máscara para campos de texto/seleção
       if (
         campo === 'tipo_aquisicao' ||
         campo === 'estado_uf'
@@ -47,7 +46,6 @@ export function useCalculadora() {
         return;
       }
 
-      // Previne erros se por acaso o valor já for um número (via código interno)
       if (typeof valor === 'number') {
         setForm((prev) => ({
           ...prev,
@@ -56,21 +54,15 @@ export function useCalculadora() {
         return;
       }
 
-      // 1. Transforma o que foi digitado em string e troca vírgula por ponto (padrão decimal)
-      // Usando String() por segurança para o TypeScript não reclamar do replace
       let textoLimpo = String(valor).replace(',', '.');
-
-      // 2. Remove letras e caracteres inválidos (deixa apenas números e o ponto)
       textoLimpo = textoLimpo.replace(/[^0-9.]/g, '');
 
-      // 3. Impede que o usuário digite mais de um ponto (ex: 10..5)
       const partes = textoLimpo.split('.');
       if (partes.length > 2) {
         textoLimpo =
           partes[0] + '.' + partes.slice(1).join('');
       }
 
-      // 4. Salva no estado a string exata que o usuário está digitando (permitindo "10.")
       setForm((prev) => ({
         ...prev,
         [campo]: textoLimpo as any,
@@ -103,8 +95,14 @@ export function useCalculadora() {
             novoForm.valor_jogo_pneus = oficina.valorPneu;
           if (oficina.kmPneu)
             novoForm.durabilidade_pneus_km = oficina.kmPneu;
+
           return novoForm as Partial<FormularioViabilidade>;
         });
+      } catch (error) {
+        console.error(
+          'Erro ao carregar formulário:',
+          error,
+        );
       } finally {
         setLoading(false);
       }
@@ -112,25 +110,43 @@ export function useCalculadora() {
     [],
   );
 
+  // ATUALIZADO: Busca todos os veículos e define o inicial corretamente
   const carregarDadosIniciais = useCallback(async () => {
     try {
       setLoading(true);
       const lista: any[] = await db.getAllAsync(
-        'SELECT * FROM veiculos',
+        'SELECT * FROM veiculos ORDER BY modelo ASC',
       );
       setVeiculosDisponiveis(lista);
 
-      const ativo =
-        lista.find((v) => v.ativo === 1) || lista[0];
-      if (ativo) await carregarFormularioVeiculo(ativo);
+      // Se houver veículos e nenhum ativo selecionado ainda, define o padrão
+      if (lista.length > 0 && !veiculoAtivo) {
+        const ativo =
+          lista.find((v) => v.ativo === 1) || lista[0];
+        await carregarFormularioVeiculo(ativo);
+      }
+    } catch (error) {
+      console.error(
+        'Erro na carga inicial de veículos:',
+        error,
+      );
     } finally {
       setLoading(false);
     }
-  }, [carregarFormularioVeiculo]);
+  }, [veiculoAtivo, carregarFormularioVeiculo]);
 
   useEffect(() => {
     carregarDadosIniciais();
-  }, [carregarDadosIniciais]);
+  }, []);
+
+  // ATUALIZADO: Função robusta para trocar o veículo no Header
+  const mudarVeiculoAtivo = useCallback(
+    async (veiculo: any) => {
+      if (veiculo.id === veiculoAtivo?.id) return;
+      await carregarFormularioVeiculo(veiculo);
+    },
+    [veiculoAtivo, carregarFormularioVeiculo],
+  );
 
   const calcularESalvar = async () => {
     if (!veiculoAtivo) return;
@@ -153,19 +169,13 @@ export function useCalculadora() {
     }
   };
 
-  const mudarVeiculoAtivo = (veiculo: any) =>
-    carregarFormularioVeiculo(veiculo);
-
-  // Validações apontando para as chaves reais do banco de dados
   const validarStatusSecoes = useCallback(() => {
     const operacaoCompleta =
       !!form.rendimento_energia_unidade &&
       !!form.preco_energia_unidade;
-
     const burocraciaCompleta =
       !!form.ipva_anual &&
       !!form.licenciamento_detran_anual;
-
     const humanoCompleto =
       !!form.salario_liquido_mensal_desejado &&
       !!form.dias_trabalhados_semana;
@@ -183,11 +193,8 @@ export function useCalculadora() {
     };
   }, [form]);
 
-  // MOTOR IPVA INTEGRADO 🚀
-  // MOTOR IPVA INTEGRADO 🚀
   const calcularIPVAAutomatico = useCallback(
     (ufSelecionada?: SiglaEstado) => {
-      // 1. Usa o estado selecionado no modal OU o que já está salvo no formulário
       const estado =
         ufSelecionada ||
         (form.estado_uf as SiglaEstado) ||
@@ -196,7 +203,6 @@ export function useCalculadora() {
       const tipoVeiculo = veiculoAtivo?.tipo;
       const anoVeiculo = veiculoAtivo?.ano;
 
-      // 2. Se o usuário escolheu um estado novo pelo Modal, atualizamos o formulário
       if (
         ufSelecionada &&
         ufSelecionada !== form.estado_uf
@@ -204,11 +210,10 @@ export function useCalculadora() {
         handleChange('estado_uf', ufSelecionada);
       }
 
-      // 3. Validação de dados básicos
       if (!valorFipe || !tipoVeiculo) {
         showCustomAlert(
           'Dados Insuficientes',
-          'Informe o valor FIPE do veículo primeiro para calcularmos o IPVA.',
+          'Informe o valor FIPE do veículo primeiro.',
         );
         return;
       }
@@ -216,7 +221,6 @@ export function useCalculadora() {
       const regra = REGRAS_IPVA_ESTADOS[estado];
       if (!regra) return;
 
-      // 4. Verificação de Isenção por Idade
       const anoAtual = new Date().getFullYear();
       const idadeVeiculo =
         anoAtual - Number(anoVeiculo || anoAtual);
@@ -230,30 +234,22 @@ export function useCalculadora() {
         return;
       }
 
-      // 5. Seleção da Alíquota correta baseada no tipo do veículo
-      let aliquota = regra.aliquota_carro; // Padrão para carro passeio
-
-      if (tipoVeiculo === 'moto') {
+      let aliquota = regra.aliquota_carro;
+      if (tipoVeiculo === 'moto')
         aliquota = regra.aliquota_moto;
-      } else if (tipoVeiculo === 'carro_eletrico') {
+      else if (tipoVeiculo === 'carro_eletrico')
         aliquota = regra.aliquota_eletrico;
-      } else if (
-        ['van', 'caminhao'].includes(tipoVeiculo)
-      ) {
+      else if (['van', 'caminhao'].includes(tipoVeiculo))
         aliquota = regra.aliquota_van;
-      }
 
-      // 6. Cálculo e Atualização do Formulário
       const valorCalculado = (valorFipe * aliquota).toFixed(
         2,
       );
-
-      // Salvamos o valor calculado no estado
       handleChange('ipva_anual', valorCalculado);
 
       showCustomAlert(
         'Cálculo Concluído',
-        `IPVA para ${estado} calculado com alíquota de ${(aliquota * 100).toFixed(1)}%.\n\nValor estimado: R$ ${valorCalculado.replace('.', ',')}`,
+        `IPVA para ${estado} calculado: R$ ${valorCalculado.replace('.', ',')}`,
       );
     },
     [
