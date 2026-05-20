@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { useRouter } from 'expo-router';
@@ -12,6 +13,18 @@ import {
   hideAppLoading,
   showAppLoadingAsync,
 } from '../ui/useAppLoading';
+import {
+  decryptJson,
+  isEncryptedPayload,
+} from '../../utils/security/encryption';
+import { useBackupPasswordPrompt } from './useBackupPasswordPrompt';
+import { AppRoutes } from '../../constants/routes';
+
+const BACKUP_PICKER_TYPES = [
+  'application/json',
+  'application/octet-stream',
+  '*/*',
+];
 
 const mostrarErroBackup = (titulo: string, mensagem: string) => {
   Alert.alert(titulo, mensagem);
@@ -20,12 +33,49 @@ const mostrarErroBackup = (titulo: string, mensagem: string) => {
 
 export function useGerenciarDados() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [importandoBackup, setImportandoBackup] =
     useState(false);
+  const {
+    backupPasswordPrompt,
+    requestPassword,
+    submitPassword,
+    cancelPassword,
+  } = useBackupPasswordPrompt();
+
+  const decodeBackupContent = async (content: string) => {
+    try {
+      return JSON.parse(content);
+    } catch (error) {
+      logger.warn('[Backup] Conteudo nao e JSON puro:', error);
+    }
+
+    if (!isEncryptedPayload(content)) {
+      throw new Error('Backup nao e JSON nem payload criptografado.');
+    }
+
+    const passphrase = await requestPassword(
+      t('configuracoes.senha_backup_label'),
+      t('configuracoes.senha_backup_restaurar_msg'),
+    );
+
+    if (passphrase === null) return null;
+
+    try {
+      return decryptJson(content, passphrase);
+    } catch (error) {
+      logger.error('[Backup] Falha ao descriptografar:', error);
+      mostrarErroBackup(
+        t('common.erro'),
+        t('configuracoes.senha_backup_incorreta'),
+      );
+      return null;
+    }
+  };
 
   const executarRestauracao = async (data: unknown) => {
     setImportandoBackup(true);
-    await showAppLoadingAsync('Restaurando backup...');
+    await showAppLoadingAsync(t('configuracoes.restaurando_backup'));
 
     try {
       await BackupRestoreService.restaurarBackup(data, {
@@ -34,12 +84,12 @@ export function useGerenciarDados() {
 
       hideAppLoading();
       Alert.alert(
-        'Backup restaurado',
-        'Backup restaurado com sucesso!',
+        t('configuracoes.backup_restaurado'),
+        t('configuracoes.backup_restaurado_msg'),
         [
           {
             text: 'OK',
-            onPress: () => router.replace('/(tabs)/dashboard'),
+            onPress: () => router.replace(AppRoutes.dashboard),
           },
         ],
       );
@@ -47,8 +97,8 @@ export function useGerenciarDados() {
       logger.error('[Backup] Falha ao restaurar:', error);
       hideAppLoading();
       mostrarErroBackup(
-        'Falha ao restaurar backup',
-        'O arquivo selecionado nao pode ser restaurado. Verifique se ele e um backup JSON valido do KORRE.',
+        t('configuracoes.falha_restaurar_backup'),
+        t('configuracoes.falha_restaurar_backup_msg'),
       );
     } finally {
       hideAppLoading();
@@ -60,9 +110,9 @@ export function useGerenciarDados() {
     if (importandoBackup) return;
 
     try {
-      await showAppLoadingAsync('Selecionando backup...');
+      await showAppLoadingAsync(t('configuracoes.selecionando_backup'));
       const res = await DocumentPicker.getDocumentAsync({
-        type: 'application/json',
+        type: BACKUP_PICKER_TYPES,
         copyToCacheDirectory: true,
       });
       hideAppLoading();
@@ -71,53 +121,46 @@ export function useGerenciarDados() {
 
       if (!res.assets?.[0]?.uri) {
         mostrarErroBackup(
-          'Backup nao selecionado',
-          'Nao foi possivel acessar o arquivo escolhido.',
+          t('configuracoes.backup_nao_selecionado'),
+          t('configuracoes.backup_nao_selecionado_msg'),
         );
         return;
       }
 
-      await showAppLoadingAsync('Lendo backup...');
+      await showAppLoadingAsync(t('configuracoes.lendo_backup'));
       const content = await FileSystem.readAsStringAsync(
         res.assets[0].uri,
       );
       hideAppLoading();
 
-      let payload: unknown;
-      try {
-        payload = JSON.parse(content);
-      } catch (error) {
-        logger.error('[Backup] JSON invalido:', error);
-        mostrarErroBackup(
-          'Arquivo invalido',
-          'O arquivo selecionado nao e um JSON valido. Escolha um backup exportado pelo KORRE.',
-        );
-        return;
-      }
+      const payload = await decodeBackupContent(content);
+      if (!payload) return;
 
       await executarRestauracao(payload);
     } catch (error) {
       hideAppLoading();
       logger.error('[Backup] Falha ao ler arquivo:', error);
       mostrarErroBackup(
-        'Falha ao ler backup',
-        'Nao foi possivel abrir o arquivo selecionado. Tente escolher outro arquivo JSON.',
+        t('configuracoes.falha_ler_backup'),
+        t('configuracoes.falha_ler_backup_msg'),
       );
     }
   };
 
   const limparTodosOsDados = () => {
     Alert.alert(
-      'Limpar tudo?',
-      'Isto apagara permanentemente seu perfil e historico.',
+      t('configuracoes.limpar_tudo_titulo'),
+      t('configuracoes.limpar_tudo_msg'),
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: t('common.cancelar'), style: 'cancel' },
         {
-          text: 'Apagar Tudo',
+          text: t('configuracoes.apagar_tudo'),
           style: 'destructive',
           onPress: async () => {
             try {
-              await showAppLoadingAsync('Limpando dados...');
+              await showAppLoadingAsync(
+                t('configuracoes.limpando_dados'),
+              );
               await db.execAsync('PRAGMA foreign_keys = OFF;');
 
               for (const tabela of [...BACKUP_TABLES].reverse()) {
@@ -125,7 +168,7 @@ export function useGerenciarDados() {
               }
 
               await db.execAsync('PRAGMA foreign_keys = ON;');
-              router.replace('/(auth)/cadastro');
+              router.replace(AppRoutes.cadastro);
             } catch (error) {
               try {
                 await db.execAsync('PRAGMA foreign_keys = ON;');
@@ -133,8 +176,8 @@ export function useGerenciarDados() {
 
               logger.error('[Backup] Falha ao limpar dados:', error);
               mostrarErroBackup(
-                'Falha ao limpar dados',
-                'Nao foi possivel apagar os dados agora. Tente novamente.',
+                t('configuracoes.falha_limpar_dados'),
+                t('configuracoes.falha_limpar_dados_msg'),
               );
             } finally {
               hideAppLoading();
@@ -149,5 +192,8 @@ export function useGerenciarDados() {
     importarBackup,
     importandoBackup,
     limparTodosOsDados,
+    backupPasswordPrompt,
+    submitBackupPassword: submitPassword,
+    cancelBackupPassword: cancelPassword,
   };
 }

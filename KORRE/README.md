@@ -111,7 +111,8 @@ Tabelas principais:
 - O app funciona localmente sem backend obrigatorio.
 - Senhas sao armazenadas em formato derivado com salt e verificacao em tempo constante. O formato atual fica em `utils/auth/passwordHash.ts` e `utils/auth/passwordHashFormat.ts`.
 - Backups nao restauram senha de arquivos antigos ou manipulados.
-- Backups JSON podem ser restaurados diretamente. Backups criptografados devem usar o formato `salt:cipher` ou `salt:iv:cipher`; quando o arquivo nao puder ser lido como JSON e tiver esse separador, o app solicita a senha de backup e chama `decryptJson`.
+- Backups exportados pelo app sao criptografados por padrao e usam extensao `.korrebackup`.
+- Backups JSON legados ainda podem ser restaurados diretamente. Backups criptografados usam o formato `salt:iv:cipher`; quando o arquivo nao puder ser lido como JSON e tiver esse separador, o app solicita a senha de backup e chama `decryptJson`.
 - A descriptografia de backup usa PBKDF2 com SHA-256 e AES-CBC. A senha nao e armazenada pelo app; se for perdida, o backup criptografado nao pode ser recuperado.
 - Comandos remotos ficam desligados por padrao ate existir canal autenticado adequado para producao.
 
@@ -119,9 +120,9 @@ Antes de lancamento publico, revise hash de senha, bloqueio por tentativas, crip
 
 ## Backup e restauracao
 
-Exporte backups pela tela de Configuracoes. Para backups criptografados, defina uma senha forte no momento da exportacao ou no fluxo de geracao usado pela build; essa mesma senha sera exigida na restauracao.
+Exporte backups pela tela de Configuracoes. Defina uma senha forte no momento da exportacao; essa mesma senha sera exigida na restauracao. O KORRE nao armazena nem recupera essa senha.
 
-Ao restaurar, o KORRE tenta importar JSON puro primeiro. Se a leitura JSON falhar e o conteudo parecer criptografado (`salt:cipher`), o usuario deve informar a senha. Senha incorreta ou conteudo adulterado exibem a mensagem de arquivo invalido e a restauracao e interrompida antes de alterar o banco local.
+Ao restaurar, o KORRE tenta importar JSON puro primeiro para manter compatibilidade com backups antigos. Se a leitura JSON falhar e o conteudo parecer criptografado (`salt:iv:cipher`), o usuario deve informar a senha. Senha incorreta ou conteudo adulterado exibem a mensagem de arquivo invalido e a restauracao e interrompida antes de alterar o banco local.
 
 ## CI
 

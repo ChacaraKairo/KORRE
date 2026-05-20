@@ -1,6 +1,6 @@
-// src/hooks/configuracoes/useExportarDados.ts
 import { useState } from 'react';
 import { Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import db from '../../database/DatabaseInit';
@@ -15,11 +15,22 @@ import {
   hideAppLoading,
   showAppLoadingAsync,
 } from '../ui/useAppLoading';
+import { encryptJson } from '../../utils/security/encryption';
+import { logger } from '../../utils/logger';
+import { useBackupPasswordPrompt } from './useBackupPasswordPrompt';
 
-const BACKUP_MIME = 'application/json';
+const BACKUP_MIME = 'application/octet-stream';
+const BACKUP_EXTENSION = 'korrebackup';
 
 export function useExportarDados() {
+  const { t } = useTranslation();
   const [isExportando, setIsExportando] = useState(false);
+  const {
+    backupPasswordPrompt,
+    requestPassword,
+    submitPassword,
+    cancelPassword,
+  } = useBackupPasswordPrompt();
 
   const montarBackup = async () => {
     const backupData: any = {
@@ -62,16 +73,24 @@ export function useExportarDados() {
 
   const exportarDados = async () => {
     if (isExportando) return;
+
+    const passphrase = await requestPassword(
+      t('configuracoes.senha_backup_criar_titulo'),
+      t('configuracoes.senha_backup_criar_msg'),
+    );
+
+    if (!passphrase) return;
+
     setIsExportando(true);
-    await showAppLoadingAsync('Gerando backup...');
+    await showAppLoadingAsync(t('configuracoes.gerando_backup'));
 
     try {
       const backupData = await montarBackup();
-      const json = JSON.stringify(backupData);
-      const nomeArquivo = `KORRE_Backup_v${BACKUP_SCHEMA_VERSION}.json`;
+      const encryptedBackup = encryptJson(backupData, passphrase);
+      const nomeArquivo = `KORRE_Backup_v${BACKUP_SCHEMA_VERSION}.${BACKUP_EXTENSION}`;
       const fileUri = FileSystem.documentDirectory + nomeArquivo;
 
-      await FileSystem.writeAsStringAsync(fileUri, json);
+      await FileSystem.writeAsStringAsync(fileUri, encryptedBackup);
 
       if (
         Platform.OS === 'android' &&
@@ -82,7 +101,7 @@ export function useExportarDados() {
           await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
 
         if (permission.granted) {
-          await showAppLoadingAsync('Salvando backup...');
+          await showAppLoadingAsync(t('configuracoes.salvando_backup'));
           const destinationUri =
             await FileSystem.StorageAccessFramework.createFileAsync(
               permission.directoryUri,
@@ -91,49 +110,57 @@ export function useExportarDados() {
             );
           await FileSystem.StorageAccessFramework.writeAsStringAsync(
             destinationUri,
-            json,
+            encryptedBackup,
           );
           await registrarBackupExportado();
           hideAppLoading();
           showCustomAlert(
-            'Backup salvo',
-            'O arquivo JSON foi salvo na pasta escolhida.',
+            t('configuracoes.backup_salvo'),
+            t('configuracoes.backup_criptografado_salvo'),
           );
           return;
         }
       }
 
       if (await Sharing.isAvailableAsync()) {
-        await showAppLoadingAsync('Abrindo compartilhamento...');
+        await showAppLoadingAsync(
+          t('configuracoes.abrindo_compartilhamento'),
+        );
         await Sharing.shareAsync(fileUri, {
           mimeType: BACKUP_MIME,
-          dialogTitle: 'Exportar Backup do KORRE',
-          UTI: 'public.json',
+          dialogTitle: t('configuracoes.exportar_backup_titulo'),
+          UTI: 'public.data',
         });
         await registrarBackupExportado();
         hideAppLoading();
         showCustomAlert(
-          'Backup pronto',
-          'O arquivo JSON foi gerado. Use a opção de salvar/arquivos do sistema para guardar uma cópia.',
+          t('configuracoes.backup_pronto'),
+          t('configuracoes.backup_criptografado_pronto'),
         );
       } else {
         hideAppLoading();
         showCustomAlert(
-          'Backup gerado',
-          'O arquivo foi salvo no armazenamento do aplicativo, mas o compartilhamento não está disponível neste dispositivo.',
+          t('configuracoes.backup_gerado'),
+          t('configuracoes.backup_compartilhamento_indisponivel'),
         );
       }
     } catch (error) {
       hideAppLoading();
-      console.error('[Backup] Falha ao exportar:', error);
+      logger.error('[Backup] Falha ao exportar:', error);
       showCustomAlert(
-        'Erro no backup',
-        'Não foi possível gerar ou salvar o arquivo de backup.',
+        t('configuracoes.erro_backup'),
+        t('configuracoes.erro_backup_msg'),
       );
     } finally {
       setIsExportando(false);
     }
   };
 
-  return { exportarDados, isExportando };
+  return {
+    exportarDados,
+    isExportando,
+    backupPasswordPrompt,
+    submitBackupPassword: submitPassword,
+    cancelBackupPassword: cancelPassword,
+  };
 }

@@ -20,7 +20,7 @@ Senhas são armazenadas por hash com salt e iterações em `utils/auth/passwordH
 
 Biometria redireciona ao dashboard após autenticação local. Como a tela só oferece biometria quando há usuário local, o risco é moderado, mas a auditoria recomenda amarrar esse fluxo a uma política explícita de sessão local.
 
-Backups não exportam senha, pois `BACKUP_EXPORT_COLUMNS` remove `perfil_usuario.senha`. A restauração valida o payload antes de abrir transação e não restaura senha. O fluxo de backup criptografado foi iniciado em etapa anterior com `decryptJson`; recomenda-se criar testes dedicados antes de expor exportação criptografada ao usuário final.
+Backups não exportam senha, pois `BACKUP_EXPORT_COLUMNS` remove `perfil_usuario.senha`. A restauração valida o payload antes de abrir transação e não restaura senha. A exportação agora gera `.korrebackup` criptografado por padrão com senha informada pelo usuário; JSON puro fica apenas como compatibilidade de restore legado.
 
 Comandos remotos ficam desligados por padrão via `EXPO_PUBLIC_KORRE_ENABLE_REMOTE_COMMANDS=false`. Os comandos atuais não apagam dados nem exportam backup automaticamente, mas retornam resumos financeiros se forem ativados. Para produção, só ativar com backend autenticado.
 
@@ -70,7 +70,10 @@ Antes de Play Store, validar nome público, package definitivo, política de pri
 | P0 | Suporte renderizava canais não configurados | Usuário via canal inexistente como oficial | `app/(tabs)/suporte.tsx`, `.env.example` | Corrigido com `config/companyContacts.ts` e renderização condicional |
 | P0 | Ganhos usavam categorias genéricas | Transações de receita podiam ser classificadas fora da origem real | `hooks/finance/useFinance.ts`, `hooks/OrigemGanhos/useOrigemGanhos.ts` | Corrigido com `origens_ganho_usuario` e repository |
 | P0 | Seleção/desmarcação de origem não era persistida | Origem desmarcada continuaria aparecendo | `database/repositories/OrigemGanhosRepository.ts` | Corrigido com tabela de seleção ativa |
+| P0 | Backup era JSON puro | Dados pessoais/financeiros podiam ficar expostos fora do aparelho | `hooks/configuracao/useExportarDados.ts`, `utils/security/encryption.ts` | Corrigido: exportação criptografada por padrão em `.korrebackup` |
 | P1 | Backups precisavam incluir seleção de origens | Restauração perderia regra de ganho selecionado | `constants/backupSchema.ts` | Corrigido com schema v5 e compatibilidade v2-v4 |
+| P1 | Biometria redirecionava sem consultar usuário local | Acesso interno inconsistente em banco sem perfil | `hooks/login/useLogin.ts` | Corrigido: biometria consulta `perfil_usuario` antes de navegar |
+| P1 | Hash precisa migração futura | SHA-256 iterado manualmente é funcional, mas não ideal para produção | `utils/auth/*`, `docs/plano-migracao-hash-senha.md` | Plano criado para PBKDF2-SHA256 gradual sem quebrar hashes antigos |
 | P1 | Muitos textos fixos fora do i18n | Troca de idioma fica incompleta | `app/`, `components/`, `hooks/` | Migrar telas restantes por prioridade |
 | P1 | Logs com `console.error` em fluxos críticos | Ruído e risco de exposição em produção | `hooks/`, `notifications/` | Trocar por `logger` e evitar dados sensíveis |
 | P1 | Comandos remotos retornam resumo financeiro se ativados | Risco de privacidade sem backend autenticado | `notifications/` | Manter flag false e exigir autenticação servidor |
@@ -80,4 +83,4 @@ Antes de Play Store, validar nome público, package definitivo, política de pri
 
 ## 11. Validação executada
 
-Foi executado `npm run validate`, que rodou testes, typecheck e lint com sucesso. A validação automatizada não substitui os testes manuais em dispositivo físico listados em `docs/checklist-lancamento.md`.
+Foi executado `npm run validate`, que rodou testes, typecheck e lint com sucesso. Também foram adicionados testes de criptografia de backup e compatibilidade do schema v5 com origens de ganho. A validação automatizada não substitui os testes manuais em dispositivo físico listados em `docs/checklist-lancamento.md`.

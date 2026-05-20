@@ -2,6 +2,8 @@ import CryptoJS from 'crypto-js';
 
 const PBKDF2_ITERATIONS = 120000;
 const KEY_SIZE_WORDS = 256 / 32;
+const SALT_BYTES = 16;
+const IV_BYTES = 16;
 
 const parseEncryptedPayload = (payload: string) => {
   const parts = payload.trim().split(':');
@@ -22,6 +24,39 @@ const parseEncryptedPayload = (payload: string) => {
 export const isEncryptedPayload = (payload: string) =>
   payload.trim().includes(':');
 
+const deriveKey = (passphrase: string, salt: string) =>
+  CryptoJS.PBKDF2(passphrase, salt, {
+    keySize: KEY_SIZE_WORDS,
+    iterations: PBKDF2_ITERATIONS,
+    hasher: CryptoJS.algo.SHA256,
+  });
+
+export const encryptJson = (
+  data: unknown,
+  passphrase: string,
+): string => {
+  if (!passphrase.trim()) {
+    throw new Error('Senha de backup vazia.');
+  }
+
+  const salt = CryptoJS.lib.WordArray.random(SALT_BYTES);
+  const iv = CryptoJS.lib.WordArray.random(IV_BYTES);
+  const saltHex = salt.toString(CryptoJS.enc.Hex);
+  const ivHex = iv.toString(CryptoJS.enc.Hex);
+  const key = deriveKey(passphrase, saltHex);
+  const encrypted = CryptoJS.AES.encrypt(
+    JSON.stringify(data),
+    key,
+    {
+      iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+    },
+  );
+
+  return `${saltHex}:${ivHex}:${encrypted.toString()}`;
+};
+
 export const decryptJson = <T = unknown>(
   payload: string,
   passphrase: string,
@@ -32,11 +67,7 @@ export const decryptJson = <T = unknown>(
     throw new Error('Senha de backup vazia.');
   }
 
-  const key = CryptoJS.PBKDF2(passphrase, salt, {
-    keySize: KEY_SIZE_WORDS,
-    iterations: PBKDF2_ITERATIONS,
-    hasher: CryptoJS.algo.SHA256,
-  });
+  const key = deriveKey(passphrase, salt);
 
   const decrypted = CryptoJS.AES.decrypt(cipher, key, {
     iv: CryptoJS.enc.Hex.parse(iv),

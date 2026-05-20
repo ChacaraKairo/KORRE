@@ -31,6 +31,7 @@ import { dynamicInlineStyles } from '../../styles/generated-dynamic/app/(tabs)/c
 import { SettingItem } from '../../components/telas/Configuracoes/SettingItem';
 import { HeaderConfiguracoes } from '../../components/telas/Configuracoes/HeaderConfiguracoes';
 import { ModalIdioma } from '../../components/telas/Configuracoes/ModalIdioma';
+import { BackupPasswordModal } from '../../components/telas/Configuracoes/BackupPasswordModal';
 
 export default function ConfiguracoesScreen() {
   const router = useRouter();
@@ -38,11 +39,20 @@ export default function ConfiguracoesScreen() {
   const { tema, setTema } = useTema();
   const isDark = tema === 'escuro';
 
-  const { exportarDados, isExportando } = useExportarDados();
+  const {
+    exportarDados,
+    isExportando,
+    backupPasswordPrompt: exportPasswordPrompt,
+    submitBackupPassword: submitExportPassword,
+    cancelBackupPassword: cancelExportPassword,
+  } = useExportarDados();
   const {
     importarBackup,
     importandoBackup,
     limparTodosOsDados,
+    backupPasswordPrompt: restorePasswordPrompt,
+    submitBackupPassword: submitRestorePassword,
+    cancelBackupPassword: cancelRestorePassword,
   } = useGerenciarDados();
 
   const [notificacoes, setNotificacoes] = useState(true);
@@ -245,6 +255,26 @@ export default function ConfiguracoesScreen() {
         isDark={isDark}
         cardColor={cardColor}
         borderColor={borderColor}
+      />
+      <BackupPasswordModal
+        visible={exportPasswordPrompt.visible}
+        title={exportPasswordPrompt.title}
+        message={exportPasswordPrompt.message}
+        isDark={isDark}
+        cardColor={cardColor}
+        borderColor={borderColor}
+        onCancel={cancelExportPassword}
+        onSubmit={submitExportPassword}
+      />
+      <BackupPasswordModal
+        visible={restorePasswordPrompt.visible}
+        title={restorePasswordPrompt.title}
+        message={restorePasswordPrompt.message}
+        isDark={isDark}
+        cardColor={cardColor}
+        borderColor={borderColor}
+        onCancel={cancelRestorePassword}
+        onSubmit={submitRestorePassword}
       />
     </SafeAreaView>
   );

@@ -12,7 +12,10 @@
 - [ ] Testar registro de ganho
 - [ ] Testar registro de despesa
 - [ ] Testar backup
+- [ ] Testar backup criptografado e guardar senha fora do aparelho
 - [ ] Testar restauração
+- [ ] Testar restauração de backup JSON legado
+- [ ] Testar restauração com senha incorreta
 - [ ] Testar notificações
 - [ ] Testar suporte sem contatos configurados
 - [ ] Testar suporte com contatos configurados

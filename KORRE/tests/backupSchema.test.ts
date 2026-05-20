@@ -39,6 +39,34 @@ describe('backup schema validation', () => {
     assert.deepEqual(tabelas.perfil_usuario, []);
   });
 
+  it('aceita backup KORRE v5 com origens de ganho', () => {
+    const backup = makeBackup(BACKUP_APP_NAME, 5) as any;
+    backup.tabelas.origens_ganho_usuario = [
+      {
+        id: 1,
+        nome: 'Uber',
+        categoria: 'Transporte',
+        icone: 'Navigation',
+        cor: '#000000',
+        ativo: 1,
+      },
+    ];
+
+    const tabelas = validateBackupPayload(backup);
+    assert.equal(
+      (tabelas.origens_ganho_usuario as unknown[]).length,
+      1,
+    );
+  });
+
+  it('aceita backup v4 sem tabela de origens de ganho', () => {
+    const backup = makeBackup(BACKUP_APP_NAME, 4) as any;
+    delete backup.tabelas.origens_ganho_usuario;
+
+    const tabelas = validateBackupPayload(backup);
+    assert.equal(tabelas.origens_ganho_usuario, undefined);
+  });
+
   it('rejeita backup de outro app', () => {
     assert.throws(() => validateBackupPayload(makeBackup('OutroApp')));
   });
@@ -51,5 +79,37 @@ describe('backup schema validation', () => {
     });
 
     assert.deepEqual(columns, ['id', 'nome']);
+  });
+
+  it('sanitiza linhas de origens de ganho no restore', () => {
+    const { columns, values } = sanitizeBackupRow(
+      'origens_ganho_usuario',
+      {
+        id: 1,
+        nome: 'iFood',
+        categoria: 'Delivery',
+        icone: 'ShoppingBag',
+        cor: '#EA1D2C',
+        ativo: 1,
+        campo_inesperado: 'ignorado',
+      },
+    );
+
+    assert.deepEqual(columns, [
+      'id',
+      'nome',
+      'categoria',
+      'icone',
+      'cor',
+      'ativo',
+    ]);
+    assert.deepEqual(values, [
+      1,
+      'iFood',
+      'Delivery',
+      'ShoppingBag',
+      '#EA1D2C',
+      1,
+    ]);
   });
 });

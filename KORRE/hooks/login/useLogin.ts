@@ -2,6 +2,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Animated } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import db from '../../database/DatabaseInit';
 import {
   hashPassword,
@@ -31,6 +32,7 @@ const LOCKOUT_MS = 5 * 60 * 1000;
 
 export const useLogin = () => {
   const router = useRouter();
+  const { t } = useTranslation();
   const [identificacao, setIdentificacao] = useState('');
   const [senha, setSenha] = useState('');
   const [temUsuario, setTemUsuario] = useState(false);
@@ -69,7 +71,7 @@ export const useLogin = () => {
         setTemUsuario(false);
       }
     } catch (e) {
-      if (__DEV__) console.error('[LOGIN] Falha ao carregar dados salvos:', e);
+      if (__DEV__) logger.error('[LOGIN] Falha ao carregar dados salvos:', e);
     }
   };
 
@@ -102,9 +104,7 @@ export const useLogin = () => {
     setErro('');
 
     if (!identificacao.trim() || !senha) {
-      setErro(
-        'Introduza o E-mail ou CPF e a senha para entrar.',
-      );
+      setErro(t('login.preencha_credenciais'));
       return;
     }
 
@@ -119,7 +119,9 @@ export const useLogin = () => {
           (lockedUntil - Date.now()) / 60000,
         );
         setErro(
-          `Muitas tentativas incorretas. Tente novamente em ${minutosRestantes} min.`,
+          t('login.tentativas_bloqueadas', {
+            minutos: minutosRestantes,
+          }),
         );
         return;
       }
@@ -174,15 +176,15 @@ export const useLogin = () => {
           }
         } else {
           await registrarFalhaLogin();
-          setErro('Utilizador ou senha incorretos.');
+          setErro(t('login.credenciais_invalidas'));
         }
       } else {
         await registrarFalhaLogin();
-        setErro('Utilizador ou senha incorretos.');
+        setErro(t('login.credenciais_invalidas'));
       }
     } catch (e) {
       logger.error('[LOGIN] Falha na consulta ao banco:', e);
-      setErro('Erro ao aceder à base de dados local.');
+      setErro(t('login.erro_banco_local'));
     } finally {
       setCarregando(false);
     }
@@ -246,17 +248,29 @@ export const useLogin = () => {
     try {
       const result =
         await LocalAuthentication.authenticateAsync({
-          promptMessage:
-            'Aceda ao KORRE com a sua biometria',
-          fallbackLabel: 'Utilizar senha',
+          promptMessage: t('login.biometria_prompt'),
+          fallbackLabel: t('login.biometria_fallback'),
           disableDeviceFallback: false,
         });
 
       if (result.success) {
-        router.replace(AppRoutes.dashboard);
+        const usuario = await db.getFirstAsync<UsuarioLogin>(
+          'SELECT id FROM perfil_usuario LIMIT 1',
+        );
+
+        if (!usuario) {
+          setTemUsuario(false);
+          setErro(t('login.sem_usuario_biometria'));
+          return;
+        }
+
+        router.replace({
+          pathname: AppRoutes.dashboard,
+          params: { userId: usuario.id },
+        });
       }
     } catch (e) {
-      if (__DEV__) console.error('[LOGIN] Falha na biometria:', e);
+      if (__DEV__) logger.error('[LOGIN] Falha na biometria:', e);
     }
   };
 
@@ -267,21 +281,23 @@ export const useLogin = () => {
       );
       if (usuario) {
         Alert.alert(
-          'Segurança Ativa',
-          `Olá, ${usuario.nome}. Sua senha não pode ser exibida porque é armazenada em formato protegido.\n\nSe você esqueceu sua senha, será necessário redefinir seus dados (funcionalidade a ser implementada).`,
-          [{ text: 'Entendi' }],
+          t('login.seguranca_ativa'),
+          t('login.recuperar_senha_msg', {
+            nome: usuario.nome,
+          }),
+          [{ text: t('calculadora.entendi') }],
         );
       } else {
         Alert.alert(
-          'Sem cadastro',
-          'Nenhum usuário encontrado no dispositivo.',
+          t('login.sem_cadastro'),
+          t('login.sem_cadastro_msg'),
         );
       }
     } catch (e) {
-      if (__DEV__) console.error('[LOGIN] Falha ao recuperar senha:', e);
+      if (__DEV__) logger.error('[LOGIN] Falha ao recuperar senha:', e);
       Alert.alert(
-        'Erro',
-        'Não foi possível acessar os dados de segurança.',
+        t('common.erro'),
+        t('login.erro_dados_seguranca'),
       );
     }
   };
