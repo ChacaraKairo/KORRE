@@ -1,59 +1,46 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
 import { useRouter } from 'expo-router';
-import {
-  TrendingUp,
-  Target,
-  Plus,
-} from 'lucide-react-native';
+import { Plus, Target, TrendingUp } from 'lucide-react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useTema } from '../../../hooks/modo_tema';
 
 import { styles } from '../../../styles/generated/components/telas/Dashboard/GanhosCardStyles';
-/**
- * TELA: Dashboard - Componente GanhosCard (Dinâmico Diário/Semanal)
- * Versão Native corrigida contra erros de 'undefined' no toLocaleString.
- */
 
 interface GanhosProps {
-  ganhosTotal: number; // Soma dos ganhos do período (dia ou semana)
-  metaValor: number; // Valor da meta (meta_diaria ou meta_semanal)
-  tipoMeta: 'diaria' | 'semanal'; // Preferência do usuário vinda do banco
+  ganhosTotal: number;
+  metaValor: number;
+  tipoMeta: 'diaria' | 'semanal';
   qtdGanhos?: number;
 }
 
 export const GanhosCard: React.FC<GanhosProps> = ({
-  ganhosTotal = 0, // Valor padrão para evitar erro de undefined
-  metaValor = 0, // Valor padrão
-  tipoMeta = 'diaria', // Valor padrão
+  ganhosTotal = 0,
+  metaValor = 0,
+  tipoMeta = 'diaria',
   qtdGanhos = 0,
 }) => {
+  const { t, i18n } = useTranslation();
   const router = useRouter();
+  const { tema } = useTema();
+  const isDark = tema === 'escuro';
 
-  // Garantia de que trabalhamos com números válidos
   const safeGanhos = ganhosTotal || 0;
   const safeMeta = metaValor || 0;
-
-  // Cálculos dinâmicos
   const metaRestante = safeMeta - safeGanhos;
   const porcentagem =
     safeMeta > 0
       ? Math.min((safeGanhos / safeMeta) * 100, 100)
       : 0;
 
-  // Textos dinâmicos baseados no tipo de meta
   const labelPeriodo =
-    tipoMeta === 'diaria' ? 'HOJE' : 'DA SEMANA';
+    tipoMeta === 'diaria'
+      ? t('dashboard.hoje')
+      : t('dashboard.da_semana');
   const labelFaltante =
     tipoMeta === 'diaria'
-      ? 'P/ META DIÁRIA'
-      : 'P/ META SEMANAL';
-
-  const { tema } = useTema();
-  const isDark = tema === 'escuro';
+      ? t('dashboard.p_meta_diaria')
+      : t('dashboard.p_meta_semanal');
 
   return (
     <TouchableOpacity
@@ -99,8 +86,10 @@ export const GanhosCard: React.FC<GanhosProps> = ({
               ]}
             >
               {metaRestante <= 0
-                ? 'META BATIDA!'
-                : `FALTAM ${labelFaltante}`}
+                ? t('dashboard.meta_batida')
+                : t('dashboard.faltam_meta', {
+                    meta: labelFaltante,
+                  })}
             </Text>
           </View>
 
@@ -112,7 +101,7 @@ export const GanhosCard: React.FC<GanhosProps> = ({
             ]}
           >
             {metaRestante <= 0
-              ? '🔥 SÓ LUCRO'
+              ? t('dashboard.so_lucro')
               : `R$ ${Math.abs(metaRestante).toFixed(2)}`}
           </Text>
         </View>
@@ -125,8 +114,14 @@ export const GanhosCard: React.FC<GanhosProps> = ({
             { color: isDark ? '#666' : '#888' },
           ]}
         >
-          GANHOS {labelPeriodo}{' '}
-          {qtdGanhos > 0 ? `• ${qtdGanhos} REGISTOS` : ''}
+          {t('dashboard.ganhos_periodo', {
+            periodo: labelPeriodo,
+          })}{' '}
+          {qtdGanhos > 0
+            ? t('dashboard.registros_count', {
+                count: qtdGanhos,
+              })
+            : ''}
         </Text>
         <Text
           style={[
@@ -135,7 +130,7 @@ export const GanhosCard: React.FC<GanhosProps> = ({
           ]}
         >
           R${' '}
-          {safeGanhos.toLocaleString('pt-BR', {
+          {safeGanhos.toLocaleString(i18n.language, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}
@@ -166,10 +161,10 @@ export const GanhosCard: React.FC<GanhosProps> = ({
           { color: isDark ? '#444' : '#888' },
         ]}
       >
-        {porcentagem.toFixed(0)}% da meta
+        {t('dashboard.porcentagem_meta', {
+          percent: porcentagem.toFixed(0),
+        })}
       </Text>
     </TouchableOpacity>
   );
 };
-
-

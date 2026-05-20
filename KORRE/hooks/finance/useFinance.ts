@@ -11,11 +11,12 @@ import {
   useFocusEffect,
 } from 'expo-router';
 import * as Icons from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import db from '../../database/DatabaseInit';
+import { FinanceiroRepository } from '../../database/repositories/FinanceiroRepository';
 import { showCustomAlert } from '../alert/useCustomAlert';
 import { verificarMetaDiaria } from '../../notifications/LocalNotificationScheduler';
 import type {
-  CategoriaFinanceira,
   TipoTransacao,
   UsuarioLocal,
   Veiculo,
@@ -29,6 +30,7 @@ import {
 export const useFinance = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
+  const { t } = useTranslation();
 
   const getTipoInicial = useCallback(() => {
     return params.initialType === 'despesa'
@@ -93,12 +95,10 @@ export const useFinance = () => {
       );
     `);
 
-    const catList = await db.getAllAsync<CategoriaFinanceira>(
-      `SELECT id, nome, tipo, icone, cor
-       FROM categorias_financeiras
-       WHERE tipo = ?`,
-      [tipoConsulta],
-    );
+    const catList =
+      await FinanceiroRepository.listarCategoriasFinanceirasPorTipo(
+        tipoConsulta,
+      );
 
     const formatadas = catList.map((cat) => ({
       id: cat.id.toString(),
@@ -114,6 +114,7 @@ export const useFinance = () => {
       tipoAtualRef.current === tipoConsulta
     ) {
       setCategorias(formatadas);
+      setCategoriaSelecionada(formatadas[0]?.id ?? '');
     }
   }, []);
 
@@ -151,24 +152,6 @@ export const useFinance = () => {
               cor TEXT
             );
             INSERT OR IGNORE INTO categorias_financeiras (nome, tipo, icone, cor) VALUES
-            ('iFood', 'ganho', 'ShoppingBag', '#EA1D2C'),
-            ('Uber', 'ganho', 'Navigation', '#000000'),
-            ('99', 'ganho', 'Smartphone', '#FFCC00'),
-            ('Rappi', 'ganho', 'ShoppingBag', '#FF441F'),
-            ('Loggi', 'ganho', 'Package', '#00B5E2'),
-            ('Lalamove', 'ganho', 'Truck', '#EA5B0C'),
-            ('InDrive', 'ganho', 'Car', '#8BC34A'),
-            ('Uber Eats', 'ganho', 'ShoppingBag', '#06C167'),
-            ('Mercado Livre Envios', 'ganho', 'Package', '#FFE600'),
-            ('Shopee Entregas', 'ganho', 'Package', '#EE4D2D'),
-            ('Amazon Flex', 'ganho', 'Package', '#FF9900'),
-            ('Borzo', 'ganho', 'Zap', '#00AEEF'),
-            ('Zé Delivery', 'ganho', 'Zap', '#FFD700'),
-            ('Cabify', 'ganho', 'Car', '#7145D6'),
-            ('Wappa', 'ganho', 'Car', '#1976D2'),
-            ('Táxi / Local', 'ganho', 'Car', '#FFC107'),
-            ('Frete particular', 'ganho', 'Truck', '#00C853'),
-            ('Particulares', 'ganho', 'Briefcase', '#00C853'),
             ('Combustível', 'despesa', 'Fuel', '#F44336'),
             ('Alimentação', 'despesa', 'Coffee', '#FF9800'),
             ('Manutenção', 'despesa', 'Wrench', '#795548'),
@@ -244,15 +227,24 @@ export const useFinance = () => {
   };
 
   const handleSave = async () => {
-    if (salvando || valorNumerico <= 0 || !categoriaSelecionada)
+    if (salvando || valorNumerico <= 0) return;
+
+    if (!categoriaSelecionada) {
+      showCustomAlert(
+        t('common.erro'),
+        tipo === 'ganho'
+          ? t('financeiro.selecione_origem_ganho')
+          : t('financeiro.selecione_categoria'),
+      );
       return;
+    }
 
     try {
       setSalvando(true);
       await showAppLoadingAsync(
         tipo === 'ganho'
-          ? 'Salvando ganho...'
-          : 'Salvando despesa...',
+          ? t('financeiro.salvando_ganho')
+          : t('financeiro.salvando_despesa'),
       );
       await db.runAsync(
         `INSERT INTO transacoes_financeiras
@@ -281,8 +273,8 @@ export const useFinance = () => {
       hideAppLoading();
       setSalvando(false);
       showCustomAlert(
-        'Erro',
-        'Não foi possível salvar a transação.',
+        t('common.erro'),
+        t('financeiro.erro_salvar_transacao'),
       );
     }
   };
@@ -294,7 +286,7 @@ export const useFinance = () => {
       const corPadrao =
         tipo === 'ganho' ? '#00C853' : '#F44336';
 
-      await showAppLoadingAsync('Criando categoria...');
+      await showAppLoadingAsync(t('financeiro.criando_categoria'));
       await db.runAsync(
         'INSERT INTO categorias_financeiras (nome, tipo, icone, cor) VALUES (?, ?, ?, ?)',
         [
@@ -312,8 +304,8 @@ export const useFinance = () => {
     } catch (error) {
       logger.error('Erro ao adicionar categoria:', error);
       showCustomAlert(
-        'Erro',
-        'Nome de categoria já existe ou erro no banco.',
+        t('common.erro'),
+        t('financeiro.erro_categoria_existente'),
       );
     } finally {
       hideAppLoading();
@@ -334,6 +326,8 @@ export const useFinance = () => {
     selectedVehicleId,
     setSelectedVehicleId,
     categorias,
+    semOrigemGanho:
+      tipo === 'ganho' && categorias.length === 0,
     mainColor,
     inputRef,
     handleSave,

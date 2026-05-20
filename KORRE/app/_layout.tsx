@@ -5,6 +5,7 @@ import {
   useSegments,
 } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   BackHandler,
@@ -17,7 +18,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppLoadingOverlay } from '../components/ui/AppLoadingOverlay';
 import { AppRoutes } from '../constants/routes';
 import db, { DatabaseInit } from '../database/DatabaseInit';
-import '../locales/i18n';
+import { i18nReady } from '../locales/i18n';
 import { executarVerificacoesLocais } from '../notifications/LocalNotificationScheduler';
 import { NotificationHandler } from '../notifications/NotificationHandler';
 import { logger } from '../utils/logger';
@@ -25,6 +26,7 @@ import { safeBack } from '../utils/navigation/safeBack';
 
 import { inlineStyles } from '../styles/generated-inline/app/_layoutInlineStyles';
 export default function RootLayout() {
+  const { t } = useTranslation();
   const [isReady, setIsReady] = useState(false);
   const [hasUser, setHasUser] = useState(false);
   const [startupError, setStartupError] = useState(false);
@@ -41,6 +43,7 @@ export default function RootLayout() {
       setStartupError(false);
 
       try {
+        await i18nReady;
         DatabaseInit();
         await NotificationHandler.setupForegroundHandler();
         subscriptions.push(
@@ -153,7 +156,7 @@ export default function RootLayout() {
               textTransform: 'uppercase',
             }}
           >
-            Carregando KORRE
+            {t('startup.loading')}
           </Text>
         </View>
       </SafeAreaProvider>
@@ -181,7 +184,7 @@ export default function RootLayout() {
               marginBottom: 8,
             }}
           >
-            Nao foi possivel inicializar o KORRE.
+            {t('startup.erro_titulo')}
           </Text>
           <Text
             style={{
@@ -192,8 +195,7 @@ export default function RootLayout() {
               marginBottom: 20,
             }}
           >
-            Tente fechar e abrir o app novamente. Se preferir,
-            toque abaixo para tentar reiniciar agora.
+            {t('startup.erro_msg')}
           </Text>
           <TouchableOpacity
             activeOpacity={0.85}
@@ -214,7 +216,7 @@ export default function RootLayout() {
                 fontWeight: '900',
               }}
             >
-              Tentar novamente
+              {t('startup.tentar_novamente')}
             </Text>
           </TouchableOpacity>
         </View>

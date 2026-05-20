@@ -5,6 +5,7 @@ import db from '../../database/DatabaseInit';
 import { CalculadoraRepository } from '../../database/repositories/CalculadoraRepository';
 import { FinanceiroRepository } from '../../database/repositories/FinanceiroRepository';
 import { verificarAlertasManutencao } from '../../notifications/LocalNotificationScheduler';
+import i18n from '../../locales/i18n';
 import type {
   MovimentacaoFinanceira,
   PerfilUsuario,
@@ -180,7 +181,7 @@ export const useDashboard = () => {
     if (!data.veiculo) return;
 
     try {
-      await showAppLoadingAsync('Atualizando KM...');
+      await showAppLoadingAsync(i18n.t('dashboard.atualizando_km'));
       await db.runAsync(
         'UPDATE veiculos SET km_atual = ? WHERE id = ?',
         [novoKm, data.veiculo.id],

@@ -1,13 +1,14 @@
 import type { SQLiteBindValue } from 'expo-sqlite';
 
 export const BACKUP_APP_NAME = 'KORRE';
-export const BACKUP_SCHEMA_VERSION = 4;
+export const BACKUP_SCHEMA_VERSION = 5;
 
 export const BACKUP_TABLES = [
   'perfil_usuario',
   'veiculos',
   'parametros_financeiros',
   'categorias_financeiras',
+  'origens_ganho_usuario',
   'transacoes_financeiras',
   'itens_manutencao',
   'historico_manutencao',
@@ -108,6 +109,14 @@ export const BACKUP_COLUMNS: Record<BackupTable, readonly string[]> = {
     'km_por_dia',
   ],
   categorias_financeiras: ['id', 'nome', 'tipo', 'icone', 'cor'],
+  origens_ganho_usuario: [
+    'id',
+    'nome',
+    'categoria',
+    'icone',
+    'cor',
+    'ativo',
+  ],
   transacoes_financeiras: [
     'id',
     'veiculo_id',
@@ -219,6 +228,13 @@ export const validateBackupPayload = (data: unknown) => {
 
   const tabelas = payload.tabelas as Record<string, unknown>;
   for (const table of BACKUP_TABLES) {
+    if (
+      payload.versao_banco < 5 &&
+      table === 'origens_ganho_usuario'
+    ) {
+      continue;
+    }
+
     if (!Array.isArray(tabelas[table])) {
       throw new Error(`Tabela obrigatoria ausente: ${table}`);
     }

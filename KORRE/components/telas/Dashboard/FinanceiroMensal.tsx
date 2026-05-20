@@ -1,16 +1,16 @@
+import React from 'react';
 import {
   Calendar,
   TrendingDown,
   TrendingUp,
   Wallet,
-  } from 'lucide-react-native';
-import React from 'react';
-import {   Text,
-  View,
-} from 'react-native';
+} from 'lucide-react-native';
+import { Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useTema } from '../../../hooks/modo_tema';
 
 import { styles } from '../../../styles/generated/components/telas/Dashboard/FinanceiroMensalStyles';
+
 interface FinanceiroMensalProps {
   ganhos: number;
   gastos: number;
@@ -19,6 +19,7 @@ interface FinanceiroMensalProps {
 export const FinanceiroMensal: React.FC<
   FinanceiroMensalProps
 > = ({ ganhos, gastos }) => {
+  const { t, i18n } = useTranslation();
   const lucro = ganhos - gastos;
 
   const { tema } = useTema();
@@ -42,7 +43,7 @@ export const FinanceiroMensal: React.FC<
             { color: isDark ? '#FFF' : '#000' },
           ]}
         >
-          RESUMO DO MÊS
+          {t('dashboard.resumo_mes')}
         </Text>
       </View>
 
@@ -56,14 +57,12 @@ export const FinanceiroMensal: React.FC<
                 { color: isDark ? '#888' : '#555' },
               ]}
             >
-              GANHOS
+              {t('dashboard.ganhos')}
             </Text>
           </View>
-          <Text
-            style={[styles.value, { color: '#00C853' }]}
-          >
+          <Text style={[styles.value, { color: '#00C853' }]}>
             R${' '}
-            {ganhos.toLocaleString('pt-BR', {
+            {ganhos.toLocaleString(i18n.language, {
               minimumFractionDigits: 2,
             })}
           </Text>
@@ -78,14 +77,12 @@ export const FinanceiroMensal: React.FC<
                 { color: isDark ? '#888' : '#555' },
               ]}
             >
-              GASTOS
+              {t('dashboard.gastos')}
             </Text>
           </View>
-          <Text
-            style={[styles.value, { color: '#F44336' }]}
-          >
+          <Text style={[styles.value, { color: '#F44336' }]}>
             R${' '}
-            {gastos.toLocaleString('pt-BR', {
+            {gastos.toLocaleString(i18n.language, {
               minimumFractionDigits: 2,
             })}
           </Text>
@@ -121,7 +118,7 @@ export const FinanceiroMensal: React.FC<
               { color: isDark ? '#FFF' : '#000' },
             ]}
           >
-            LUCRO LÍQUIDO
+            {t('dashboard.lucro_liquido')}
           </Text>
         </View>
         <Text
@@ -131,7 +128,7 @@ export const FinanceiroMensal: React.FC<
           ]}
         >
           R${' '}
-          {lucro.toLocaleString('pt-BR', {
+          {lucro.toLocaleString(i18n.language, {
             minimumFractionDigits: 2,
           })}
         </Text>
@@ -139,5 +136,3 @@ export const FinanceiroMensal: React.FC<
     </View>
   );
 };
-
-

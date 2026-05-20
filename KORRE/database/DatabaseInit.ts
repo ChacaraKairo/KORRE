@@ -192,6 +192,15 @@ const initV1 = () => {
     );
 
     -- 6. TRANSAÇÕES FINANCEIRAS
+    CREATE TABLE IF NOT EXISTS origens_ganho_usuario (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT UNIQUE NOT NULL,
+      categoria TEXT,
+      icone TEXT,
+      cor TEXT,
+      ativo INTEGER NOT NULL DEFAULT 0
+    );
+
     CREATE TABLE IF NOT EXISTS transacoes_financeiras (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       veiculo_id INTEGER,

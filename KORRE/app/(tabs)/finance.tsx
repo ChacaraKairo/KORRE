@@ -27,6 +27,7 @@ import { SuccessOverlay } from '../../components/telas/finance/SuccessOverlay';
 import { AdicionarCategoria } from '../../components/telas/finance/AdicionarCategoria';
 import { useTema } from '../../hooks/modo_tema';
 import { safeBack } from '../../utils/navigation/safeBack';
+import { AppRoutes } from '../../constants/routes';
 
 export default function AddTransactionScreen() {
   const { t } = useTranslation();
@@ -44,6 +45,7 @@ export default function AddTransactionScreen() {
     selectedVehicleId,
     setSelectedVehicleId,
     categorias,
+    semOrigemGanho,
     mainColor,
     inputRef,
     handleSave,
@@ -251,26 +253,83 @@ export default function AddTransactionScreen() {
             </View>
           </View>
 
-          <CategoryGrid
-            categorias={categorias}
-            categoriaSelecionada={categoriaSelecionada}
-            onSelect={setCategoriaSelecionada}
-            mainColor={mainColor}
-          />
-
-          <TouchableOpacity
-            style={styles.addCategoryBtn}
-            onPress={() => setModalCategoriaAberto(true)}
-          >
-            <Text
-              style={[
-                styles.addCategoryBtnText,
-                { color: mainColor },
-              ]}
+          {semOrigemGanho ? (
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: isDark ? '#333' : '#E0E0E0',
+                backgroundColor: isDark ? '#161616' : '#FFFFFF',
+                borderRadius: 8,
+                padding: 16,
+                gap: 10,
+              }}
             >
-              {t('financeiro.adicionar_categoria')}
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  color: isDark ? '#FFFFFF' : '#1A1A1A',
+                  fontSize: 16,
+                  fontWeight: '800',
+                }}
+              >
+                {t('financeiro.sem_origem_ganho')}
+              </Text>
+              <Text
+                style={{
+                  color: isDark ? '#888' : '#555',
+                  fontSize: 13,
+                  lineHeight: 18,
+                }}
+              >
+                {t('financeiro.sem_origem_ganho_desc')}
+              </Text>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => router.push(AppRoutes.origemGanhos)}
+                style={{
+                  minHeight: 44,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 8,
+                  backgroundColor: mainColor,
+                  paddingHorizontal: 14,
+                }}
+              >
+                <Text
+                  style={{
+                    color: '#0A0A0A',
+                    fontSize: 13,
+                    fontWeight: '900',
+                    textAlign: 'center',
+                  }}
+                >
+                  {t('financeiro.configurar_origens_ganho')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <CategoryGrid
+              categorias={categorias}
+              categoriaSelecionada={categoriaSelecionada}
+              onSelect={setCategoriaSelecionada}
+              mainColor={mainColor}
+            />
+          )}
+
+          {tipo === 'despesa' && (
+            <TouchableOpacity
+              style={styles.addCategoryBtn}
+              onPress={() => setModalCategoriaAberto(true)}
+            >
+              <Text
+                style={[
+                  styles.addCategoryBtnText,
+                  { color: mainColor },
+                ]}
+              >
+                {t('financeiro.adicionar_categoria')}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
 

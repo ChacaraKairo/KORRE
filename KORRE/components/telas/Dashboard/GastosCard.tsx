@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { TrendingDown, Plus } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
+import { Plus, TrendingDown } from 'lucide-react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useTema } from '../../../hooks/modo_tema';
 
 import { styles } from '../../../styles/generated/components/telas/Dashboard/GastosCardStyles';
@@ -17,6 +18,7 @@ export const GastosCard: React.FC<GastosProps> = ({
   qtdGastos = 0,
   tipoMeta = 'diaria',
 }) => {
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
@@ -61,9 +63,13 @@ export const GastosCard: React.FC<GastosProps> = ({
           ]}
         >
           {tipoMeta === 'semanal'
-            ? 'GASTOS DA SEMANA'
-            : 'GASTOS DE HOJE'}{' '}
-          {qtdGastos > 0 ? `• ${qtdGastos} REGISTOS` : ''}
+            ? t('dashboard.gastos_da_semana')
+            : t('dashboard.gastos_de_hoje')}{' '}
+          {qtdGastos > 0
+            ? t('dashboard.registros_count', {
+                count: qtdGastos,
+              })
+            : ''}
         </Text>
         <Text
           style={[
@@ -72,7 +78,7 @@ export const GastosCard: React.FC<GastosProps> = ({
           ]}
         >
           R${' '}
-          {valor.toLocaleString('pt-BR', {
+          {valor.toLocaleString(i18n.language, {
             minimumFractionDigits: 2,
           })}
         </Text>

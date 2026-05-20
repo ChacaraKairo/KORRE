@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { showCustomAlert } from '../../../hooks/alert/useCustomAlert';
 import { useTema } from '../../../hooks/modo_tema';
 import { styles as baseStyles } from '../../../styles/telas/Dashboard/indicesMCCardStyles';
@@ -32,6 +33,7 @@ export const IndicesMCCard = ({
   custoPorMinuto,
   metaPorMinuto,
 }: Props) => {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
   const router = useRouter();
@@ -57,7 +59,7 @@ export const IndicesMCCard = ({
     const metaTotal = calcKmCusto + calcMinMeta;
 
     showCustomAlert(
-      'Como funciona o Semáforo?',
+      t('dashboard.indices_ajuda_titulo'),
       `O sistema separa CUSTO de LUCRO.\n\n` +
         `Faturamento Ideal por Hora: R$ ${metaPorHora.toFixed(2)}\n\n` +
         `Exemplo para corrida de ${exKm}km e ${exMin}min:\n\n` +
@@ -100,7 +102,7 @@ export const IndicesMCCard = ({
           <Text
             style={[baseStyles.title, { color: textColor }]}
           >
-            Índices Mágicos
+            {t('dashboard.indices_magicos')}
           </Text>
         </View>
         <View
@@ -118,7 +120,7 @@ export const IndicesMCCard = ({
                 { color: '#00C853' },
               ]}
             >
-              Ativo
+              {t('dashboard.ativo')}
             </Text>
           </View>
           <TouchableOpacity
@@ -211,7 +213,7 @@ export const IndicesMCCard = ({
               { color: '#00C853', fontWeight: 'bold' },
             ]}
           >
-            Meta/Min
+            {t('dashboard.meta_min')}
           </Text>
           <Text
             numberOfLines={1}
@@ -252,7 +254,7 @@ export const IndicesMCCard = ({
               },
             ]}
           >
-            Faturamento Ideal / Hora
+            {t('dashboard.faturamento_ideal_hora')}
           </Text>
         </View>
         <Text
@@ -280,7 +282,7 @@ export const IndicesMCCard = ({
             { color: textMuted },
           ]}
         >
-          Refazer Auditoria
+          {t('dashboard.refazer_auditoria')}
         </Text>
         <ChevronRight size={14} color={textMuted} />
       </View>

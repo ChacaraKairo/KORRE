@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useHeaderClimaDashboard } from '../../../hooks/dashboard/useHeaderClimaDashboard';
 import { dashboardStyles as styles } from '../../../styles/telas/Dashboard/dashboardStyles';
 
@@ -34,6 +35,7 @@ export const HeaderDashboard: React.FC<HeaderProps> = ({
   fotoPerfil,
   onPressConfig,
 }) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { clima, loadingClima } = useHeaderClimaDashboard();
   const [imageError, setImageError] = useState(false);
@@ -103,7 +105,7 @@ export const HeaderDashboard: React.FC<HeaderProps> = ({
               style={styles.nomeUsuario}
               numberOfLines={1}
             >
-              {nome ? nome.split(' ')[0] : 'Motorista'}
+              {nome ? nome.split(' ')[0] : t('dashboard.motorista')}
             </Text>
             <View
               style={[
@@ -133,7 +135,7 @@ export const HeaderDashboard: React.FC<HeaderProps> = ({
           {!loadingClima && clima && (
             <View style={inlineStyles.inline5}>
               <Text style={inlineStyles.inline6}>
-                Previsão de Amanhã
+                {t('dashboard.previsao_amanha')}
               </Text>
               <View style={inlineStyles.inline7}>
                 {clima.condicao === 'sol' && (

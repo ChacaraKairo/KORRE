@@ -6,6 +6,7 @@ import {
   ScrollView,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 // Camada de Estilos Consolidada
 import { dashboardStyles as styles } from '../../styles/telas/Dashboard/dashboardStyles';
@@ -28,6 +29,7 @@ import { VeiculoCard } from '../../components/telas/Dashboard/VeiculoCard';
 import { AppRoutes } from '../../constants/routes';
 
 export default function DashboardScreen() {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
   const themeBg = {
@@ -101,8 +103,10 @@ export default function DashboardScreen() {
     <View style={[styles.container, themeBg]}>
       {/* Organism: Top Bar & Perfil */}
       <HeaderDashboard
-        nome={usuario?.nome || 'Piloto'}
-        fraseMotivacional={frase || 'Bora faturar!'}
+        nome={usuario?.nome || t('dashboard.boas_vindas')}
+        fraseMotivacional={
+          frase ? t(frase) : t('dashboard.frase_padrao')
+        }
         fotoPerfil={usuario?.foto_uri}
         onPressConfig={onPressConfig}
       />

@@ -1,11 +1,29 @@
 // database/repositories/FinanceiroRepository.ts
 import db from '../DatabaseInit';
 import type {
+  CategoriaFinanceira,
   MovimentacaoFinanceira,
   TipoTransacao,
 } from '../../types/database';
+import { OrigemGanhosRepository } from './OrigemGanhosRepository';
 
 export const FinanceiroRepository = {
+  listarCategoriasFinanceirasPorTipo: async (
+    tipo: TipoTransacao,
+  ) => {
+    if (tipo === 'ganho') {
+      return OrigemGanhosRepository.listarCategoriasGanhoAtivas();
+    }
+
+    return db.getAllAsync<CategoriaFinanceira>(
+      `SELECT id, nome, tipo, icone, cor
+       FROM categorias_financeiras
+       WHERE tipo = ?
+       ORDER BY nome ASC`,
+      [tipo],
+    );
+  },
+
   getResumoPorPeriodo: async (
     veiculoId: number,
     dataInicio: string,

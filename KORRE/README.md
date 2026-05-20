@@ -41,6 +41,8 @@ Variaveis conhecidas:
 - `EXPO_PUBLIC_KORRE_SUPPORT_YOUTUBE_URL`: canal oficial de tutoriais. Se vazio, o app informa que o canal ainda nao foi configurado.
 - `EXPO_PUBLIC_KORRE_SUPPORT_WHATSAPP`: telefone do WhatsApp em formato internacional, apenas numeros. Se vazio, o app informa que o suporte ainda nao foi configurado.
 
+Para o lancamento inicial, mantenha `EXPO_PUBLIC_KORRE_ENABLE_REMOTE_COMMANDS=false`. Ative comandos remotos somente depois de configurar um backend autenticado, com autorizacao por usuario, trilha de auditoria e validacao de payloads.
+
 ## Instalar e rodar
 
 ```bash
@@ -107,11 +109,19 @@ Tabelas principais:
 ## Seguranca e privacidade
 
 - O app funciona localmente sem backend obrigatorio.
-- Senhas sao armazenadas em formato derivado com salt.
+- Senhas sao armazenadas em formato derivado com salt e verificacao em tempo constante. O formato atual fica em `utils/auth/passwordHash.ts` e `utils/auth/passwordHashFormat.ts`.
 - Backups nao restauram senha de arquivos antigos ou manipulados.
+- Backups JSON podem ser restaurados diretamente. Backups criptografados devem usar o formato `salt:cipher` ou `salt:iv:cipher`; quando o arquivo nao puder ser lido como JSON e tiver esse separador, o app solicita a senha de backup e chama `decryptJson`.
+- A descriptografia de backup usa PBKDF2 com SHA-256 e AES-CBC. A senha nao e armazenada pelo app; se for perdida, o backup criptografado nao pode ser recuperado.
 - Comandos remotos ficam desligados por padrao ate existir canal autenticado adequado para producao.
 
 Antes de lancamento publico, revise hash de senha, bloqueio por tentativas, criptografia de backup, termos, politica de privacidade e adequacao LGPD/Play Store.
+
+## Backup e restauracao
+
+Exporte backups pela tela de Configuracoes. Para backups criptografados, defina uma senha forte no momento da exportacao ou no fluxo de geracao usado pela build; essa mesma senha sera exigida na restauracao.
+
+Ao restaurar, o KORRE tenta importar JSON puro primeiro. Se a leitura JSON falhar e o conteudo parecer criptografado (`salt:cipher`), o usuario deve informar a senha. Senha incorreta ou conteudo adulterado exibem a mensagem de arquivo invalido e a restauracao e interrompida antes de alterar o banco local.
 
 ## CI
 

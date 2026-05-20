@@ -3,8 +3,13 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BackupRestoreService } from '../../services/BackupRestoreService';
 import { logger } from '../../utils/logger';
+import {
+  decryptJson,
+  isEncryptedPayload,
+} from '../../utils/security/encryption';
 import { showCustomAlert } from '../alert/useCustomAlert';
 
 const mostrarAviso = (titulo: string, mensagem: string) => {
@@ -14,7 +19,29 @@ const mostrarAviso = (titulo: string, mensagem: string) => {
 
 export function useRestaurarBackup() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [carregando, setCarregando] = useState(false);
+
+  const solicitarSenhaBackup = () =>
+    new Promise<string | null>((resolve) => {
+      Alert.prompt(
+        t('configuracoes.senha_backup_label'),
+        undefined,
+        [
+          {
+            text: t('common.cancelar'),
+            style: 'cancel',
+            onPress: () => resolve(null),
+          },
+          {
+            text: t('common.salvar'),
+            onPress: (passphrase?: string) =>
+              resolve(passphrase ?? ''),
+          },
+        ],
+        'secure-text',
+      );
+    });
 
   const executarRestauracao = async (data: unknown) => {
     setCarregando(true);
@@ -73,16 +100,42 @@ export function useRestaurarBackup() {
         return;
       }
 
+      const pareceCriptografado = isEncryptedPayload(conteudo);
       let dados: unknown;
       try {
         dados = JSON.parse(conteudo);
       } catch (error) {
         logger.error('[PICKER] JSON invalido:', error);
-        mostrarAviso(
-          'Arquivo invalido',
-          'O arquivo selecionado nao e um JSON valido. Escolha um backup exportado pelo KORRE.',
-        );
-        return;
+
+        if (pareceCriptografado) {
+          const passphrase = await solicitarSenhaBackup();
+
+          if (passphrase === null) return;
+
+          try {
+            const decryptedObject = decryptJson(
+              conteudo,
+              passphrase,
+            );
+            dados = decryptedObject;
+          } catch (decryptError) {
+            logger.error(
+              '[PICKER] Falha ao descriptografar backup:',
+              decryptError,
+            );
+            mostrarAviso(
+              t('common.erro'),
+              t('configuracoes.senha_backup_incorreta'),
+            );
+            return;
+          }
+        } else {
+          mostrarAviso(
+            'Arquivo invalido',
+            'O arquivo selecionado nao e um JSON valido. Escolha um backup exportado pelo KORRE.',
+          );
+          return;
+        }
       }
 
       Alert.alert(

@@ -53,6 +53,7 @@ i18n.use(initReactI18next).init({
   lng: deviceLanguage,
   fallbackLng: 'pt',
   interpolation: { escapeValue: false },
+  react: { useSuspense: false },
 });
 
 export const loadSavedLanguage = async () => {
@@ -79,7 +80,7 @@ export const setAppLanguage = async (
   await i18n.changeLanguage(normalizedLanguage);
 };
 
-loadSavedLanguage().catch((error) => {
+export const i18nReady = loadSavedLanguage().catch((error) => {
   if (__DEV__) {
     console.warn('[i18n] Falha ao carregar idioma salvo:', error);
   }

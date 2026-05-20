@@ -10,6 +10,7 @@ import {
   AlertCircle,
   Wrench,
 } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { dashboardStyles as styles } from '../../../styles/telas/Dashboard/dashboardStyles';
 import { useTema } from '../../../hooks/modo_tema';
 
@@ -32,6 +33,7 @@ export const StatusGrid: React.FC<StatusProps> = ({
   onUpdateKm,
   onOpenOficina,
 }) => {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
@@ -43,7 +45,7 @@ export const StatusGrid: React.FC<StatusProps> = ({
     | 'warning'
     | 'ok'
     | 'initial' = 'initial';
-  let descManutencao = 'Verificar manutenções';
+  let descManutencao = t('dashboard.verificar_manutencoes');
 
   // Só processa se houver dados REAIS salvos no banco
   if (
@@ -71,21 +73,27 @@ export const StatusGrid: React.FC<StatusProps> = ({
       statusManutencao = 'critical';
       descManutencao =
         criticos.length === 1
-          ? `Atrasada: ${criticos[0].nome}`
-          : `${criticos.length} manutenções atrasadas`;
+          ? t('dashboard.atrasada', { item: criticos[0].nome })
+          : t('dashboard.manutencoes_atrasadas', {
+              count: criticos.length,
+            });
     } else if (atencao.length > 0) {
       statusManutencao = 'warning';
       descManutencao =
         atencao.length === 1
-          ? `Atenção: ${atencao[0].nome}`
-          : `${atencao.length} manutenções próximas`;
+          ? t('dashboard.atencao', { item: atencao[0].nome })
+          : t('dashboard.manutencoes_proximas', {
+              count: atencao.length,
+            });
     } else {
       statusManutencao = 'ok';
       // Pega o item com a maior porcentagem de desgaste para avisar qual é a próxima
       const proxima = analisados.reduce((prev, current) =>
         prev.perc > current.perc ? prev : current,
       );
-      descManutencao = `Próxima: ${proxima.nome}`;
+      descManutencao = t('dashboard.proxima', {
+        item: proxima.nome,
+      });
     }
   }
 
@@ -95,7 +103,7 @@ export const StatusGrid: React.FC<StatusProps> = ({
   const uiConfig = {
     critical: {
       icon: <AlertTriangle size={20} color="#FFF" />,
-      label: 'Crítico',
+      label: t('dashboard.status_critico'),
     },
     warning: {
       icon: (
@@ -104,7 +112,7 @@ export const StatusGrid: React.FC<StatusProps> = ({
           color={!isDark ? '#0A0A0A' : '#FFF'}
         />
       ),
-      label: 'Atenção',
+      label: t('dashboard.status_atencao'),
     },
     initial: {
       icon: (
@@ -113,11 +121,11 @@ export const StatusGrid: React.FC<StatusProps> = ({
           color={!isDark ? '#0A0A0A' : '#FF9800'}
         />
       ),
-      label: 'Sem Dados',
+      label: t('dashboard.status_sem_dados'),
     },
     ok: {
       icon: <ShieldCheck size={20} color="#FFF" />,
-      label: 'Em Dia',
+      label: t('dashboard.status_em_dia'),
     },
   };
 
@@ -157,7 +165,7 @@ export const StatusGrid: React.FC<StatusProps> = ({
               { color: isDark ? '#666' : '#888' },
             ]}
           >
-            KM ATUAL
+            {t('dashboard.km_atual')}
           </Text>
           <Text
             style={[
