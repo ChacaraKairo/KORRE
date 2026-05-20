@@ -38,8 +38,8 @@ Variaveis conhecidas:
 
 - `EXPO_PUBLIC_KORRE_API_BASE_URL`: URL base opcional para registro de push token e comunicacao remota.
 - `EXPO_PUBLIC_KORRE_ENABLE_REMOTE_COMMANDS`: habilita comandos remotos recebidos por push quando definido como `true`. O padrao seguro e desligado.
-- `EXPO_PUBLIC_KORRE_SUPPORT_YOUTUBE_URL`: canal oficial de tutoriais. Se vazio, o app informa que o canal ainda nao foi configurado.
-- `EXPO_PUBLIC_KORRE_SUPPORT_WHATSAPP`: telefone do WhatsApp em formato internacional, apenas numeros. Se vazio, o app informa que o suporte ainda nao foi configurado.
+
+Canais publicos de suporte e dados oficiais da empresa ficam centralizados em `config/companyContacts.ts`. Nao use `.env` para telefone, e-mail, site ou redes sociais exibidos ao usuario.
 
 Para o lancamento inicial, mantenha `EXPO_PUBLIC_KORRE_ENABLE_REMOTE_COMMANDS=false`. Ative comandos remotos somente depois de configurar um backend autenticado, com autorizacao por usuario, trilha de auditoria e validacao de payloads.
 
