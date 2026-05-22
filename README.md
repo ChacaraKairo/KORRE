@@ -1,4 +1,5 @@
 # KORRE
+link na play store 'https://play.google.com/store/apps/details?id=korre_app.gestao.korucompany&pcampaignid=web_share'
 
 Aplicativo mobile offline-first para motoristas e entregadores controlarem ganhos, despesas, veiculo, manutencao e viabilidade de corridas.
 
