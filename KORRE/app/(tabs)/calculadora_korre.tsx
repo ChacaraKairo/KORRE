@@ -14,23 +14,24 @@ import {
 
 import { styles } from '../../styles/generated/app/(tabs)/calculadora_korreStyles';
 import { inlineStyles } from '../../styles/generated-inline/app/(tabs)/calculadora_korreInlineStyles';
-// Hooks
-import { useCalculadora } from '../../hooks/calculadora/useCalculadora';
+import {
+  CalculadoraHeader,
+  ModalExplicativo,
+  PainelResultadoFlutuante,
+  SecaoComposicaoCustoKm,
+  SecaoCustoPessoa,
+  SecaoCustosAtivo,
+  SecaoCustosExistencia,
+  SecaoPatrimonio,
+  useIndicesKorreForm,
+} from '../../modules/indicesKorre';
 import { useTema } from '../../hooks/modo_tema';
 
 // Layout (A casca da tela)
-import { CalculadoraHeader } from '../../components/telas/Calculadora/layout/CalculadoraHeader';
-import { PainelResultadoFlutuante } from '../../components/telas/Calculadora/layout/PainelResultadoFlutuante';
 
 // Sections (Os blocos do formulário)
-import { SecaoCustoPessoa } from '../../components/telas/Calculadora/sections/SecaoCustoPessoa';
-import { SecaoComposicaoCustoKm } from '../../components/telas/Calculadora/sections/SecaoComposicaoCustoKm';
-import { SecaoCustosAtivo } from '../../components/telas/Calculadora/sections/SecaoCustosAtivo';
-import { SecaoCustosExistencia } from '../../components/telas/Calculadora/sections/SecaoCustosExistencia';
-import { SecaoPatrimonio } from '../../components/telas/Calculadora/sections/SecaoPatrimonio';
 
 // UI Genérica
-import { ModalExplicativo } from '../../components/telas/Calculadora/ui/ModalExplicativo';
 import { MainButton as Button } from '../../components/ui/buttons/Button'; // Mantido caso seja global
 
 export default function CalculadoraScreen() {
@@ -47,7 +48,7 @@ export default function CalculadoraScreen() {
     mudarVeiculoAtivo,
     validarStatusSecoes,
     calcularIPVAAutomatico,
-  } = useCalculadora();
+  } = useIndicesKorreForm();
 
   const { tema } = useTema();
   const isDark = tema === 'escuro';
