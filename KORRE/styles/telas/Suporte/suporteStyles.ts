@@ -29,6 +29,31 @@ export const styles = StyleSheet.create({
     paddingBottom: 40,
   },
 
+  companyCard: {
+    borderWidth: 1,
+    borderRadius: 20,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  companyLogo: {
+    width: 52,
+    height: 52,
+    marginRight: 14,
+  },
+  companyTextContainer: {
+    flex: 1,
+  },
+  companyEyebrow: {
+    fontSize: 12,
+    marginBottom: 3,
+  },
+  companyTitle: {
+    fontSize: 17,
+    fontWeight: '900',
+  },
+
   // Banner YouTube
   bannerYoutube: {
     backgroundColor: '#FF0000',

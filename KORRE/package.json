@@ -9,8 +9,10 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "test": "tsx --test tests/**/*.test.ts",
+    "i18n:check": "tsx scripts/check-i18n-keys.ts",
+    "i18n:scan": "tsx scripts/find-hardcoded-user-text.ts",
     "typecheck": "tsc --noEmit",
-    "validate": "npm test && npm run typecheck && npm run lint"
+    "validate": "npm test && npm run typecheck && npm run lint && npm run i18n:check"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",

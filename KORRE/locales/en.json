@@ -10,7 +10,8 @@
     "sucesso": "Success",
     "em_breve": "Coming soon",
     "sem_placa": "No plate",
-    "loading_local": "Loading local data..."
+    "loading_local": "Loading local data...",
+    "atencao": "Attention"
   },
   "tabs": {
     "dashboard": "Dashboard",
@@ -122,7 +123,38 @@
     "aceito": "I accept the",
     "termos": "Terms of use",
     "armazenamento": "and confirm local storage.",
-    "comecar": "Start KORRE"
+    "comecar": "Start KORRE",
+    "preencha_obrigatorios": "Fill in all required fields correctly.",
+    "cpf_invalido": "Invalid CPF",
+    "cpf_invalido_msg": "Enter a valid CPF.",
+    "senha_invalida": "Invalid password",
+    "senha_invalida_msg": "Enter a valid password.",
+    "senhas_nao_coincidem": "The passwords do not match. Check for extra spaces.",
+    "erro_salvar_banco": "Could not save the data to the local database.",
+    "backup_restaurado_boas_vindas": "Data restored. Welcome back!",
+    "ir_dashboard": "Go to Dashboard",
+    "arquivo_vazio": "Empty file",
+    "arquivo_vazio_msg": "The selected file is empty.",
+    "arquivo_invalido": "Invalid file",
+    "arquivo_invalido_msg": "The selected file is not valid JSON or an encrypted KORRE backup.",
+    "confirmar_importacao_backup": "Do you want to import the backup \"{{nome}}\"?",
+    "sim_restaurar": "Yes, restore",
+    "foto_erro": "Could not capture the photo.",
+    "dados_piloto": "RIDER DATA",
+    "nome_usuario": "User name",
+    "nome_placeholder": "Ex: John Silva",
+    "email": "Email",
+    "cpf_opcional": "CPF (optional)",
+    "crie_senha": "Create a password",
+    "senha_regra": "* Minimum 7 characters, with letters and numbers.",
+    "confirme_senha": "Confirm your password",
+    "metas_seguranca": "GOALS AND SECURITY",
+    "diaria": "Daily",
+    "semanal": "Weekly",
+    "meta_diaria": "Daily goal (R$)",
+    "meta_semanal": "Weekly goal (R$)",
+    "meta_diaria_obs": "* This goal will be used to calculate your daily progress.",
+    "meta_semanal_obs": "* The weekly goal helps with long-term financial planning."
   },
   "dashboard": {
     "boas_vindas": "Rider",
@@ -186,7 +218,12 @@
     "ver_tudo": "View all",
     "progresso_meta": "Goal progress",
     "live": "LIVE",
-    "modal_km_placeholder": "Ex: 12500"
+    "modal_km_placeholder": "Ex: 12500",
+    "atualizar_km": "Update KM",
+    "quilometragem_atual": "CURRENT MILEAGE",
+    "ultimos_registros": "LATEST RECORDS",
+    "nenhum_registro_hoje": "No records today.",
+    "sem_categoria": "No category"
   },
   "veiculo_card": {
     "sem_veiculo": "No vehicle",
@@ -225,6 +262,10 @@
     "criando_categoria": "Creating category...",
     "erro_salvar_transacao": "Could not save the transaction.",
     "erro_categoria_existente": "Category name already exists or database error.",
+    "nova_categoria": "New Category",
+    "nome_categoria": "CATEGORY NAME",
+    "escolher_icone": "CHOOSE ICON",
+    "atualizando_lucro": "Updating your profit...",
     "salvar_anotacao": "SAVE ENTRY",
     "salvando": "SAVING...",
     "salvo": "SAVED!",
@@ -241,6 +282,10 @@
     "salvar_auditoria": "SAVE AUDIT",
     "entendi": "GOT IT",
     "patrimonio": "Assets and capital",
+    "valor_veiculo_fipe": "Vehicle value (FIPE table)",
+    "valor_fipe": "FIPE value",
+    "selic_anual": "Annual Selic rate",
+    "taxa_selic": "Selic rate",
     "custos_movimento": "Movement costs (KM)",
     "composicao_km": "Cost per km composition",
     "total_ikm": "Total IKM",
@@ -250,10 +295,23 @@
   "origem_ganhos": {
     "adicionar_plataforma": "ADD NEW PLATFORM",
     "info": "Each chosen color and icon will be used on your Dashboard to organize your income in KORRE.",
+    "titulo": "Set up your work",
+    "subtitulo": "Where do you earn your money?",
     "finalizar": "Finish selection",
     "nova_origem": "NEW SOURCE",
+    "nome_app": "APP NAME",
+    "escolher_cor": "CHOOSE COLOR",
+    "registrar": "REGISTER SOURCE",
     "placeholder_nome": "Ex: Local delivery",
-    "buscar": "Search company or app..."
+    "buscar": "Search company or app...",
+    "categorias": {
+      "delivery": "Delivery",
+      "transporte": "Transport",
+      "logistica": "Logistics",
+      "bebidas": "Beverages",
+      "fixo_extra": "Fixed / Extra",
+      "personalizado": "Custom"
+    }
   },
   "oficina": {
     "titulo": "Workshop",
@@ -264,7 +322,10 @@
     "periodo": "Period",
     "apagar": "Delete",
     "confirmar_exclusao": "Do you want to delete this record?",
-    "erro_salvar": "Error saving"
+    "erro_salvar": "Error saving",
+    "gerenciar_registro": "Manage record",
+    "editar_valor": "Edit amount",
+    "apagar_definitivamente": "Delete permanently"
   },
   "perfil": {
     "sair": "Sign out",
@@ -311,8 +372,16 @@
     "email": "Email support",
     "email_assunto": "KORRE support",
     "email_erro": "Could not open email.",
+    "suporte_por": "Official support by",
+    "site_app": "KORRE website",
+    "site_app_erro": "Could not open the KORRE website.",
     "site_oficial": "Official website",
     "site_erro": "Could not open the official website.",
+    "site_koru_erro": "Could not open the Koru Company website.",
+    "reclamacoes": "Complaints channel",
+    "reclamacoes_erro": "Could not open the complaints channel.",
+    "politica_privacidade": "Privacy policy",
+    "privacidade_erro": "Could not open the privacy policy.",
     "youtube": "YouTube tutorials",
     "canal_config_titulo": "Channel in setup",
     "canal_config_msg": "Official KORRE tutorials have not been configured in this build yet.",
@@ -346,5 +415,14 @@
   "modal": {
     "titulo": "This is a modal",
     "home": "Go to home screen"
+  },
+  "categorias": {
+    "combustivel": "Fuel",
+    "manutencao": "Maintenance",
+    "alimentacao": "Food",
+    "outros_ganhos": "Other income",
+    "outras_despesas": "Other expenses",
+    "outros": "Other",
+    "outros_rendimentos": "Other earnings"
   }
 }

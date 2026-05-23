@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Modal,
   View,
@@ -8,6 +9,7 @@ import {
 import { X, Edit3, Trash2 } from 'lucide-react-native';
 import { useTema } from '../../../hooks/modo_tema';
 import { styles } from '../../../styles/telas/Historico/historicoStyles';
+import { translateCategoryName } from '../../../utils/i18n/translateDomainValue';
 
 import { inlineStyles } from '../../../styles/generated-inline/components/telas/historico/ModalOpcoesRegistroInlineStyles';
 import { dynamicInlineStyles } from '../../../styles/generated-dynamic/components/telas/historico/ModalOpcoesRegistroDynamicStyles';
@@ -18,6 +20,7 @@ export function ModalOpcoesRegistro({
   onEdit,
   onDelete,
 }: any) {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
@@ -49,7 +52,7 @@ export function ModalOpcoesRegistro({
                 { color: textColor },
               ]}
             >
-              Gerir Registo
+              {t('historico.gerenciar_registro')}
             </Text>
             <TouchableOpacity
               onPress={onClose}
@@ -72,7 +75,7 @@ export function ModalOpcoesRegistro({
             <Text
               style={dynamicInlineStyles.inline1({ textMuted })}
             >
-              {item.categoria}
+              {translateCategoryName(t, item.categoria)}
             </Text>
             <Text
               style={dynamicInlineStyles.inline2({ item })}
@@ -100,7 +103,7 @@ export function ModalOpcoesRegistro({
                 { color: textColor },
               ]}
             >
-              Editar Valor
+              {t('historico.editar_valor')}
             </Text>
           </TouchableOpacity>
 
@@ -121,7 +124,7 @@ export function ModalOpcoesRegistro({
                 { color: '#EF4444' },
               ]}
             >
-              Apagar Definitivamente
+              {t('historico.apagar_definitivamente')}
             </Text>
           </TouchableOpacity>
         </View>

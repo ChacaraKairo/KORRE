@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, TouchableOpacity } from 'react-native';
 import {
   Clock,
@@ -7,6 +8,7 @@ import {
 } from 'lucide-react-native';
 import { useTema } from '../../../hooks/modo_tema';
 import { styles } from '../../../styles/telas/Historico/historicoStyles';
+import { translateCategoryName } from '../../../utils/i18n/translateDomainValue';
 
 import { inlineStyles } from '../../../styles/generated-inline/components/telas/historico/ListaMovimentacoesInlineStyles';
 interface ListaProps {
@@ -18,6 +20,7 @@ export function ListaMovimentacoes({
   movimentacoes,
   onSelect,
 }: ListaProps) {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
@@ -61,7 +64,7 @@ export function ListaMovimentacoes({
                   { color: textColor },
                 ]}
               >
-                {item.categoria}
+                {translateCategoryName(t, item.categoria)}
               </Text>
               <View style={styles.itemDataBox}>
                 <Clock size={10} color={textMuted} />

@@ -10,7 +10,8 @@
     "sucesso": "Exito",
     "em_breve": "Pronto",
     "sem_placa": "Sin placa",
-    "loading_local": "Cargando datos locales..."
+    "loading_local": "Cargando datos locales...",
+    "atencao": "Atenci?n"
   },
   "tabs": {
     "dashboard": "Panel",
@@ -122,7 +123,38 @@
     "aceito": "Acepto los",
     "termos": "Terminos de uso",
     "armazenamento": "y confirmo el almacenamiento local.",
-    "comecar": "Empezar KORRE"
+    "comecar": "Empezar KORRE",
+    "preencha_obrigatorios": "Completa correctamente todos los campos obligatorios.",
+    "cpf_invalido": "CPF inv?lido",
+    "cpf_invalido_msg": "Ingresa un CPF v?lido.",
+    "senha_invalida": "Contrase?a inv?lida",
+    "senha_invalida_msg": "Ingresa una contrase?a v?lida.",
+    "senhas_nao_coincidem": "Las contrase?as no coinciden. Verifica si hay espacios adicionales.",
+    "erro_salvar_banco": "No fue posible guardar los datos en la base local.",
+    "backup_restaurado_boas_vindas": "Datos restaurados. Bienvenido de vuelta!",
+    "ir_dashboard": "Ir al Dashboard",
+    "arquivo_vazio": "Archivo vac?o",
+    "arquivo_vazio_msg": "El archivo seleccionado est? vac?o.",
+    "arquivo_invalido": "Archivo inv?lido",
+    "arquivo_invalido_msg": "El archivo seleccionado no es un JSON v?lido ni un backup cifrado de KORRE.",
+    "confirmar_importacao_backup": "Deseas importar el backup \"{{nome}}\"?",
+    "sim_restaurar": "S?, restaurar",
+    "foto_erro": "No fue posible capturar la foto.",
+    "dados_piloto": "DATOS DEL PILOTO",
+    "nome_usuario": "Nombre de usuario",
+    "nome_placeholder": "Ej: Juan Silva",
+    "email": "E-mail",
+    "cpf_opcional": "CPF (opcional)",
+    "crie_senha": "Crea una contrasena",
+    "senha_regra": "* Minimo de 7 caracteres, con letras y numeros.",
+    "confirme_senha": "Confirma tu contrasena",
+    "metas_seguranca": "METAS Y SEGURIDAD",
+    "diaria": "Diaria",
+    "semanal": "Semanal",
+    "meta_diaria": "Meta diaria (R$)",
+    "meta_semanal": "Meta semanal (R$)",
+    "meta_diaria_obs": "* Esta meta se usara para calcular tu progreso diario.",
+    "meta_semanal_obs": "* La meta semanal ayuda en la planificacion financiera a largo plazo."
   },
   "dashboard": {
     "boas_vindas": "Piloto",
@@ -186,7 +218,12 @@
     "ver_tudo": "Ver todo",
     "progresso_meta": "Progreso de la meta",
     "live": "LIVE",
-    "modal_km_placeholder": "Ej: 12500"
+    "modal_km_placeholder": "Ej: 12500",
+    "atualizar_km": "Actualizar KM",
+    "quilometragem_atual": "KILOMETRAJE ACTUAL",
+    "ultimos_registros": "ULTIMOS REGISTROS",
+    "nenhum_registro_hoje": "Ningun registro hoy.",
+    "sem_categoria": "Sin categoria"
   },
   "veiculo_card": {
     "sem_veiculo": "Sin vehiculo",
@@ -225,6 +262,10 @@
     "criando_categoria": "Creando categoria...",
     "erro_salvar_transacao": "No fue posible guardar la transaccion.",
     "erro_categoria_existente": "El nombre de la categoria ya existe o hubo un error en la base de datos.",
+    "nova_categoria": "Nueva Categoria",
+    "nome_categoria": "NOMBRE DE LA CATEGORIA",
+    "escolher_icone": "ELEGIR ICONO",
+    "atualizando_lucro": "Actualizando tu ganancia...",
     "salvar_anotacao": "GUARDAR REGISTRO",
     "salvando": "GUARDANDO...",
     "salvo": "GUARDADO!",
@@ -241,6 +282,10 @@
     "salvar_auditoria": "GUARDAR AUDITORIA",
     "entendi": "ENTENDIDO",
     "patrimonio": "Patrimonio y capital",
+    "valor_veiculo_fipe": "Valor del vehiculo (Tabla FIPE)",
+    "valor_fipe": "Valor FIPE",
+    "selic_anual": "Tasa Selic anual",
+    "taxa_selic": "Tasa Selic",
     "custos_movimento": "Costos de movimiento (KM)",
     "composicao_km": "Composicion del costo por km",
     "total_ikm": "Total IKM",
@@ -250,10 +295,23 @@
   "origem_ganhos": {
     "adicionar_plataforma": "AGREGAR NUEVA PLATAFORMA",
     "info": "Cada color e icono elegido se usara en tu Panel para organizar tus ingresos en KORRE.",
+    "titulo": "Configura tu trabajo",
+    "subtitulo": "Donde ganas tu dinero?",
     "finalizar": "Finalizar seleccion",
     "nova_origem": "NUEVA FUENTE",
+    "nome_app": "NOMBRE DE LA APP",
+    "escolher_cor": "ELEGIR COLOR",
+    "registrar": "REGISTRAR FUENTE",
     "placeholder_nome": "Ej: Entrega local",
-    "buscar": "Buscar empresa o app..."
+    "buscar": "Buscar empresa o app...",
+    "categorias": {
+      "delivery": "Delivery",
+      "transporte": "Transporte",
+      "logistica": "Log?stica",
+      "bebidas": "Bebidas",
+      "fixo_extra": "Fijo / Extra",
+      "personalizado": "Personalizado"
+    }
   },
   "oficina": {
     "titulo": "Taller",
@@ -264,7 +322,10 @@
     "periodo": "Periodo",
     "apagar": "Eliminar",
     "confirmar_exclusao": "Quieres eliminar este registro?",
-    "erro_salvar": "Error al guardar"
+    "erro_salvar": "Error al guardar",
+    "gerenciar_registro": "Gestionar registro",
+    "editar_valor": "Editar valor",
+    "apagar_definitivamente": "Borrar definitivamente"
   },
   "perfil": {
     "sair": "Salir de la cuenta",
@@ -311,8 +372,16 @@
     "email": "Soporte por e-mail",
     "email_assunto": "Soporte KORRE",
     "email_erro": "No fue posible abrir el e-mail.",
+    "suporte_por": "Soporte oficial por",
+    "site_app": "Sitio de KORRE",
+    "site_app_erro": "No fue posible abrir el sitio de KORRE.",
     "site_oficial": "Sitio oficial",
     "site_erro": "No fue posible abrir el sitio oficial.",
+    "site_koru_erro": "No fue posible abrir el sitio de Koru Company.",
+    "reclamacoes": "Canal de reclamos",
+    "reclamacoes_erro": "No fue posible abrir el canal de reclamos.",
+    "politica_privacidade": "Politica de privacidad",
+    "privacidade_erro": "No fue posible abrir la politica de privacidad.",
     "youtube": "Tutoriales en YouTube",
     "canal_config_titulo": "Canal en configuracion",
     "canal_config_msg": "Los tutoriales oficiales de KORRE aun no fueron configurados en esta build.",
@@ -346,5 +415,14 @@
   "modal": {
     "titulo": "Este es un modal",
     "home": "Ir a la pantalla inicial"
+  },
+  "categorias": {
+    "combustivel": "Combustible",
+    "manutencao": "Mantenimiento",
+    "alimentacao": "Alimentaci?n",
+    "outros_ganhos": "Otros ingresos",
+    "outras_despesas": "Otros gastos",
+    "outros": "Otros",
+    "outros_rendimentos": "Otros ingresos"
   }
 }

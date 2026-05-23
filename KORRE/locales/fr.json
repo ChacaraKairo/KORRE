@@ -10,7 +10,8 @@
     "sucesso": "Succes",
     "em_breve": "Bientot",
     "sem_placa": "Sans plaque",
-    "loading_local": "Chargement des donnees locales..."
+    "loading_local": "Chargement des donnees locales...",
+    "atencao": "Attention"
   },
   "tabs": {
     "dashboard": "Tableau de bord",
@@ -122,7 +123,38 @@
     "aceito": "J'accepte les",
     "termos": "Conditions d'utilisation",
     "armazenamento": "et je confirme le stockage local.",
-    "comecar": "Commencer KORRE"
+    "comecar": "Commencer KORRE",
+    "preencha_obrigatorios": "Remplissez correctement tous les champs obligatoires.",
+    "cpf_invalido": "CPF invalide",
+    "cpf_invalido_msg": "Saisissez un CPF valide.",
+    "senha_invalida": "Mot de passe invalide",
+    "senha_invalida_msg": "Saisissez un mot de passe valide.",
+    "senhas_nao_coincidem": "Les mots de passe ne correspondent pas. Verifiez les espaces en trop.",
+    "erro_salvar_banco": "Impossible d'enregistrer les donnees dans la base locale.",
+    "backup_restaurado_boas_vindas": "Donnees restaurees. Bon retour!",
+    "ir_dashboard": "Aller au Dashboard",
+    "arquivo_vazio": "Fichier vide",
+    "arquivo_vazio_msg": "Le fichier selectionne est vide.",
+    "arquivo_invalido": "Fichier invalide",
+    "arquivo_invalido_msg": "Le fichier selectionne n'est pas un JSON valide ni une sauvegarde KORRE chiffree.",
+    "confirmar_importacao_backup": "Voulez-vous importer la sauvegarde \"{{nome}}\"?",
+    "sim_restaurar": "Oui, restaurer",
+    "foto_erro": "Impossible de capturer la photo.",
+    "dados_piloto": "DONNEES DU PILOTE",
+    "nome_usuario": "Nom d'utilisateur",
+    "nome_placeholder": "Ex: Jean Silva",
+    "email": "E-mail",
+    "cpf_opcional": "CPF (facultatif)",
+    "crie_senha": "Creez un mot de passe",
+    "senha_regra": "* Minimum 7 caracteres, avec lettres et chiffres.",
+    "confirme_senha": "Confirmez votre mot de passe",
+    "metas_seguranca": "OBJECTIFS ET SECURITE",
+    "diaria": "Quotidienne",
+    "semanal": "Hebdomadaire",
+    "meta_diaria": "Objectif quotidien (R$)",
+    "meta_semanal": "Objectif hebdomadaire (R$)",
+    "meta_diaria_obs": "* Cet objectif sera utilise pour calculer votre progression quotidienne.",
+    "meta_semanal_obs": "* L'objectif hebdomadaire aide a la planification financiere a long terme."
   },
   "dashboard": {
     "boas_vindas": "Pilote",
@@ -186,7 +218,12 @@
     "ver_tudo": "Voir tout",
     "progresso_meta": "Progression de l'objectif",
     "live": "LIVE",
-    "modal_km_placeholder": "Ex: 12500"
+    "modal_km_placeholder": "Ex: 12500",
+    "atualizar_km": "Mettre a jour le KM",
+    "quilometragem_atual": "KILOMETRAGE ACTUEL",
+    "ultimos_registros": "DERNIERS ENREGISTREMENTS",
+    "nenhum_registro_hoje": "Aucun enregistrement aujourd'hui.",
+    "sem_categoria": "Sans categorie"
   },
   "veiculo_card": {
     "sem_veiculo": "Aucun vehicule",
@@ -225,6 +262,10 @@
     "criando_categoria": "Creation de la categorie...",
     "erro_salvar_transacao": "Impossible d'enregistrer la transaction.",
     "erro_categoria_existente": "Ce nom de categorie existe deja ou une erreur de base de donnees est survenue.",
+    "nova_categoria": "Nouvelle categorie",
+    "nome_categoria": "NOM DE LA CATEGORIE",
+    "escolher_icone": "CHOISIR UNE ICONE",
+    "atualizando_lucro": "Mise a jour de votre profit...",
     "salvar_anotacao": "ENREGISTRER",
     "salvando": "ENREGISTREMENT...",
     "salvo": "ENREGISTRE!",
@@ -241,6 +282,10 @@
     "salvar_auditoria": "ENREGISTRER L'AUDIT",
     "entendi": "COMPRIS",
     "patrimonio": "Patrimoine et capital",
+    "valor_veiculo_fipe": "Valeur du vehicule (table FIPE)",
+    "valor_fipe": "Valeur FIPE",
+    "selic_anual": "Taux Selic annuel",
+    "taxa_selic": "Taux Selic",
     "custos_movimento": "Couts de mouvement (KM)",
     "composicao_km": "Composition du cout par km",
     "total_ikm": "Total IKM",
@@ -250,10 +295,23 @@
   "origem_ganhos": {
     "adicionar_plataforma": "AJOUTER UNE PLATEFORME",
     "info": "Chaque couleur et icone choisie sera utilisee dans votre Tableau de bord pour organiser vos gains dans KORRE.",
+    "titulo": "Configurez votre travail",
+    "subtitulo": "Ou gagnez-vous votre argent?",
     "finalizar": "Terminer la selection",
     "nova_origem": "NOUVELLE SOURCE",
+    "nome_app": "NOM DE L'APP",
+    "escolher_cor": "CHOISIR UNE COULEUR",
+    "registrar": "ENREGISTRER LA SOURCE",
     "placeholder_nome": "Ex: Livraison locale",
-    "buscar": "Rechercher entreprise ou app..."
+    "buscar": "Rechercher entreprise ou app...",
+    "categorias": {
+      "delivery": "Livraison",
+      "transporte": "Transport",
+      "logistica": "Logistique",
+      "bebidas": "Boissons",
+      "fixo_extra": "Fixe / Extra",
+      "personalizado": "Personnalise"
+    }
   },
   "oficina": {
     "titulo": "Atelier",
@@ -264,7 +322,10 @@
     "periodo": "Periode",
     "apagar": "Supprimer",
     "confirmar_exclusao": "Voulez-vous supprimer cet enregistrement?",
-    "erro_salvar": "Erreur lors de l'enregistrement"
+    "erro_salvar": "Erreur lors de l'enregistrement",
+    "gerenciar_registro": "Gerer l'enregistrement",
+    "editar_valor": "Modifier le montant",
+    "apagar_definitivamente": "Supprimer definitivement"
   },
   "perfil": {
     "sair": "Se deconnecter",
@@ -311,8 +372,16 @@
     "email": "Support par e-mail",
     "email_assunto": "Support KORRE",
     "email_erro": "Impossible d'ouvrir l'e-mail.",
+    "suporte_por": "Support officiel par",
+    "site_app": "Site KORRE",
+    "site_app_erro": "Impossible d'ouvrir le site KORRE.",
     "site_oficial": "Site officiel",
     "site_erro": "Impossible d'ouvrir le site officiel.",
+    "site_koru_erro": "Impossible d'ouvrir le site Koru Company.",
+    "reclamacoes": "Canal de reclamations",
+    "reclamacoes_erro": "Impossible d'ouvrir le canal de reclamations.",
+    "politica_privacidade": "Politique de confidentialite",
+    "privacidade_erro": "Impossible d'ouvrir la politique de confidentialite.",
     "youtube": "Tutoriels YouTube",
     "canal_config_titulo": "Chaine en configuration",
     "canal_config_msg": "Les tutoriels officiels KORRE ne sont pas encore configures dans cette build.",
@@ -346,5 +415,14 @@
   "modal": {
     "titulo": "Ceci est un modal",
     "home": "Aller a l'ecran d'accueil"
+  },
+  "categorias": {
+    "combustivel": "Carburant",
+    "manutencao": "Entretien",
+    "alimentacao": "Alimentation",
+    "outros_ganhos": "Autres revenus",
+    "outras_despesas": "Autres depenses",
+    "outros": "Autres",
+    "outros_rendimentos": "Autres revenus"
   }
 }

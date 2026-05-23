@@ -4,6 +4,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AppRoutes } from '../../constants/routes';
 import { BackupRestoreService } from '../../services/BackupRestoreService';
 import { logger } from '../../utils/logger';
 import {
@@ -26,7 +27,7 @@ export function useRestaurarBackup() {
     new Promise<string | null>((resolve) => {
       Alert.prompt(
         t('configuracoes.senha_backup_label'),
-        undefined,
+        t('configuracoes.senha_backup_restaurar_msg'),
         [
           {
             text: t('common.cancelar'),
@@ -50,20 +51,20 @@ export function useRestaurarBackup() {
       await BackupRestoreService.restaurarBackup(data);
 
       Alert.alert(
-        'Backup restaurado',
-        'Dados restaurados. Bem-vindo de volta!',
+        t('configuracoes.backup_restaurado'),
+        t('cadastro.backup_restaurado_boas_vindas'),
         [
           {
-            text: 'Ir para Dashboard',
-            onPress: () => router.replace('/(tabs)/dashboard'),
+            text: t('cadastro.ir_dashboard'),
+            onPress: () => router.replace(AppRoutes.dashboard),
           },
         ],
       );
     } catch (error) {
       logger.error('[RESTORE][FATAL]', error);
       mostrarAviso(
-        'Erro na restauracao',
-        'O arquivo de backup e invalido ou incompativel com o KORRE.',
+        t('configuracoes.falha_restaurar_backup'),
+        t('configuracoes.falha_restaurar_backup_msg'),
       );
     } finally {
       setCarregando(false);
@@ -73,7 +74,7 @@ export function useRestaurarBackup() {
   const selecionarArquivo = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/json',
+        type: ['application/json', 'application/octet-stream', '*/*'],
         copyToCacheDirectory: true,
       });
 
@@ -81,8 +82,8 @@ export function useRestaurarBackup() {
 
       if (!result.assets?.[0]?.uri) {
         mostrarAviso(
-          'Backup nao selecionado',
-          'Nao foi possivel acessar o arquivo escolhido.',
+          t('configuracoes.backup_nao_selecionado'),
+          t('configuracoes.backup_nao_selecionado_msg'),
         );
         return;
       }
@@ -94,14 +95,15 @@ export function useRestaurarBackup() {
 
       if (!conteudo) {
         mostrarAviso(
-          'Arquivo vazio',
-          'O arquivo selecionado esta vazio.',
+          t('cadastro.arquivo_vazio'),
+          t('cadastro.arquivo_vazio_msg'),
         );
         return;
       }
 
       const pareceCriptografado = isEncryptedPayload(conteudo);
       let dados: unknown;
+
       try {
         dados = JSON.parse(conteudo);
       } catch (error) {
@@ -113,11 +115,7 @@ export function useRestaurarBackup() {
           if (passphrase === null) return;
 
           try {
-            const decryptedObject = decryptJson(
-              conteudo,
-              passphrase,
-            );
-            dados = decryptedObject;
+            dados = decryptJson(conteudo, passphrase);
           } catch (decryptError) {
             logger.error(
               '[PICKER] Falha ao descriptografar backup:',
@@ -131,20 +129,22 @@ export function useRestaurarBackup() {
           }
         } else {
           mostrarAviso(
-            'Arquivo invalido',
-            'O arquivo selecionado nao e um JSON valido. Escolha um backup exportado pelo KORRE.',
+            t('cadastro.arquivo_invalido'),
+            t('cadastro.arquivo_invalido_msg'),
           );
           return;
         }
       }
 
       Alert.alert(
-        'Restaurar dados',
-        `Deseja importar o backup "${asset.name}"?`,
+        t('configuracoes.restaurar_dados'),
+        t('cadastro.confirmar_importacao_backup', {
+          nome: asset.name,
+        }),
         [
-          { text: 'Cancelar', style: 'cancel' },
+          { text: t('common.cancelar'), style: 'cancel' },
           {
-            text: 'Sim, restaurar',
+            text: t('cadastro.sim_restaurar'),
             onPress: () => {
               void executarRestauracao(dados);
             },
@@ -154,8 +154,8 @@ export function useRestaurarBackup() {
     } catch (error) {
       logger.error('[PICKER][ERRO CRITICO]', error);
       mostrarAviso(
-        'Erro de leitura',
-        'Nao foi possivel processar este arquivo. Verifique se e um JSON valido.',
+        t('configuracoes.falha_ler_backup'),
+        t('configuracoes.falha_ler_backup_msg'),
       );
     }
   };

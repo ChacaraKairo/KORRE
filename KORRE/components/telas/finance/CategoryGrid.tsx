@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { translateCategoryName } from '../../../utils/i18n/translateDomainValue';
 import { financeStyles as styles } from '../../../styles/telas/Finance/financeStyles';
 
 interface CategoryGridProps {
@@ -58,7 +59,7 @@ export const CategoryGrid = ({
                   { color: isSelected ? mainColor : '#666' },
                 ]}
               >
-                {cat.nome || cat.id}
+                {translateCategoryName(t, cat.nome || cat.id)}
               </Text>
             </TouchableOpacity>
           );

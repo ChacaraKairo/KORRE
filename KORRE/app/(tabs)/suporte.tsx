@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import {
+  AlertTriangle,
   ArrowLeft,
   ChevronDown,
   ChevronUp,
@@ -13,6 +14,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Linking,
+  Image,
   Platform,
   SafeAreaView,
   ScrollView,
@@ -99,9 +101,24 @@ export default function SuporteScreen() {
   );
   const hasYoutube = Boolean(COMPANY_CONTACTS.support.youtubeUrl);
   const hasEmail = Boolean(COMPANY_CONTACTS.support.email);
-  const hasWebsite = Boolean(COMPANY_CONTACTS.support.websiteUrl);
+  const hasSupportWebsite = Boolean(
+    COMPANY_CONTACTS.support.websiteUrl,
+  );
+  const hasAppWebsite = Boolean(COMPANY_CONTACTS.app.websiteUrl);
+  const hasComplaints = Boolean(
+    COMPANY_CONTACTS.support.complaintsUrl,
+  );
+  const hasPrivacyPolicy = Boolean(
+    COMPANY_CONTACTS.support.privacyPolicyUrl,
+  );
   const hasAnyChannel =
-    hasWhatsapp || hasYoutube || hasEmail || hasWebsite;
+    hasWhatsapp ||
+    hasYoutube ||
+    hasEmail ||
+    hasSupportWebsite ||
+    hasAppWebsite ||
+    hasComplaints ||
+    hasPrivacyPolicy;
 
   const showChannelNotConfigured = () => {
     showCustomAlert(
@@ -195,6 +212,41 @@ export default function SuporteScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+        {hasSupportWebsite && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() =>
+              void openExternalUrl(
+                COMPANY_CONTACTS.support.websiteUrl,
+                t('suporte.site_koru_erro'),
+              )
+            }
+            style={[
+              styles.companyCard,
+              { backgroundColor: cardColor, borderColor },
+            ]}
+          >
+            <Image
+              source={require('../../assets/images/koru.png')}
+              style={styles.companyLogo}
+              resizeMode="contain"
+            />
+            <View style={styles.companyTextContainer}>
+              <Text
+                style={[
+                  styles.companyEyebrow,
+                  { color: isDark ? '#AAA' : '#555' },
+                ]}
+              >
+                {t('suporte.suporte_por')}
+              </Text>
+              <Text style={[styles.companyTitle, { color: textColor }]}>
+                {COMPANY_CONTACTS.companyName}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
         {hasYoutube && (
           <TouchableOpacity
             activeOpacity={0.8}
@@ -242,6 +294,36 @@ export default function SuporteScreen() {
               {t('suporte.canais_indisponiveis')}
             </Text>
           </View>
+        )}
+
+        {hasAppWebsite && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() =>
+              void openExternalUrl(
+                COMPANY_CONTACTS.app.websiteUrl,
+                t('suporte.site_app_erro'),
+              )
+            }
+            style={[
+              styles.cardWhatsapp,
+              { backgroundColor: cardColor, borderColor },
+            ]}
+          >
+            <View style={styles.whatsappIconBox}>
+              <Globe size={24} color="#00C853" />
+            </View>
+            <View style={styles.whatsappTextContainer}>
+              <Text
+                style={[
+                  styles.whatsappTitle,
+                  { color: textColor },
+                ]}
+              >
+                {t('suporte.site_app')}
+              </Text>
+            </View>
+          </TouchableOpacity>
         )}
 
         {hasWhatsapp && (
@@ -294,13 +376,13 @@ export default function SuporteScreen() {
           </TouchableOpacity>
         )}
 
-        {hasWebsite && (
+        {hasComplaints && (
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() =>
               void openExternalUrl(
-                COMPANY_CONTACTS.support.websiteUrl,
-                t('suporte.site_erro'),
+                COMPANY_CONTACTS.support.complaintsUrl,
+                t('suporte.reclamacoes_erro'),
               )
             }
             style={[
@@ -309,7 +391,7 @@ export default function SuporteScreen() {
             ]}
           >
             <View style={styles.whatsappIconBox}>
-              <Globe size={24} color="#00C853" />
+              <AlertTriangle size={24} color="#00C853" />
             </View>
             <View style={styles.whatsappTextContainer}>
               <Text
@@ -318,7 +400,37 @@ export default function SuporteScreen() {
                   { color: textColor },
                 ]}
               >
-                {t('suporte.site_oficial')}
+                {t('suporte.reclamacoes')}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
+        {hasPrivacyPolicy && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() =>
+              void openExternalUrl(
+                COMPANY_CONTACTS.support.privacyPolicyUrl,
+                t('suporte.privacidade_erro'),
+              )
+            }
+            style={[
+              styles.cardWhatsapp,
+              { backgroundColor: cardColor, borderColor },
+            ]}
+          >
+            <View style={styles.whatsappIconBox}>
+              <FileText size={24} color="#00C853" />
+            </View>
+            <View style={styles.whatsappTextContainer}>
+              <Text
+                style={[
+                  styles.whatsappTitle,
+                  { color: textColor },
+                ]}
+              >
+                {t('suporte.politica_privacidade')}
               </Text>
             </View>
           </TouchableOpacity>

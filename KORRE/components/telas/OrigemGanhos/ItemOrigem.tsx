@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, TouchableOpacity } from 'react-native';
 import {
   Check,
@@ -12,6 +13,7 @@ import {
   ShoppingBag,
 } from 'lucide-react-native';
 import { styles } from '../../../styles/telas/OrigemGanhos/OrigemGanhosStyles';
+import { translateIncomeOriginGroup } from '../../../utils/i18n/translateDomainValue';
 
 const IconComponents: any = {
   Smartphone,
@@ -35,6 +37,7 @@ export const ItemOrigem: React.FC<ItemOrigemProps> = ({
   isSelecionado,
   onToggle,
 }) => {
+  const { t } = useTranslation();
   const Icon = IconComponents[item.icone || item.iconId] || Briefcase;
 
   return (
@@ -65,7 +68,7 @@ export const ItemOrigem: React.FC<ItemOrigemProps> = ({
             {item.nome}
           </Text>
           <Text style={styles.itemCategory}>
-            {item.categoria}
+            {translateIncomeOriginGroup(t, item.categoria)}
           </Text>
         </View>
       </View>

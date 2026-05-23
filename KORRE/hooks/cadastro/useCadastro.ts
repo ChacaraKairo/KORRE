@@ -1,7 +1,7 @@
-// src/hooks/cadastro/useCadastro.ts
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import db from '../../database/DatabaseInit';
 import { validarRegrasSenha } from '../../utils/validacaoSenha';
 import { validarCPF } from '../../utils/validacaoCpf';
@@ -14,8 +14,8 @@ import { waitForUiFeedback } from '../../utils/ui/waitForUiFeedback';
 
 export const useCadastro = () => {
   const router = useRouter();
+  const { t } = useTranslation();
 
-  // Estados do Perfil
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
@@ -23,7 +23,6 @@ export const useCadastro = () => {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [foto, setFoto] = useState<string | null>(null);
 
-  // Estados do Veículo
   const [tipoVeiculo, setTipoVeiculo] =
     useState<TipoVeiculo>('moto');
   const [marca, setMarca] = useState('');
@@ -33,7 +32,6 @@ export const useCadastro = () => {
   const [placa, setPlaca] = useState('');
   const [kmAtual, setKmAtual] = useState('');
 
-  // Estados de Metas e Termos
   const [meta, setMeta] = useState('');
   const [tipoMeta, setTipoMeta] = useState<
     'diaria' | 'semanal'
@@ -45,7 +43,6 @@ export const useCadastro = () => {
   const salvarCadastro = async () => {
     if (salvando) return;
 
-    // 1. LIMPEZA DE DADOS
     const nomeLimpo = nome.trim();
     const emailLimpo = email.trim();
     const senhaLimpa = senha.trim();
@@ -54,7 +51,6 @@ export const useCadastro = () => {
 
     setErro(true);
 
-    // 2. Validação de Campos Vazios Básicos
     if (
       !nomeLimpo ||
       !emailLimpo ||
@@ -66,33 +62,36 @@ export const useCadastro = () => {
       !aceitouTermos
     ) {
       Alert.alert(
-        'Atenção',
-        'Preencha todos os campos obrigatórios corretamente.',
+        t('common.atencao'),
+        t('cadastro.preencha_obrigatorios'),
       );
       return;
     }
 
-    // 3. Validacao matematica do CPF, quando informado.
     if (cpfLimpo) {
       const validacaoCpf = validarCPF(cpfLimpo);
       if (!validacaoCpf.valida) {
-        Alert.alert('CPF Inválido', validacaoCpf.erro);
+        Alert.alert(
+          t('cadastro.cpf_invalido'),
+          validacaoCpf.erro ?? t('cadastro.cpf_invalido_msg'),
+        );
         return;
       }
     }
 
-    // 4. Validação de Regras de Senha
     const validacaoSenha = validarRegrasSenha(senhaLimpa);
     if (!validacaoSenha.valida) {
-      Alert.alert('Senha Inválida', validacaoSenha.erro);
+      Alert.alert(
+        t('cadastro.senha_invalida'),
+        validacaoSenha.erro ?? t('cadastro.senha_invalida_msg'),
+      );
       return;
     }
 
-    // 5. Verificação de Igualdade das Senhas
     if (senhaLimpa !== confirmacaoLimpa) {
       Alert.alert(
-        'Atenção',
-        'As senhas não coincidem. Verifique se há espaços extras.',
+        t('common.atencao'),
+        t('cadastro.senhas_nao_coincidem'),
       );
       return;
     }
@@ -102,11 +101,8 @@ export const useCadastro = () => {
       await waitForUiFeedback();
 
       const valorMeta = parseFloat(meta) || 0;
-
-      // Criptografia
       const senhaCriptografada = await hashPassword(senhaLimpa);
 
-      // 6. Inserir Perfil
       const resultUsuario = await db.runAsync(
         `INSERT INTO perfil_usuario (nome, email, cpf, senha, foto_uri, tipo_meta, meta_diaria, meta_semanal) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
         [
@@ -123,25 +119,24 @@ export const useCadastro = () => {
 
       const usuarioId = resultUsuario.lastInsertRowId;
 
-      // 7. Inserir Veículo usando o Serviço Global
       await VeiculoService.inserirVeiculo({
         tipo: tipoVeiculo,
-        marca: marca,
-        modelo: modelo,
-        ano: ano,
-        motor: motor,
-        placa: placa,
+        marca,
+        modelo,
+        ano,
+        motor,
+        placa,
         km_atual: parseInt(kmAtual) || 0,
-        ativo: 1, // O primeiro veículo cadastrado sempre será o ativo
-        id_user: usuarioId, // Relaciona com o usuário recém-criado
+        ativo: 1,
+        id_user: usuarioId,
       });
 
       router.replace(AppRoutes.origemGanhos);
     } catch (error) {
       logger.error('Erro ao salvar no banco:', error);
       Alert.alert(
-        'Erro',
-        'Falha ao guardar os dados no banco de dados local.',
+        t('common.erro'),
+        t('cadastro.erro_salvar_banco'),
       );
     } finally {
       setSalvando(false);
