@@ -442,6 +442,65 @@
     "faq_offline_resposta": "Sim. Os principais fluxos de cadastro, ganhos, despesas e veiculos funcionam com dados locais.",
     "termos_privacidade": "Termos de uso e privacidade"
   },
+  "rideAnalyzer": {
+    "open": "Analisar corrida",
+    "eyebrow": "Decisor KORRE",
+    "title": "Analisar corrida",
+    "subtitle": "Digite os dados da oferta e veja se ela cobre custo, tempo e meta.",
+    "fields": {
+      "value": "Valor oferecido",
+      "time": "Tempo total estimado",
+      "pickupKm": "KM ate o embarque",
+      "rideKm": "KM da viagem"
+    },
+    "placeholders": {
+      "value": "Ex: 18,50",
+      "time": "Ex: 25",
+      "pickupKm": "Ex: 2,5",
+      "rideKm": "Ex: 8"
+    },
+    "actions": {
+      "analyze": "Analisar"
+    },
+    "indices": {
+      "km": "Custo/KM",
+      "minute": "Custo/min"
+    },
+    "empty": {
+      "title": "Faca a Auditoria KORRE primeiro",
+      "text": "Sem custo por km e custo por minuto, a analise da corrida perde confiabilidade.",
+      "action": "Abrir auditoria"
+    },
+    "decisions": {
+      "ideal": "Ideal",
+      "aceitavel": "Aceitavel",
+      "fraca": "Fraca",
+      "toxica": "Toxica",
+      "prejuizo": "Prejuizo"
+    },
+    "result": {
+      "message": {
+        "ideal": "Corrida forte para a sua meta.",
+        "aceitavel": "Corrida dentro da meta minima.",
+        "fraca": "Da lucro, mas fica abaixo da meta.",
+        "toxica": "Paga pouco pelo seu tempo.",
+        "prejuizo": "Nao cobre o custo estimado."
+      },
+      "reason": {
+        "ideal": "O lucro por hora ficou bem acima do minimo configurado.",
+        "aceitavel": "A oferta cobre os custos e bate a meta por minuto.",
+        "fraca": "A oferta ainda da lucro, mas reduz sua produtividade.",
+        "toxica": "Existe lucro liquido, mas ele fica muito abaixo da meta.",
+        "prejuizo": "O valor oferecido e menor ou igual ao custo estimado."
+      }
+    },
+    "metrics": {
+      "cost": "Custo",
+      "profit": "Lucro",
+      "hour": "Lucro/h",
+      "distance": "Distancia"
+    }
+  },
   "notificacoes": {
     "titulo": "Notificacoes",
     "testar": "TESTAR NOTIFICACAO",

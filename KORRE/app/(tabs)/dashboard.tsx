@@ -4,9 +4,12 @@ import React, { useState } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
+  Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Gauge } from 'lucide-react-native';
 
 // Camada de Estilos Consolidada
 import { dashboardStyles as styles } from '../../styles/telas/Dashboard/dashboardStyles';
@@ -68,6 +71,8 @@ export default function DashboardScreen() {
     router.push(AppRoutes.oficina);
   const abrirCalculadora = () =>
     router.push(AppRoutes.calculadora);
+  const abrirAnaliseCorrida = () =>
+    router.push(AppRoutes.analisarCorrida);
 
   // Handler do Modal de KM
   const salvarKm = async () => {
@@ -144,6 +149,17 @@ export default function DashboardScreen() {
             veiculo?.meta_ganho_minuto_calculado || 0
           } // <-- A mágica entra aqui
         />
+
+        <TouchableOpacity
+          activeOpacity={0.82}
+          onPress={abrirAnaliseCorrida}
+          style={styles.rideAnalyzerButton}
+        >
+          <Gauge size={20} color="#121212" />
+          <Text style={styles.rideAnalyzerButtonText}>
+            {t('rideAnalyzer.open')}
+          </Text>
+        </TouchableOpacity>
 
         {/* Organism: Resumo de Performance Diária/Semanal */}
         <GanhosCard

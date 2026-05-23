@@ -341,6 +341,23 @@ export const dashboardStyles = StyleSheet.create({
     fontWeight: '900',
     textTransform: 'uppercase',
   },
+  rideAnalyzerButton: {
+    height: 52,
+    backgroundColor: '#00C853',
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    marginTop: -4,
+    marginBottom: 16,
+  },
+  rideAnalyzerButtonText: {
+    color: '#121212',
+    fontSize: 14,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
   scrollContent: {
     paddingBottom: 100,
   },

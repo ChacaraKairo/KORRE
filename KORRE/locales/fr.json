@@ -442,6 +442,65 @@
     "faq_offline_resposta": "Oui. Les principaux flux d'inscription, revenus, depenses et vehicules fonctionnent avec des donnees locales.",
     "termos_privacidade": "Conditions d'utilisation et confidentialite"
   },
+  "rideAnalyzer": {
+    "open": "Analyser la course",
+    "eyebrow": "Moteur de decision KORRE",
+    "title": "Analyser la course",
+    "subtitle": "Saisissez les donnees de l'offre et voyez si elle couvre cout, temps et objectif.",
+    "fields": {
+      "value": "Valeur proposee",
+      "time": "Temps total estime",
+      "pickupKm": "KM jusqu'au depart",
+      "rideKm": "KM du trajet"
+    },
+    "placeholders": {
+      "value": "Ex: 18,50",
+      "time": "Ex: 25",
+      "pickupKm": "Ex: 2,5",
+      "rideKm": "Ex: 8"
+    },
+    "actions": {
+      "analyze": "Analyser"
+    },
+    "indices": {
+      "km": "Cout/KM",
+      "minute": "Cout/min"
+    },
+    "empty": {
+      "title": "Faites d'abord l'Audit KORRE",
+      "text": "Sans cout par km et cout par minute, l'analyse de la course est moins fiable.",
+      "action": "Ouvrir l'audit"
+    },
+    "decisions": {
+      "ideal": "Ideale",
+      "aceitavel": "Acceptable",
+      "fraca": "Faible",
+      "toxica": "Toxique",
+      "prejuizo": "Perte"
+    },
+    "result": {
+      "message": {
+        "ideal": "Course forte pour votre objectif.",
+        "aceitavel": "Course dans l'objectif minimum.",
+        "fraca": "Elle rapporte, mais reste sous l'objectif.",
+        "toxica": "Elle paie trop peu votre temps.",
+        "prejuizo": "Elle ne couvre pas le cout estime."
+      },
+      "reason": {
+        "ideal": "Le profit par heure est bien au-dessus du minimum configure.",
+        "aceitavel": "L'offre couvre les couts et atteint l'objectif par minute.",
+        "fraca": "L'offre reste rentable, mais baisse votre productivite.",
+        "toxica": "Il y a un profit net, mais il reste tres sous l'objectif.",
+        "prejuizo": "La valeur proposee est inferieure ou egale au cout estime."
+      }
+    },
+    "metrics": {
+      "cost": "Cout",
+      "profit": "Profit",
+      "hour": "Profit/h",
+      "distance": "Distance"
+    }
+  },
   "notificacoes": {
     "titulo": "Notifications",
     "testar": "TESTER LA NOTIFICATION",

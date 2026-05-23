@@ -442,6 +442,65 @@
     "faq_offline_resposta": "Si. Los flujos principales de registro, ingresos, gastos y vehiculos funcionan con datos locales.",
     "termos_privacidade": "Terminos de uso y privacidad"
   },
+  "rideAnalyzer": {
+    "open": "Analizar viaje",
+    "eyebrow": "Motor de decision KORRE",
+    "title": "Analizar viaje",
+    "subtitle": "Ingresa los datos de la oferta y ve si cubre costo, tiempo y meta.",
+    "fields": {
+      "value": "Valor ofrecido",
+      "time": "Tiempo total estimado",
+      "pickupKm": "KM hasta recogida",
+      "rideKm": "KM del viaje"
+    },
+    "placeholders": {
+      "value": "Ej: 18,50",
+      "time": "Ej: 25",
+      "pickupKm": "Ej: 2,5",
+      "rideKm": "Ej: 8"
+    },
+    "actions": {
+      "analyze": "Analizar"
+    },
+    "indices": {
+      "km": "Costo/KM",
+      "minute": "Costo/min"
+    },
+    "empty": {
+      "title": "Haz primero la Auditoria KORRE",
+      "text": "Sin costo por km y costo por minuto, el analisis del viaje pierde confiabilidad.",
+      "action": "Abrir auditoria"
+    },
+    "decisions": {
+      "ideal": "Ideal",
+      "aceitavel": "Aceptable",
+      "fraca": "Debil",
+      "toxica": "Toxica",
+      "prejuizo": "Perdida"
+    },
+    "result": {
+      "message": {
+        "ideal": "Viaje fuerte para tu meta.",
+        "aceitavel": "Viaje dentro de la meta minima.",
+        "fraca": "Da ganancia, pero queda por debajo de la meta.",
+        "toxica": "Paga muy poco por tu tiempo.",
+        "prejuizo": "No cubre el costo estimado."
+      },
+      "reason": {
+        "ideal": "La ganancia por hora quedo bien por encima del minimo configurado.",
+        "aceitavel": "La oferta cubre costos y alcanza la meta por minuto.",
+        "fraca": "La oferta aun da ganancia, pero reduce tu productividad.",
+        "toxica": "Existe ganancia neta, pero queda muy por debajo de la meta.",
+        "prejuizo": "El valor ofrecido es menor o igual al costo estimado."
+      }
+    },
+    "metrics": {
+      "cost": "Costo",
+      "profit": "Ganancia",
+      "hour": "Ganancia/h",
+      "distance": "Distancia"
+    }
+  },
   "notificacoes": {
     "titulo": "Notificaciones",
     "testar": "PROBAR NOTIFICACION",

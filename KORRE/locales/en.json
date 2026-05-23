@@ -442,6 +442,65 @@
     "faq_offline_resposta": "Yes. Core flows for registration, income, expenses, and vehicles work with local data.",
     "termos_privacidade": "Terms of use and privacy"
   },
+  "rideAnalyzer": {
+    "open": "Analyze ride",
+    "eyebrow": "KORRE decision engine",
+    "title": "Analyze ride",
+    "subtitle": "Enter the offer data and see whether it covers cost, time, and goal.",
+    "fields": {
+      "value": "Offered value",
+      "time": "Estimated total time",
+      "pickupKm": "KM to pickup",
+      "rideKm": "Trip KM"
+    },
+    "placeholders": {
+      "value": "Ex: 18.50",
+      "time": "Ex: 25",
+      "pickupKm": "Ex: 2.5",
+      "rideKm": "Ex: 8"
+    },
+    "actions": {
+      "analyze": "Analyze"
+    },
+    "indices": {
+      "km": "Cost/KM",
+      "minute": "Cost/min"
+    },
+    "empty": {
+      "title": "Run the KORRE Audit first",
+      "text": "Without cost per km and cost per minute, the ride analysis is less reliable.",
+      "action": "Open audit"
+    },
+    "decisions": {
+      "ideal": "Ideal",
+      "aceitavel": "Acceptable",
+      "fraca": "Weak",
+      "toxica": "Toxic",
+      "prejuizo": "Loss"
+    },
+    "result": {
+      "message": {
+        "ideal": "Strong ride for your goal.",
+        "aceitavel": "Ride within the minimum goal.",
+        "fraca": "It profits, but stays below the goal.",
+        "toxica": "It pays too little for your time.",
+        "prejuizo": "It does not cover estimated cost."
+      },
+      "reason": {
+        "ideal": "Profit per hour is well above your configured minimum.",
+        "aceitavel": "The offer covers costs and reaches the per-minute goal.",
+        "fraca": "The offer still profits, but lowers your productivity.",
+        "toxica": "There is net profit, but it is far below the goal.",
+        "prejuizo": "The offered value is lower than or equal to estimated cost."
+      }
+    },
+    "metrics": {
+      "cost": "Cost",
+      "profit": "Profit",
+      "hour": "Profit/h",
+      "distance": "Distance"
+    }
+  },
   "notificacoes": {
     "titulo": "Notifications",
     "testar": "TEST NOTIFICATION",
