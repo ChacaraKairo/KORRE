@@ -13,6 +13,10 @@ Este modulo concentra a geracao dos indices KORRE e o formulario da calculadora.
 - `application/`
   - Orquestracao entre formulas e banco.
   - Ponto central para processar e salvar os indices.
+- `suggestions/`
+  - Perfis de uso e custos padrao por tipo de veiculo.
+  - Servico puro para sugerir valores da auditoria.
+  - Aplicacao segura de sugestoes sem sobrescrever dados do usuario.
 - `hooks/`
   - Estado do formulario, troca de veiculo, preenchimento automatico e acoes da tela.
 - `ui.ts`
@@ -29,4 +33,3 @@ import { useIndicesKorreForm, IndicesKorreService } from '@/modules/indicesKorre
 Os caminhos antigos em `utils/`, `type/`, `hooks/calculadora/` e
 `database/repositories/CalculadoraRepository.ts` continuam existindo como
 adaptadores para compatibilidade, mas a evolucao nova deve acontecer aqui.
-
