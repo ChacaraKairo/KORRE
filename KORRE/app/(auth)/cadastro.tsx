@@ -20,6 +20,7 @@ import {
   View,
 } from 'react-native';
 import { HeaderCadastro } from '../../components/telas/Cadastro/HeaderCadastro';
+import { LanguageSwitcherButton } from '../../components/LanguageSwitcherButton';
 import { MetasSecao } from '../../components/telas/Cadastro/MetasSecao';
 import { PerfilSecao } from '../../components/telas/Cadastro/PerfilSecao';
 import { RestaurarFluxoCadastro } from '../../components/telas/Cadastro/RestaurarFluxoCadastro';
@@ -122,6 +123,7 @@ export default function CadastroScreen() {
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
       <CustomAlert />
+      <LanguageSwitcherButton />
 
       <KeyboardAvoidingView
         behavior={

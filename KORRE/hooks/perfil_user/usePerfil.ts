@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import db from '../../database/DatabaseInit';
 import { PhotoService } from '../../components/telas/Cadastro/script/photoService';
 import { AppRoutes } from '../../constants/routes';
@@ -12,6 +13,7 @@ import { logger } from '../../utils/logger';
 import { showCustomAlert } from '../alert/useCustomAlert';
 
 export function usePerfil() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [usuario, setUsuario] =
     useState<PerfilUsuario | null>(null);
@@ -86,7 +88,7 @@ export function usePerfil() {
         [usuario.id],
       );
     } catch (error) {
-      logger.error('[Perfil] Erro ao listar veículos:', error);
+      logger.error('[Perfil] Erro ao listar veiculos:', error);
       return [];
     }
   };
@@ -106,10 +108,10 @@ export function usePerfil() {
       await carregarDados();
       return true;
     } catch (error) {
-      logger.error('[Perfil] Erro ao trocar veículo ativo:', error);
+      logger.error('[Perfil] Erro ao trocar veiculo ativo:', error);
       showCustomAlert(
-        'Erro',
-        'Não foi possível trocar o veículo ativo.',
+        t('common.erro'),
+        t('perfil.erro_trocar_veiculo'),
       );
       return false;
     }
@@ -132,14 +134,14 @@ export function usePerfil() {
         [valorFormatado, usuario.id],
       );
       showCustomAlert(
-        'Sucesso',
-        'A sua meta foi atualizada!',
+        t('common.sucesso'),
+        t('perfil.meta_atualizada'),
       );
     } catch (error) {
       logger.error('[Perfil] Erro ao salvar meta:', error);
       showCustomAlert(
-        'Erro',
-        'Não foi possível atualizar a meta.',
+        t('common.erro'),
+        t('perfil.erro_atualizar_meta'),
       );
     }
   };
@@ -161,20 +163,20 @@ export function usePerfil() {
     } catch (error) {
       logger.error('[Perfil] Erro ao alterar foto:', error);
       showCustomAlert(
-        'Erro',
-        'Não foi possível alterar a foto de perfil.',
+        t('common.erro'),
+        t('perfil.erro_alterar_foto'),
       );
     }
   };
 
   const realizarLogout = () => {
     showCustomAlert(
-      'Sair da Conta',
-      'Tem certeza que deseja sair?',
+      t('perfil.sair_titulo'),
+      t('perfil.sair_confirmacao'),
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: t('common.cancelar'), style: 'cancel' },
         {
-          text: 'Sair',
+          text: t('perfil.sair_acao'),
           style: 'destructive',
           onPress: () => router.replace(AppRoutes.login),
         },

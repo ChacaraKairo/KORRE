@@ -1,10 +1,12 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Moon, Sun } from 'lucide-react-native';
 import { styles } from '../../../styles/telas/Perfil/perfilStyles';
 import { useTema } from '../../../hooks/modo_tema';
 
 export const HeaderPerfil = () => {
+  const { t } = useTranslation();
   const { tema, toggleTema } = useTema();
   const isDark = tema === 'escuro';
 
@@ -16,7 +18,7 @@ export const HeaderPerfil = () => {
           { color: isDark ? '#FFFFFF' : '#000000' },
         ]}
       >
-        Central de Comando
+        {t('perfil.central_comando')}
       </Text>
       <TouchableOpacity
         style={[

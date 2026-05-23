@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   View,
   Text,
@@ -22,6 +23,7 @@ export const CardUsuario = ({
   onEditPress,
   onCameraPress, // <-- Recebe a função aqui
 }: Props) => {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
@@ -86,11 +88,11 @@ export const CardUsuario = ({
           { color: isDark ? '#FFFFFF' : '#000000' },
         ]}
       >
-        {usuario?.nome || 'Piloto'}
+        {usuario?.nome || t('perfil.piloto')}
       </Text>
       <View style={styles.tagEntregador}>
         <Text style={styles.tagTexto}>
-          Entregador Parceiro
+          {t('perfil.entregador_parceiro')}
         </Text>
       </View>
 
@@ -100,7 +102,7 @@ export const CardUsuario = ({
       >
         <Pencil size={14} color="#00C853" />
         <Text style={styles.btnEditarTexto}>
-          Editar Dados
+          {t('perfil.editar_dados')}
         </Text>
       </TouchableOpacity>
     </View>

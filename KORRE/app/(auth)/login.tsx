@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { CardLogin } from '../../components/telas/Login/CardLogin';
 import { FooterLogin } from '../../components/telas/Login/FooterLogin';
+import { LanguageSwitcherButton } from '../../components/LanguageSwitcherButton';
 import { useLogin } from '../../hooks/login/useLogin';
 import { loginStyles as styles } from '../../styles/telas/login/LoginStyles';
 import { AppRoutes } from '../../constants/routes';
@@ -44,6 +45,7 @@ const LoginScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <LanguageSwitcherButton />
       <TouchableOpacity
         style={inlineStyles.inline1}
         onPress={() =>

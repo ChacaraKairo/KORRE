@@ -1,30 +1,24 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  View,
-  Text,
+  ActivityIndicator,
   Modal,
+  ScrollView,
+  Text,
   TextInput,
   TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
+  View,
 } from 'react-native';
-import {
-  X,
-  Trash2,
-  Save,
-  Bike,
-  Car,
-} from 'lucide-react-native';
+import { Bike, Car, Save, Trash2, X } from 'lucide-react-native';
 import { useEditarPerfil } from '../../../hooks/perfil_user/useEditarPerfil';
 import { useTema } from '../../../hooks/modo_tema';
 import { inlineStyles } from '../../../styles/generated-inline/components/telas/Perfil/ModalEditarPerfilInlineStyles';
 import { dynamicInlineStyles } from '../../../styles/generated-dynamic/components/telas/Perfil/ModalEditarPerfilDynamicStyles';
-// Usando os teus estilos base
 
 interface Props {
   visivel: boolean;
   onClose: () => void;
-  onSalvoSucesso: () => void; // Função para atualizar a tela de trás quando salvar
+  onSalvoSucesso: () => void;
 }
 
 export const ModalEditarPerfil = ({
@@ -32,6 +26,7 @@ export const ModalEditarPerfil = ({
   onClose,
   onSalvoSucesso,
 }: Props) => {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
@@ -59,20 +54,15 @@ export const ModalEditarPerfil = ({
       transparent
       animationType="slide"
     >
-      <View
-        style={inlineStyles.inline1}
-      >
+      <View style={inlineStyles.inline1}>
         <View
           style={dynamicInlineStyles.inline1({ bgColor })}
         >
-          {/* Header do Modal */}
-          <View
-            style={inlineStyles.inline2}
-          >
+          <View style={inlineStyles.inline2}>
             <Text
               style={dynamicInlineStyles.inline2({ textColor })}
             >
-              Editar Dados
+              {t('perfil.editar_dados')}
             </Text>
             <TouchableOpacity
               onPress={onClose}
@@ -86,36 +76,41 @@ export const ModalEditarPerfil = ({
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            {/* Secção: Dados Pessoais */}
-            <Text
-              style={inlineStyles.inline3}
-            >
-              Dados Pessoais
+            <Text style={inlineStyles.inline3}>
+              {t('perfil.dados_pessoais')}
             </Text>
             <TextInput
-              style={dynamicInlineStyles.inline4({ inputBg, textColor, borderColor })}
+              style={dynamicInlineStyles.inline4({
+                inputBg,
+                textColor,
+                borderColor,
+              })}
               value={nome}
               onChangeText={setNome}
-              placeholder="O teu nome"
+              placeholder={t('perfil.editar_nome_placeholder')}
               placeholderTextColor="#666"
             />
             <TextInput
-              style={dynamicInlineStyles.inline5({ inputBg, textColor, borderColor })}
+              style={dynamicInlineStyles.inline5({
+                inputBg,
+                textColor,
+                borderColor,
+              })}
               value={senha}
               onChangeText={setSenha}
-              placeholder="Nova senha (opcional)"
+              placeholder={t('perfil.nova_senha_placeholder')}
               placeholderTextColor="#666"
               secureTextEntry
             />
 
-            {/* Secção: Tipo de Meta */}
-            <Text
-              style={inlineStyles.inline4}
-            >
-              Tipo de Meta Financeira
+            <Text style={inlineStyles.inline4}>
+              {t('perfil.tipo_meta_financeira')}
             </Text>
             <View
-              style={dynamicInlineStyles.inline6({ inputBg, borderColor })}
+              style={dynamicInlineStyles.inline6({
+                inputBg,
+                borderColor,
+              })}
             >
               <TouchableOpacity
                 onPress={() => setTipoMeta('diaria')}
@@ -124,7 +119,7 @@ export const ModalEditarPerfil = ({
                 <Text
                   style={dynamicInlineStyles.inline8({ tipoMeta })}
                 >
-                  Diária
+                  {t('perfil.diaria')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -134,32 +129,28 @@ export const ModalEditarPerfil = ({
                 <Text
                   style={dynamicInlineStyles.inline10({ tipoMeta })}
                 >
-                  Semanal
+                  {t('perfil.semanal')}
                 </Text>
               </TouchableOpacity>
             </View>
 
-            {/* Secção: Gerir Veículos */}
-            <Text
-              style={inlineStyles.inline5}
-            >
-              Gerir Veículos
+            <Text style={inlineStyles.inline5}>
+              {t('perfil.gerir_veiculos')}
             </Text>
             {veiculos.length === 0 ? (
-              <Text
-                style={inlineStyles.inline6}
-              >
-                Nenhum veículo cadastrado.
+              <Text style={inlineStyles.inline6}>
+                {t('perfil.nenhum_veiculo_cadastrado')}
               </Text>
             ) : (
               veiculos.map((v) => (
                 <View
                   key={v.id}
-                  style={dynamicInlineStyles.inline11({ inputBg, borderColor })}
+                  style={dynamicInlineStyles.inline11({
+                    inputBg,
+                    borderColor,
+                  })}
                 >
-                  <View
-                    style={inlineStyles.inline7}
-                  >
+                  <View style={inlineStyles.inline7}>
                     {v.tipo === 'carro' ? (
                       <Car size={20} color={textColor} />
                     ) : (
@@ -167,13 +158,13 @@ export const ModalEditarPerfil = ({
                     )}
                     <View>
                       <Text
-                        style={dynamicInlineStyles.inline12({ textColor })}
+                        style={dynamicInlineStyles.inline12({
+                          textColor,
+                        })}
                       >
                         {v.modelo}
                       </Text>
-                      <Text
-                        style={inlineStyles.inline8}
-                      >
+                      <Text style={inlineStyles.inline8}>
                         {v.placa}
                       </Text>
                     </View>
@@ -191,7 +182,6 @@ export const ModalEditarPerfil = ({
             )}
           </ScrollView>
 
-          {/* Botão Salvar */}
           <TouchableOpacity
             onPress={salvarDados}
             disabled={loading}
@@ -202,10 +192,8 @@ export const ModalEditarPerfil = ({
             ) : (
               <Save size={20} color="#0A0A0A" />
             )}
-            <Text
-              style={inlineStyles.inline10}
-            >
-              Salvar Alterações
+            <Text style={inlineStyles.inline10}>
+              {t('perfil.salvar_alteracoes')}
             </Text>
           </TouchableOpacity>
         </View>

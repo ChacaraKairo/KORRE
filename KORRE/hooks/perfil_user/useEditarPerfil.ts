@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import db from '../../database/DatabaseInit';
 import { hashPassword } from '../../utils/auth/passwordHash';
 import { logger } from '../../utils/logger';
@@ -23,6 +24,7 @@ export function useEditarPerfil(
   onClose: () => void,
   onSalvoSucesso: () => void,
 ) {
+  const { t } = useTranslation();
   const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
   const [tipoMeta, setTipoMeta] =
@@ -70,7 +72,10 @@ export function useEditarPerfil(
 
   const salvarDados = async () => {
     if (!nome.trim()) {
-      showCustomAlert('Aviso', 'O nome não pode estar vazio.');
+      showCustomAlert(
+        t('common.atencao'),
+        t('perfil.nome_obrigatorio'),
+      );
       return;
     }
 
@@ -92,19 +97,19 @@ export function useEditarPerfil(
       }
 
       showCustomAlert(
-        'Sucesso',
-        'Os seus dados foram atualizados!',
+        t('common.sucesso'),
+        t('perfil.dados_atualizados'),
       );
       onSalvoSucesso();
       onClose();
     } catch (error) {
       logger.error(
-        '[EditarPerfil] Erro ao salvar edição:',
+        '[EditarPerfil] Erro ao salvar edicao:',
         error,
       );
       showCustomAlert(
-        'Erro',
-        'Ocorreu um problema ao salvar os dados.',
+        t('common.erro'),
+        t('perfil.erro_salvar_dados'),
       );
     } finally {
       setLoading(false);
@@ -113,12 +118,12 @@ export function useEditarPerfil(
 
   const apagarVeiculo = (id: number, modelo: string) => {
     showCustomAlert(
-      'Apagar Veículo',
-      `Tem certeza que quer apagar o veículo ${modelo}? Esta ação não pode ser desfeita.`,
+      t('perfil.apagar_veiculo_titulo'),
+      t('perfil.apagar_veiculo_confirmacao', { modelo }),
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: t('common.cancelar'), style: 'cancel' },
         {
-          text: 'Apagar',
+          text: t('perfil.apagar'),
           style: 'destructive',
           onPress: async () => {
             try {
@@ -131,12 +136,12 @@ export function useEditarPerfil(
               );
             } catch (error) {
               logger.error(
-                '[EditarPerfil] Erro ao apagar veículo:',
+                '[EditarPerfil] Erro ao apagar veiculo:',
                 error,
               );
               showCustomAlert(
-                'Erro',
-                'Não foi possível apagar o veículo.',
+                t('common.erro'),
+                t('perfil.erro_apagar_veiculo'),
               );
             }
           },

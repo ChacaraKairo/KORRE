@@ -1,24 +1,21 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import {
-  ArrowLeftRight,
-  Settings2,
-} from 'lucide-react-native';
-import { useRouter } from 'expo-router'; import { inlineStyles } from '../../../styles/generated-inline/components/telas/Perfil/VeiculoResumoInlineStyles';
+import { useTranslation } from 'react-i18next';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { ArrowLeftRight, Settings2 } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
+import { inlineStyles } from '../../../styles/generated-inline/components/telas/Perfil/VeiculoResumoInlineStyles';
 import { dynamicInlineStyles } from '../../../styles/generated-dynamic/components/telas/Perfil/VeiculoResumoDynamicStyles';
-// Adicionado para a navegação
 import { styles } from '../../../styles/telas/Perfil/perfilStyles';
 import { useTema } from '../../../hooks/modo_tema';
 import {
-  VEICULOS_CONFIG,
   TipoVeiculo,
+  VEICULOS_CONFIG,
 } from '../../../type/typeVeiculos';
 import type { Veiculo } from '../../../types/database';
 import { showCustomAlert } from '../../../hooks/alert/useCustomAlert';
 
 interface Props {
   veiculo: Veiculo | null;
-  // Opcional: Função que você pode passar do perfil.tsx para abrir um modal de troca de veículo
   onTrocarVeiculo?: () => void;
 }
 
@@ -26,6 +23,7 @@ export const VeiculoResumo = ({
   veiculo,
   onTrocarVeiculo,
 }: Props) => {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
   const router = useRouter();
@@ -41,7 +39,7 @@ export const VeiculoResumo = ({
           },
         ]}
       >
-        A Tua Máquina
+        {t('perfil.sua_maquina')}
       </Text>
 
       <View
@@ -54,17 +52,14 @@ export const VeiculoResumo = ({
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingVertical: 12, // Reduzido para ficar mais estreito
+            paddingVertical: 12,
             paddingHorizontal: 16,
             marginBottom: 0,
             borderRadius: 20,
           },
         ]}
       >
-        {/* Esquerda: Ícone, Modelo e Placa */}
-        <View
-          style={inlineStyles.inline2}
-        >
+        <View style={inlineStyles.inline2}>
           <View
             style={[
               styles.veiculoIconBox,
@@ -95,9 +90,9 @@ export const VeiculoResumo = ({
                   marginBottom: 2,
                 },
               ]}
-              numberOfLines={1} // Evita quebra de linha se o nome for muito grande
+              numberOfLines={1}
             >
-              {veiculo?.modelo || 'Nenhum veículo'}
+              {veiculo?.modelo || t('perfil.nenhum_veiculo')}
             </Text>
             <Text
               style={[
@@ -109,23 +104,19 @@ export const VeiculoResumo = ({
                 },
               ]}
             >
-              {veiculo?.placa || 'Adiciona um veículo'}
+              {veiculo?.placa || t('perfil.adicione_veiculo')}
             </Text>
           </View>
         </View>
 
-        {/* Direita: Botões de Ação */}
-        <View
-          style={inlineStyles.inline4}
-        >
-          {/* Botão: Trocar Veículo */}
+        <View style={inlineStyles.inline4}>
           <TouchableOpacity
             onPress={
               onTrocarVeiculo ||
               (() =>
                 showCustomAlert(
-                  'Trocar',
-                  'Abrir modal de troca de veículo',
+                  t('garagem.trocar_veiculo'),
+                  t('perfil.abrir_troca_veiculo'),
                 ))
             }
             style={dynamicInlineStyles.inline1({ isDark })}
@@ -136,7 +127,6 @@ export const VeiculoResumo = ({
             />
           </TouchableOpacity>
 
-          {/* Botão: Ir para a Garagem / Oficina */}
           <TouchableOpacity
             onPress={() => router.push('/(tabs)/garagem')}
             style={inlineStyles.inline5}

@@ -1,16 +1,18 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  View,
   Text,
   TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import { Target, Check, Pencil } from 'lucide-react-native';
+import { Check, Pencil, Target } from 'lucide-react-native';
 import { styles } from '../../../styles/telas/Perfil/perfilStyles';
 import { useTema } from '../../../hooks/modo_tema';
 
 import { inlineStyles } from '../../../styles/generated-inline/components/telas/Perfil/MetaFinanceiraInlineStyles';
 import { dynamicInlineStyles } from '../../../styles/generated-dynamic/components/telas/Perfil/MetaFinanceiraDynamicStyles';
+
 interface Props {
   meta: string;
   setMeta: (texto: string) => void;
@@ -24,20 +26,18 @@ export const MetaFinanceira = ({
   salvarMeta,
   tipoMeta,
 }: Props) => {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
-  // Controle de estado para alternar entre visualização e edição
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
-  // Função para salvar e fechar o modo de edição
   const handleSave = () => {
     salvarMeta();
     setIsEditing(false);
   };
 
-  // Função para abrir o input e focar automaticamente
   const handleEditClick = () => {
     setIsEditing(true);
     setTimeout(() => {
@@ -56,19 +56,19 @@ export const MetaFinanceira = ({
           },
         ]}
       >
-        Meta Financeira
+        {t('perfil.meta_financeira')}
       </Text>
 
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={isEditing ? undefined : handleEditClick} // Clica no card para editar
+        onPress={isEditing ? undefined : handleEditClick}
         style={[
           styles.cardMeta,
           {
             backgroundColor: isDark ? '#161616' : '#FFFFFF',
             borderColor: isDark ? '#222' : '#E0E0E0',
             borderWidth: 1,
-            flexDirection: 'row', // Deixa tudo na mesma linha (mais estreito)
+            flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
             paddingVertical: 16,
@@ -78,10 +78,7 @@ export const MetaFinanceira = ({
           },
         ]}
       >
-        {/* Esquerda: Ícone e Textos/Input */}
-        <View
-          style={inlineStyles.inline2}
-        >
+        <View style={inlineStyles.inline2}>
           <View
             style={[
               styles.metaIconBox,
@@ -92,7 +89,6 @@ export const MetaFinanceira = ({
           </View>
 
           <View style={inlineStyles.inline3}>
-            {/* Texto Dinâmico baseado no banco */}
             <Text
               style={[
                 styles.metaLabel,
@@ -103,16 +99,14 @@ export const MetaFinanceira = ({
                 },
               ]}
             >
-              OBJETIVO{' '}
+              {t('perfil.objetivo')}{' '}
               {tipoMeta === 'semanal'
-                ? 'SEMANAL'
-                : 'DIÁRIO'}
+                ? t('perfil.semanal').toUpperCase()
+                : t('perfil.diaria').toUpperCase()}
             </Text>
 
             {isEditing ? (
-              <View
-                style={inlineStyles.inline4}
-              >
+              <View style={inlineStyles.inline4}>
                 <Text
                   style={dynamicInlineStyles.inline1({ isDark })}
                 >
@@ -128,7 +122,7 @@ export const MetaFinanceira = ({
                   placeholderTextColor={
                     isDark ? '#333' : '#999'
                   }
-                  onSubmitEditing={handleSave} // Salva ao apertar Enter no teclado
+                  onSubmitEditing={handleSave}
                 />
               </View>
             ) : (
@@ -141,7 +135,6 @@ export const MetaFinanceira = ({
           </View>
         </View>
 
-        {/* Direita: Botão de Ação (Lápis ou Check) */}
         <View>
           {isEditing ? (
             <TouchableOpacity
