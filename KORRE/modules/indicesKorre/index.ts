@@ -7,4 +7,5 @@ export * from './domain/calculadoraDecisao';
 export * from './infra/indicesKorreRepository';
 export * from './application/indicesKorreService';
 export * from './hooks/useIndicesKorreForm';
+export * from './suggestions';
 export * from './ui';
