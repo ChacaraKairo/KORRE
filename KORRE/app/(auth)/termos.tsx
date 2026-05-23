@@ -103,7 +103,7 @@ export default function TermosScreen() {
         <Text
           style={[styles.lastUpdate, { color: textMuted }]}
         >
-          Última atualização: Março de 2026
+          Ultima atualizacao: 1 de maio de 2026
         </Text>
 
         <Text
@@ -220,7 +220,7 @@ export default function TermosScreen() {
         <Text
           style={[styles.lastUpdate, { color: textMuted }]}
         >
-          Última atualização: Março de 2026
+          Ultima atualizacao: 1 de maio de 2026
         </Text>
 
         <Text

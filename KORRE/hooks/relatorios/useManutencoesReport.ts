@@ -67,15 +67,25 @@ export function useManutencoesReport() {
             setVeiculoSelecionadoId(idAtual);
           }
 
-          // Busca histórico associado aos itens de manutenção
-          // Se o banco tiver a coluna "data_registro", aplicaríamos: AND data_registro >= date('now', '-${diasFiltro} days')
-          // Como o SQLite às vezes não tem datas formalizadas em todas as tabelas MVP, trazemos tudo e agrupamos
+          let filtroPeriodoSql = '';
+          const params: Array<number | string> = [idAtual];
+
+          if (diasFiltro === 365) {
+            filtroPeriodoSql =
+              " AND date(h.data_servico) >= date('now', 'start of year')";
+          } else if (diasFiltro < 9999) {
+            filtroPeriodoSql =
+              " AND date(h.data_servico) >= date('now', 'localtime', ?)";
+            params.push(`-${diasFiltro} days`);
+          }
+
           const historico: any[] = await db.getAllAsync(
-            `SELECT h.id, h.valor, h.descricao, i.nome, i.ultima_troca_data 
-           FROM historico_manutencao h 
-           LEFT JOIN itens_manutencao i ON h.item_id = i.id 
-           WHERE h.veiculo_id = ?`,
-            [idAtual],
+            `SELECT h.id, h.valor, h.descricao, h.data_servico, i.nome
+           FROM historico_manutencao h
+           LEFT JOIN itens_manutencao i ON h.item_id = i.id
+           WHERE h.veiculo_id = ?${filtroPeriodoSql}
+           ORDER BY date(h.data_servico) DESC, h.id DESC`,
+            params,
           );
 
           // Agrupar itens com o mesmo nome para ter Quantidade, Valor Total e Valor Médio
@@ -91,8 +101,8 @@ export function useManutencoesReport() {
             const valorReal = item.valor || 0;
 
             let dataFormatada = '-';
-            if (item.ultima_troca_data) {
-              const d = new Date(item.ultima_troca_data);
+            if (item.data_servico) {
+              const d = new Date(item.data_servico);
               if (!isNaN(d.getTime())) {
                 dataFormatada =
                   d.toLocaleDateString('pt-BR');

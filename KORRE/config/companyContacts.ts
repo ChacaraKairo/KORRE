@@ -9,22 +9,25 @@ export const COMPANY_CONTACTS = {
     youtubeUrl:
       'https://youtube.com/@korusolucoesemtecnologia?si=dN64spbJ06wsl_fN',
     websiteUrl: 'https://site-koru-company.vercel.app',
-    complaintsUrl: 'https://korre-app.netlify.app/reclamacoes',
+    complaintsUrl:
+      'https://korre-app.netlify.app/reclamacoes',
     instagramUrl: '',
-    privacyPolicyUrl: 'https://korre-app.netlify.app/privacidade',
-    termsOfUseUrl: '',
+    privacyPolicyUrl:
+      'https://korre-app.netlify.app/privacidade',
+    termsOfUseUrl: 'https://korre-app.netlify.app/termos',
   },
 
   legal: {
-    responsibleName: '',
-    document: '',
-    address: '',
+    responsibleName: 'Koru Company',
+    document: '61.902.707/0001-88',
+    address:
+      'Rua Vitantonio Scisci, 804 - Jardim JK, Indaiatuba/SP',
     country: 'Brasil',
   },
 
   app: {
     appName: 'KORRE',
-    publicVersionLabel: '',
+    publicVersionLabel: '1.3.1',
     websiteUrl: 'https://korre-app.netlify.app',
   },
 
