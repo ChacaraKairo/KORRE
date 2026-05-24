@@ -12,6 +12,7 @@ import { AppRoutes } from '../../constants/routes';
 import { logger } from '../../utils/logger';
 import { waitForUiFeedback } from '../../utils/ui/waitForUiFeedback';
 import { setAuthSession } from '../../utils/auth/authSession';
+import { FuelEntryService } from '../../modules/fuel/application/FuelEntryService';
 
 export const useCadastro = () => {
   const router = useRouter();
@@ -132,6 +133,19 @@ export const useCadastro = () => {
         ativo: 1,
         id_user: usuarioId,
       });
+
+      const pendentes = await FuelEntryService.contarPendentesSemLogin();
+      if (pendentes > 0) {
+        const veiculo = await db.getFirstAsync<{ id: number }>(
+          'SELECT id FROM veiculos WHERE id_user = ? ORDER BY id DESC LIMIT 1',
+          [usuarioId],
+        );
+        if (veiculo?.id) {
+          await FuelEntryService.vincularPendentesAoVeiculo(
+            veiculo.id,
+          );
+        }
+      }
 
       router.replace(AppRoutes.origemGanhos);
     } catch (error) {

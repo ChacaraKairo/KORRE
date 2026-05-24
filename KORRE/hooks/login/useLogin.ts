@@ -22,6 +22,8 @@ import {
   registrarFalhaLogin,
   resetarTentativasLogin,
 } from '../../utils/auth/loginLockout';
+import { SecurityNotificationChecker } from '../../notifications/checkers/SecurityNotificationChecker';
+import { FuelEntryService } from '../../modules/fuel/application/FuelEntryService';
 
 type UsuarioLogin = {
   id: number;
@@ -127,6 +129,7 @@ export const useLogin = () => {
             minutos: minutosRestantes,
           }),
         );
+        await SecurityNotificationChecker.notifyTooManyAttempts();
         return;
       }
 
@@ -169,6 +172,8 @@ export const useLogin = () => {
             pathname: AppRoutes.dashboard,
             params: { userId: usuario.id },
           });
+          await SecurityNotificationChecker.notifyLoginSuccess();
+          await resolverPendenciasAbastecimento();
 
           if (
             !senhaAtual ||
@@ -182,10 +187,12 @@ export const useLogin = () => {
         } else {
           await registrarFalhaLogin();
           setErro(t('login.credenciais_invalidas'));
+          await SecurityNotificationChecker.notifyTooManyAttempts();
         }
       } else {
         await registrarFalhaLogin();
         setErro(t('login.credenciais_invalidas'));
+        await SecurityNotificationChecker.notifyTooManyAttempts();
       }
     } catch (e) {
       logger.error('[LOGIN] Falha na consulta ao banco:', e);
@@ -208,6 +215,45 @@ export const useLogin = () => {
     } catch (error) {
       logger.error('[LOGIN] Falha ao atualizar hash:', error);
     }
+  };
+
+  const resolverPendenciasAbastecimento = async () => {
+    const pendentes = await FuelEntryService.contarPendentesSemLogin();
+    if (!pendentes) return;
+    const veiculoAtivo = await db.getFirstAsync<{ id: number }>(
+      'SELECT id FROM veiculos WHERE ativo = 1 LIMIT 1',
+    );
+    if (!veiculoAtivo) return;
+
+    await new Promise<void>((resolve) => {
+      Alert.alert(
+        t('privacidade.link_saved_fuel_title'),
+        t('privacidade.link_saved_fuel_msg'),
+        [
+          {
+            text: t('privacidade.link_active_vehicle'),
+            onPress: async () => {
+              await FuelEntryService.vincularPendentesAoVeiculo(
+                veiculoAtivo.id,
+              );
+              resolve();
+            },
+          },
+          {
+            text: t('privacidade.keep_separate'),
+            onPress: () => resolve(),
+          },
+          {
+            text: t('privacidade.delete_records'),
+            style: 'destructive',
+            onPress: async () => {
+              await FuelEntryService.apagarPendentesSemLogin();
+              resolve();
+            },
+          },
+        ],
+      );
+    });
   };
 
   const realizarLoginBiometrico = async () => {
@@ -235,6 +281,7 @@ export const useLogin = () => {
           pathname: AppRoutes.dashboard,
           params: { userId: usuario.id },
         });
+        await resolverPendenciasAbastecimento();
       }
     } catch (e) {
       if (__DEV__) logger.error('[LOGIN] Falha na biometria:', e);

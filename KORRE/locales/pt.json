@@ -321,6 +321,7 @@
       "usuario": "Valor manual",
       "historico_oficina": "Historico da oficina",
       "historico_financeiro": "Historico financeiro",
+      "historico_abastecimento": "Historico de abastecimento",
       "pre_cadastro": "Pre-cadastro",
       "padrao_tipo_veiculo": "Estimativa por tipo de veiculo",
       "configuracao_app": "Configuracao do app",
@@ -497,7 +498,19 @@
     "testar": "TESTAR NOTIFICACAO",
     "vazio": "Nenhuma notificacao no momento.",
     "teste_titulo": "Meta proxima!",
-    "teste_msg": "Faltam apenas R$ 25 para bater sua meta diaria!"
+    "teste_msg": "Faltam apenas R$ 25 para bater sua meta diaria!",
+    "pref": {
+      "manutencao": "Manutencao e oficina",
+      "financeiro": "Financeiro e metas",
+      "backup": "Backup",
+      "indices": "Indices e auditoria",
+      "corrida": "Analise de corrida",
+      "seguranca": "Seguranca",
+      "mei": "MEI",
+      "uso_app": "Uso do app e onboarding",
+      "privacidade": "Privacidade e termos",
+      "sistema": "Sistema e suporte"
+    }
   },
   "ride_decision": {
     "title": "Analisar corrida",
@@ -604,5 +617,71 @@
     "outras_despesas": "Outras despesas",
     "outros": "Outros",
     "outros_rendimentos": "Outros rendimentos"
+  },
+  "fuel": {
+    "save_fuel_entry": "Salvar abastecimento",
+    "saved_title": "Abastecimento salvo",
+    "saved_msg": "Abastecimento salvo com sucesso.",
+    "saved_without_login_msg": "Abastecimento salvo neste aparelho. Crie uma conta depois para vincular este registro ao seu veiculo e acompanhar o consumo real.",
+    "total_value": "Valor abastecido",
+    "liters": "Litros abastecidos",
+    "price_per_liter": "Preco por litro",
+    "full_tank": "Tanque cheio",
+    "fuel_type": "Tipo de combustivel",
+    "current_km": "Km atual",
+    "city": "Cidade",
+    "state": "Estado",
+    "note": "Observacao",
+    "register_finance": "Registrar tambem no financeiro",
+    "real_consumption": "Consumo real",
+    "fuel_cost_km": "Custo por km de combustivel",
+    "calc_confidence": "Confianca do calculo",
+    "types": {
+      "gasolina": "Gasolina",
+      "etanol": "Etanol",
+      "diesel": "Diesel",
+      "gnv": "GNV",
+      "energia": "Energia eletrica",
+      "flex_outro": "Outro"
+    }
+  },
+  "privacidade": {
+    "consent_title": "Dados anonimos e agregados",
+    "consent_message": "Voce permite que o KORRE use dados anonimos e agregados de abastecimento e manutencao para gerar estatisticas? Nunca compartilhamos nome, CPF, e-mail, telefone ou placa.",
+    "allow": "Permitir",
+    "not_now": "Agora nao",
+    "learn_more": "Saiba mais",
+    "allow_anonymous_data": "Permitir uso de dados anonimos para estatisticas",
+    "allow_anonymous_data_sub": "Nunca compartilhamos nome, CPF, e-mail, telefone ou placa",
+    "link_saved_fuel_title": "Encontramos abastecimentos salvos neste aparelho",
+    "link_saved_fuel_msg": "Deseja vincular esses registros ao seu veiculo?",
+    "link_active_vehicle": "Vincular ao veiculo ativo",
+    "choose_vehicle": "Escolher veiculo",
+    "keep_separate": "Manter separado",
+    "delete_records": "Apagar registros"
+  },
+  "termos": {
+    "titulo": "Termos de uso",
+    "ultima_atualizacao": "Ultima atualizacao: 24 de maio de 2026",
+    "secao_servico_titulo": "Natureza do servico",
+    "secao_servico_texto": "O KORRE e um app offline-first de apoio a gestao de veiculos, abastecimentos, custos e produtividade do usuario.",
+    "secao_dados_titulo": "Dados salvos",
+    "secao_dados_texto": "O app pode salvar abastecimentos, consumo estimado/real, manutencoes e dados operacionais para melhorar os calculos da Auditoria KORRE.",
+    "uso_dados_anonimos_titulo": "Uso de dados anonimos e agregados",
+    "uso_dados_anonimos_texto": "O KORRE podera gerar estatisticas anonimas e agregadas sobre abastecimento, consumo, custos, manutencao e uso de veiculos. Essas estatisticas poderao ser usadas para melhorar o aplicativo, criar relatorios de mercado e desenvolver funcionalidades futuras. O KORRE nao compartilha nome, CPF, e-mail, telefone, senha, placa ou dados individuais identificaveis em relatorios estatisticos. O usuario pode ativar ou desativar essa participacao nas configuracoes de privacidade.",
+    "secao_desativar_titulo": "Controle do usuario",
+    "secao_desativar_texto": "O usuario pode alterar esse consentimento em Configuracoes > Privacidade e dados."
+  },
+  "politica": {
+    "titulo": "Politica de privacidade",
+    "ultima_atualizacao": "Ultima atualizacao: 24 de maio de 2026",
+    "secao_coleta_titulo": "Dados armazenados",
+    "secao_coleta_texto": "O KORRE salva dados locais de perfil, veiculo, financeiro, manutencao e configuracoes para funcionamento do app.",
+    "secao_abastecimento_titulo": "Dados de abastecimento, consumo e manutencao",
+    "secao_abastecimento_texto": "O app pode salvar abastecimentos, tipo de combustivel, valor, litros, preco por litro, km atual, consumo calculado e custos de manutencao.",
+    "secao_nunca_titulo": "Dados que nunca entram em relatorios comerciais",
+    "secao_nunca_texto": "Nome, CPF, e-mail, telefone, senha, hash, placa, foto, localizacao exata e historico individual identificavel nao entram em relatorios comerciais.",
+    "secao_desativar_titulo": "Como desativar",
+    "secao_desativar_texto": "Configuacoes > Privacidade e dados > desativar uso de dados anonimos."
   }
 }

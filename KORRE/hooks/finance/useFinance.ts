@@ -16,6 +16,8 @@ import db from '../../database/DatabaseInit';
 import { FinanceiroRepository } from '../../database/repositories/FinanceiroRepository';
 import { showCustomAlert } from '../alert/useCustomAlert';
 import { verificarMetaDiaria } from '../../notifications/LocalNotificationScheduler';
+import { criarNotificacao } from '../../notifications/NotificationService';
+import { AppRoutes } from '../../constants/routes';
 import type {
   TipoTransacao,
   UsuarioLocal,
@@ -259,6 +261,19 @@ export const useFinance = () => {
       );
 
       await verificarMetaDiaria();
+      if (tipo === 'despesa' && valorNumerico >= 500) {
+        await criarNotificacao({
+          titulo: 'Despesa acima da media',
+          mensagem:
+            'Uma despesa alta foi registrada. Revise seu fluxo financeiro.',
+          tipo: 'financeiro',
+          prioridade: 'alta',
+          destino: AppRoutes.finance,
+          canal: 'historico',
+          grupoPreferencia: 'financeiro',
+          dedupKey: `gasto_acima_media:${categoriaSelecionada}:${new Date().toISOString().slice(0, 7)}`,
+        });
+      }
       setShowSuccess(true);
       setTimeout(() => {
         hideAppLoading();

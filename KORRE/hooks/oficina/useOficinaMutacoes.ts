@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import db from '../../database/DatabaseInit';
 import { showCustomAlert } from '../alert/useCustomAlert';
+import { criarNotificacao } from '../../notifications/NotificationService';
+import { AppRoutes } from '../../constants/routes';
 
 export function useOficinaMutacoes(
   veiculoConsultado: any,
@@ -127,6 +129,20 @@ export function useOficinaMutacoes(
           agoraLocal,
         ],
       );
+      const historicoRecente = await db.getFirstAsync<{ id: number }>(
+        `SELECT id FROM historico_manutencao WHERE veiculo_id = ? AND item_id = ? ORDER BY id DESC LIMIT 1`,
+        [veiculoConsultado.id, itemIdToUse],
+      );
+      await criarNotificacao({
+        titulo: 'Manutencao registrada com sucesso',
+        mensagem: `${item.nome} registrada e adicionada ao historico.`,
+        tipo: 'sucesso',
+        prioridade: 'baixa',
+        destino: AppRoutes.oficina,
+        canal: 'historico',
+        grupoPreferencia: 'manutencao',
+        dedupKey: `manutencao_registrada:${historicoRecente?.id ?? Date.now()}`,
+      });
 
       // 3. Gestão Financeira: Busca ou cria categoria e gera transação
       let categoriaId = null;

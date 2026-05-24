@@ -43,6 +43,17 @@ export async function handleRemoteCommand(payload: unknown) {
 
   try {
     const data = await executeCommand(commandPayload);
+    await criarNotificacao({
+      titulo: 'Comando remoto recebido',
+      mensagem: `Comando ${commandPayload.command} processado com seguranca.`,
+      tipo: 'servidor',
+      prioridade: 'media',
+      origem: 'servidor',
+      canal: 'historico',
+      destino: AppRoutes.notificacoes,
+      grupoPreferencia: 'sistema',
+      dedupKey: `comando_remoto:${commandPayload.requestId}`,
+    });
     await logRemoteCommand({
       requestId: commandPayload.requestId,
       command: commandPayload.command,
@@ -191,7 +202,9 @@ const createRemoteNotification = async (
     titulo: payload.titulo,
     mensagem: payload.mensagem,
     tipo,
+    prioridade: 'media',
     origem: 'servidor',
+    canal: 'local',
     destino:
       typeof payload.destino === 'string'
         ? payload.destino
@@ -204,6 +217,7 @@ const createRemoteNotification = async (
       typeof payload.dedupKey === 'string'
         ? payload.dedupKey
         : undefined,
+    grupoPreferencia: 'sistema',
   };
 
   await criarNotificacao(input);
@@ -235,8 +249,11 @@ const requestBackupExport = async (requestId: string) => {
     mensagem:
       'O servidor solicitou um backup. Exporte manualmente em Configuracoes.',
     tipo: 'backup',
+    prioridade: 'media',
     origem: 'servidor',
+    canal: 'historico',
     destino: AppRoutes.configuracoes,
+    grupoPreferencia: 'backup',
     dedupKey: `remote_backup_request:${requestId}`,
   });
 
@@ -312,9 +329,20 @@ const isTipoNotificacao = (
     'info',
     'alerta',
     'sucesso',
+    'sistema',
+    'servidor',
     'manutencao',
     'financeiro',
     'backup',
-    'sistema',
-    'servidor',
+    'seguranca',
+    'indices',
+    'corrida',
+    'auditoria',
+    'oficina',
+    'garagem',
+    'meta',
+    'mei',
+    'uso_app',
+    'privacidade',
+    'suporte',
   ].includes(tipo);

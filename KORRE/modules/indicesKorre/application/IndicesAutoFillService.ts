@@ -6,6 +6,7 @@ import {
 import { isCampoVazio } from '../suggestions/applySuggestionsToForm';
 import { MaintenanceCostResolver } from '../realSources/MaintenanceCostResolver';
 import { FinancialCostResolver } from '../realSources/FinancialCostResolver';
+import { FuelAuditSuggestionService } from '../../fuel/application/FuelAuditSuggestionService';
 
 export interface ResultadoAutoFillIndices {
   form: Partial<FormularioViabilidade>;
@@ -43,15 +44,17 @@ export const IndicesAutoFillService = {
       tipoVeiculo: input.tipoVeiculo,
     }).sugestoes;
 
-    const [oficina, financeiro] = await Promise.all([
+    const [oficina, financeiro, abastecimento] = await Promise.all([
       MaintenanceCostResolver.resolverSugestoes(input.veiculoId),
       FinancialCostResolver.resolverSugestoes({
         veiculoId: input.veiculoId,
       }),
+      FuelAuditSuggestionService.gerarSugestoes(input.veiculoId),
     ]);
 
     const prioritized = [
       ...oficina.filter((s) => s.fonte === 'historico_oficina'),
+      ...abastecimento,
       ...financeiro,
       ...oficina.filter((s) => s.fonte === 'pre_cadastro'),
       ...base.filter((s) => s.fonte === 'estimativa_korre'),

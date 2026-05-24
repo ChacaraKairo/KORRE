@@ -4,6 +4,7 @@ export type FonteSugestao =
   | 'usuario'
   | 'historico_oficina'
   | 'historico_financeiro'
+  | 'historico_abastecimento'
   | 'pre_cadastro'
   | 'padrao_tipo_veiculo'
   | 'configuracao_app'

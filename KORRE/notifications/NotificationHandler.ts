@@ -2,6 +2,11 @@ import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import { AppRoutes } from '../constants/routes';
 import { handleRemoteCommand } from './RemoteCommandHandler';
+import { getAuthSessionUserId } from '../utils/auth/authSession';
+import {
+  resolveNotificationDestino,
+  routeRequiresAuthentication,
+} from './notificationRouting';
 
 const isExpoGo = Constants.appOwnership === 'expo';
 const remoteCommandsEnabled =
@@ -49,8 +54,17 @@ export const NotificationHandler = {
 
         const destino =
           typeof data?.destino === 'string'
-            ? data.destino
+            ? resolveNotificationDestino(data.destino)
             : AppRoutes.notificacoes;
+        const isAuthenticated = getAuthSessionUserId() !== null;
+        const routeRequiresAuth =
+          routeRequiresAuthentication(destino);
+
+        if (!isAuthenticated && routeRequiresAuth) {
+          router.push(AppRoutes.login);
+          return;
+        }
+
         router.push(destino as never);
       },
     );

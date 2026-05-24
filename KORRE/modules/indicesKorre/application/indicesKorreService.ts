@@ -4,6 +4,9 @@ import { CalculadoraDecisao as CalculadoraCustoPessoa } from '../domain/calculad
 import type { FormularioViabilidade } from '../domain/types';
 import { CalculadoraRepository } from '../infra/indicesKorreRepository';
 import { MaintenancePlanningService } from '../../maintenancePlanning/MaintenancePlanningService';
+import db from '../../../database/DatabaseInit';
+import { criarNotificacao } from '../../../notifications/NotificationService';
+import { AppRoutes } from '../../../constants/routes';
 
 export const CalculadoraService = {
   carregarDadosCompletosVeiculo: async (
@@ -25,6 +28,13 @@ export const CalculadoraService = {
     veiculoId: number,
     form: Partial<FormularioViabilidade>,
   ) => {
+    const antes = await db.getFirstAsync<{
+      custo_km_calculado: number | null;
+      custo_minuto_calculado: number | null;
+    }>(
+      `SELECT custo_km_calculado, custo_minuto_calculado FROM veiculos WHERE id = ?`,
+      [veiculoId],
+    );
     const resultadoKm = CalculadoraMovimento.calcularCustoKm(
       form as any,
     );
@@ -86,6 +96,43 @@ export const CalculadoraService = {
       veiculoId,
       form,
     );
+
+    await criarNotificacao({
+      titulo: 'Auditoria KORRE salva',
+      mensagem: 'Os indices foram atualizados com sucesso.',
+      tipo: 'sucesso',
+      prioridade: 'baixa',
+      destino: AppRoutes.calculadoraKorre,
+      canal: 'historico',
+      grupoPreferencia: 'indices',
+      dedupKey: `auditoria_salva:${veiculoId}:${Date.now()}`,
+    });
+
+    const ikmAnterior = Number(antes?.custo_km_calculado || 0);
+    if (ikmAnterior > 0 && ikm > ikmAnterior * 1.15) {
+      await criarNotificacao({
+        titulo: 'Custo por km aumentou',
+        mensagem: 'Seu IKM subiu de forma relevante. Revise os custos.',
+        tipo: 'indices',
+        prioridade: 'alta',
+        destino: AppRoutes.calculadoraKorre,
+        grupoPreferencia: 'indices',
+        dedupKey: `ikm_aumentou:${veiculoId}:${new Date().toISOString().slice(0, 10)}`,
+      });
+    }
+
+    const iminAnterior = Number(antes?.custo_minuto_calculado || 0);
+    if (iminAnterior > 0 && iminCustoFixo > iminAnterior * 1.15) {
+      await criarNotificacao({
+        titulo: 'Custo por minuto aumentou',
+        mensagem: 'Seu IMIN subiu de forma relevante.',
+        tipo: 'indices',
+        prioridade: 'media',
+        destino: AppRoutes.calculadoraKorre,
+        grupoPreferencia: 'indices',
+        dedupKey: `imin_aumentou:${veiculoId}:${new Date().toISOString().slice(0, 10)}`,
+      });
+    }
 
     return {
       ikm,

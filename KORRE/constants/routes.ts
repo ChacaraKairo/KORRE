@@ -15,6 +15,7 @@ export const AppRoutes = {
   oficina: '/(tabs)/oficina',
   origemGanhos: '/(tabs)/origemganhos',
   perfil: '/(tabs)/perfil',
+  politicaPrivacidade: '/(auth)/politica-privacidade',
   recuperarSenha: '/(auth)/recuperar-senha',
   relatorios: '/(tabs)/relatorios',
   suporte: '/(tabs)/suporte',

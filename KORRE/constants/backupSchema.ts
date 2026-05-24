@@ -1,7 +1,7 @@
 import type { SQLiteBindValue } from 'expo-sqlite';
 
 export const BACKUP_APP_NAME = 'KORRE';
-export const BACKUP_SCHEMA_VERSION = 7;
+export const BACKUP_SCHEMA_VERSION = 9;
 
 export const BACKUP_TABLES = [
   'perfil_usuario',
@@ -14,6 +14,9 @@ export const BACKUP_TABLES = [
   'historico_manutencao',
   'analises_corrida',
   'notificacoes',
+  'abastecimentos',
+  'consumo_veiculo_periodo',
+  'eventos_veiculo',
 ] as const;
 
 export type BackupTable = (typeof BACKUP_TABLES)[number];
@@ -175,7 +178,58 @@ export const BACKUP_COLUMNS: Record<BackupTable, readonly string[]> = {
     'destino',
     'dados_json',
     'dedup_key',
+    'prioridade',
+    'canal',
+    'grupo_preferencia',
     'data_criacao',
+  ],
+  abastecimentos: [
+    'id',
+    'veiculo_id',
+    'usuario_local_id',
+    'data_abastecimento',
+    'km_atual',
+    'tipo_combustivel',
+    'litros',
+    'valor_total',
+    'preco_unitario',
+    'tanque_cheio',
+    'cidade',
+    'estado_uf',
+    'origem',
+    'sincronizado',
+    'elegivel_estatistica',
+    'observacao',
+    'criado_sem_login',
+    'vinculado_apos_cadastro',
+  ],
+  consumo_veiculo_periodo: [
+    'id',
+    'veiculo_id',
+    'periodo_inicio',
+    'periodo_fim',
+    'km_rodados',
+    'litros_consumidos',
+    'combustivel',
+    'consumo_km_l',
+    'custo_combustivel_total',
+    'custo_combustivel_km',
+    'confianca_calculo',
+    'origem',
+    'data_calculo',
+  ],
+  eventos_veiculo: [
+    'id',
+    'veiculo_id',
+    'tipo_evento',
+    'data_evento',
+    'km_evento',
+    'valor_total',
+    'categoria',
+    'subcategoria',
+    'origem',
+    'detalhes_json',
+    'elegivel_estatistica',
   ],
 };
 
@@ -255,6 +309,12 @@ export const validateBackupPayload = (data: unknown) => {
 
     if (payload.versao_banco < 6 && table === 'analises_corrida') {
       continue;
+    }
+
+    if (payload.versao_banco < 9) {
+      if (table === 'abastecimentos') continue;
+      if (table === 'consumo_veiculo_periodo') continue;
+      if (table === 'eventos_veiculo') continue;
     }
 
     if (!Array.isArray(tabelas[table])) {

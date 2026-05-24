@@ -19,6 +19,7 @@ import {
 } from '../../utils/security/encryption';
 import { useBackupPasswordPrompt } from './useBackupPasswordPrompt';
 import { AppRoutes } from '../../constants/routes';
+import { criarNotificacao } from '../../notifications/NotificationService';
 
 const BACKUP_PICKER_TYPES = [
   'application/json',
@@ -93,6 +94,16 @@ export function useGerenciarDados() {
           },
         ],
       );
+      await criarNotificacao({
+        titulo: 'Restauracao concluida',
+        mensagem: 'O backup foi restaurado com sucesso.',
+        tipo: 'backup',
+        prioridade: 'media',
+        destino: AppRoutes.dashboard,
+        canal: 'historico',
+        grupoPreferencia: 'backup',
+        dedupKey: `restore_concluido:${Date.now()}`,
+      });
     } catch (error) {
       logger.error('[Backup] Falha ao restaurar:', error);
       hideAppLoading();
@@ -100,6 +111,16 @@ export function useGerenciarDados() {
         t('configuracoes.falha_restaurar_backup'),
         t('configuracoes.falha_restaurar_backup_msg'),
       );
+      await criarNotificacao({
+        titulo: 'Falha na restauracao',
+        mensagem: 'Nao foi possivel restaurar o backup selecionado.',
+        tipo: 'backup',
+        prioridade: 'alta',
+        destino: AppRoutes.configuracoes,
+        canal: 'historico',
+        grupoPreferencia: 'backup',
+        dedupKey: `restore_falhou:${new Date().toISOString().slice(0, 10)}`,
+      });
     } finally {
       hideAppLoading();
       setImportandoBackup(false);

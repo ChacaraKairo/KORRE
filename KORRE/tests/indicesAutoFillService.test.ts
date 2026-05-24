@@ -3,11 +3,13 @@ import { describe, it } from 'node:test';
 import { IndicesAutoFillService } from '../modules/indicesKorre/application/IndicesAutoFillService';
 import { MaintenanceCostResolver } from '../modules/indicesKorre/realSources/MaintenanceCostResolver';
 import { FinancialCostResolver } from '../modules/indicesKorre/realSources/FinancialCostResolver';
+import { FuelAuditSuggestionService } from '../modules/fuel/application/FuelAuditSuggestionService';
 
 describe('IndicesAutoFillService', () => {
   it('nao sobrescreve valor manual e cria sugestao de revisao', async () => {
     const oldMaintenance = MaintenanceCostResolver.resolverSugestoes;
     const oldFinancial = FinancialCostResolver.resolverSugestoes;
+    const oldFuel = FuelAuditSuggestionService.gerarSugestoes;
     try {
       MaintenanceCostResolver.resolverSugestoes = async () => [
         {
@@ -20,6 +22,7 @@ describe('IndicesAutoFillService', () => {
         },
       ];
       FinancialCostResolver.resolverSugestoes = async () => [];
+      FuelAuditSuggestionService.gerarSugestoes = async () => [];
 
       const result =
         await IndicesAutoFillService.preencherInteligente({
@@ -38,15 +41,18 @@ describe('IndicesAutoFillService', () => {
     } finally {
       MaintenanceCostResolver.resolverSugestoes = oldMaintenance;
       FinancialCostResolver.resolverSugestoes = oldFinancial;
+      FuelAuditSuggestionService.gerarSugestoes = oldFuel;
     }
   });
 
   it('mantem perfil e padrao como fallback', async () => {
     const oldMaintenance = MaintenanceCostResolver.resolverSugestoes;
     const oldFinancial = FinancialCostResolver.resolverSugestoes;
+    const oldFuel = FuelAuditSuggestionService.gerarSugestoes;
     try {
       MaintenanceCostResolver.resolverSugestoes = async () => [];
       FinancialCostResolver.resolverSugestoes = async () => [];
+      FuelAuditSuggestionService.gerarSugestoes = async () => [];
 
       const result =
         await IndicesAutoFillService.preencherInteligente({
@@ -69,6 +75,7 @@ describe('IndicesAutoFillService', () => {
     } finally {
       MaintenanceCostResolver.resolverSugestoes = oldMaintenance;
       FinancialCostResolver.resolverSugestoes = oldFinancial;
+      FuelAuditSuggestionService.gerarSugestoes = oldFuel;
     }
   });
 });

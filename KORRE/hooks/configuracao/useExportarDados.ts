@@ -18,6 +18,8 @@ import {
 import { encryptJson } from '../../utils/security/encryption';
 import { logger } from '../../utils/logger';
 import { useBackupPasswordPrompt } from './useBackupPasswordPrompt';
+import { criarNotificacao } from '../../notifications/NotificationService';
+import { AppRoutes } from '../../constants/routes';
 
 const BACKUP_MIME = 'application/octet-stream';
 const BACKUP_EXTENSION = 'korrebackup';
@@ -113,6 +115,16 @@ export function useExportarDados() {
             encryptedBackup,
           );
           await registrarBackupExportado();
+          await criarNotificacao({
+            titulo: 'Backup exportado com sucesso',
+            mensagem: 'Seu backup foi exportado e salvo.',
+            tipo: 'backup',
+            prioridade: 'baixa',
+            destino: AppRoutes.configuracoes,
+            canal: 'historico',
+            grupoPreferencia: 'backup',
+            dedupKey: `backup_exportado:${Date.now()}`,
+          });
           hideAppLoading();
           showCustomAlert(
             t('configuracoes.backup_salvo'),
@@ -132,6 +144,16 @@ export function useExportarDados() {
           UTI: 'public.data',
         });
         await registrarBackupExportado();
+        await criarNotificacao({
+          titulo: 'Backup exportado com sucesso',
+          mensagem: 'Seu backup foi exportado com sucesso.',
+          tipo: 'backup',
+          prioridade: 'baixa',
+          destino: AppRoutes.configuracoes,
+          canal: 'historico',
+          grupoPreferencia: 'backup',
+          dedupKey: `backup_exportado:${Date.now()}`,
+        });
         hideAppLoading();
         showCustomAlert(
           t('configuracoes.backup_pronto'),
@@ -151,6 +173,16 @@ export function useExportarDados() {
         t('configuracoes.erro_backup'),
         t('configuracoes.erro_backup_msg'),
       );
+      await criarNotificacao({
+        titulo: 'Falha ao exportar backup',
+        mensagem: 'Nao foi possivel concluir a exportacao do backup.',
+        tipo: 'backup',
+        prioridade: 'alta',
+        destino: AppRoutes.configuracoes,
+        canal: 'historico',
+        grupoPreferencia: 'backup',
+        dedupKey: `backup_falhou:${new Date().toISOString().slice(0, 10)}`,
+      });
     } finally {
       setIsExportando(false);
     }

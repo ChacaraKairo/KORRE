@@ -7,6 +7,8 @@ import {
 } from '../data/RideAnalysisRepository';
 import { RideDecisionService } from '../domain/rideDecisionService';
 import type { RideDecisionResult } from '../domain/types';
+import { criarNotificacao } from '../../../notifications/NotificationService';
+import { AppRoutes } from '../../../constants/routes';
 
 const parseNumber = (value: string) => {
   const normalized = value.replace(',', '.').replace(/[^0-9.]/g, '');
@@ -138,6 +140,25 @@ export function useRideDecision() {
         kmAteEmbarque: parseNumber(kmEmbarque),
         kmViagem: parseNumber(kmViagem),
         resultado,
+      });
+      const decisao = String(resultado.decisao).toLowerCase();
+      await criarNotificacao({
+        titulo:
+          decisao === 'prejuizo'
+            ? 'Corrida em prejuizo'
+            : decisao === 'ideal'
+              ? 'Corrida ideal'
+              : 'Analise de corrida salva',
+        mensagem:
+          decisao === 'prejuizo'
+            ? 'A corrida analisada ficou em prejuizo. Revise antes de aceitar novas ofertas.'
+            : 'Analise registrada com sucesso.',
+        tipo: 'corrida',
+        prioridade: decisao === 'prejuizo' ? 'alta' : 'baixa',
+        destino: String(AppRoutes.analisarCorrida),
+        canal: 'historico',
+        grupoPreferencia: 'corrida',
+        dedupKey: `corrida_${decisao}:${Date.now()}`,
       });
       setAnaliseSalva(true);
       await carregarHistorico();

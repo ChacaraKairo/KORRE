@@ -321,6 +321,7 @@
       "usuario": "Valeur manuelle",
       "historico_oficina": "Historique atelier",
       "historico_financeiro": "Historique financier",
+      "historico_abastecimento": "Historique de ravitaillement",
       "pre_cadastro": "Pre-inscription",
       "padrao_tipo_veiculo": "Estimation par type de vehicule",
       "configuracao_app": "Configuration de l'app",
@@ -497,7 +498,19 @@
     "testar": "TESTER LA NOTIFICATION",
     "vazio": "Aucune notification pour le moment.",
     "teste_titulo": "Objectif proche!",
-    "teste_msg": "Il ne reste que R$ 25 pour atteindre votre objectif quotidien!"
+    "teste_msg": "Il ne reste que R$ 25 pour atteindre votre objectif quotidien!",
+    "pref": {
+      "manutencao": "Maintenance et atelier",
+      "financeiro": "Finance et objectifs",
+      "backup": "Sauvegarde",
+      "indices": "Indices et audit",
+      "corrida": "Analyse de course",
+      "seguranca": "Securite",
+      "mei": "MEI",
+      "uso_app": "Usage de l'app et onboarding",
+      "privacidade": "Confidentialite et termes",
+      "sistema": "Systeme et support"
+    }
   },
   "ride_decision": {
     "title": "Analyser une course",
@@ -604,5 +617,71 @@
     "outras_despesas": "Autres depenses",
     "outros": "Autres",
     "outros_rendimentos": "Autres revenus"
+  },
+  "fuel": {
+    "save_fuel_entry": "Enregistrer le ravitaillement",
+    "saved_title": "Ravitaillement enregistre",
+    "saved_msg": "Ravitaillement enregistre avec succes.",
+    "saved_without_login_msg": "Ravitaillement enregistre sur cet appareil. Creez un compte plus tard pour lier cet enregistrement a votre vehicule et suivre la consommation reelle.",
+    "total_value": "Valeur ravitaillee",
+    "liters": "Litres ravitailles",
+    "price_per_liter": "Prix par litre",
+    "full_tank": "Reservoir plein",
+    "fuel_type": "Type de carburant",
+    "current_km": "KM actuel",
+    "city": "Ville",
+    "state": "Etat",
+    "note": "Observation",
+    "register_finance": "Enregistrer aussi en finance",
+    "real_consumption": "Consommation reelle",
+    "fuel_cost_km": "Cout carburant par km",
+    "calc_confidence": "Confiance du calcul",
+    "types": {
+      "gasolina": "Essence",
+      "etanol": "Ethanol",
+      "diesel": "Diesel",
+      "gnv": "GNV",
+      "energia": "Energie electrique",
+      "flex_outro": "Autre"
+    }
+  },
+  "privacidade": {
+    "consent_title": "Donnees anonymes et agregees",
+    "consent_message": "Autorisez-vous KORRE a utiliser des donnees anonymes et agregees de ravitaillement et de maintenance pour des statistiques? Nous ne partageons jamais nom, CPF, e-mail, telephone ou plaque.",
+    "allow": "Autoriser",
+    "not_now": "Pas maintenant",
+    "learn_more": "En savoir plus",
+    "allow_anonymous_data": "Autoriser l'usage de donnees anonymes pour statistiques",
+    "allow_anonymous_data_sub": "Nous ne partageons jamais nom, CPF, e-mail, telephone ou plaque",
+    "link_saved_fuel_title": "Nous avons trouve des ravitaillements enregistres sur cet appareil",
+    "link_saved_fuel_msg": "Voulez-vous lier ces enregistrements a votre vehicule?",
+    "link_active_vehicle": "Lier au vehicule actif",
+    "choose_vehicle": "Choisir un vehicule",
+    "keep_separate": "Garder separe",
+    "delete_records": "Supprimer les enregistrements"
+  },
+  "termos": {
+    "titulo": "Conditions d'utilisation",
+    "ultima_atualizacao": "Derniere mise a jour : 24 mai 2026",
+    "secao_servico_titulo": "Nature du service",
+    "secao_servico_texto": "KORRE est une application offline-first pour la gestion des vehicules, carburant, couts et productivite.",
+    "secao_dados_titulo": "Donnees enregistrees",
+    "secao_dados_texto": "L'application peut enregistrer ravitaillements, consommation estimee/reelle, maintenance et donnees operationnelles pour ameliorer l'Audit KORRE.",
+    "uso_dados_anonimos_titulo": "Usage de donnees anonymes et agregees",
+    "uso_dados_anonimos_texto": "KORRE peut generer des statistiques anonymes et agregees sur ravitaillement, consommation, couts, maintenance et usage des vehicules. Nous ne partageons jamais nom, CPF, e-mail, telephone, mot de passe, plaque ou donnees individuelles identifiables.",
+    "secao_desativar_titulo": "Controle utilisateur",
+    "secao_desativar_texto": "Vous pouvez modifier ce consentement dans Parametres > Confidentialite et donnees."
+  },
+  "politica": {
+    "titulo": "Politique de confidentialite",
+    "ultima_atualizacao": "Derniere mise a jour : 24 mai 2026",
+    "secao_coleta_titulo": "Donnees stockees",
+    "secao_coleta_texto": "KORRE stocke des donnees locales de profil, vehicule, finance, maintenance et parametres.",
+    "secao_abastecimento_titulo": "Donnees de ravitaillement, consommation et maintenance",
+    "secao_abastecimento_texto": "L'application peut enregistrer ravitaillements, type de carburant, valeur, litres, prix unitaire, km actuel, consommation calculee et couts de maintenance.",
+    "secao_nunca_titulo": "Donnees jamais incluses dans des rapports commerciaux",
+    "secao_nunca_texto": "Nom, CPF, e-mail, telephone, mot de passe, hash, plaque, photo, localisation exacte et historique individuel identifiable ne sont pas inclus dans des rapports commerciaux.",
+    "secao_desativar_titulo": "Comment desactiver",
+    "secao_desativar_texto": "Parametres > Confidentialite et donnees > desactiver l'usage de donnees anonymes."
   }
 }

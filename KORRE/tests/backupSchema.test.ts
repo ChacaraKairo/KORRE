@@ -105,6 +105,41 @@ describe('backup schema validation', () => {
     assert.equal((tabelas.itens_manutencao as unknown[]).length, 1);
   });
 
+  it('aceita backup KORRE v9 com tabelas de abastecimento', () => {
+    const backup = makeBackup(BACKUP_APP_NAME, 9) as any;
+    backup.tabelas.abastecimentos = [
+      {
+        id: 1,
+        veiculo_id: 2,
+        tipo_combustivel: 'gasolina',
+        valor_total: 120,
+      },
+    ];
+    backup.tabelas.consumo_veiculo_periodo = [
+      {
+        id: 1,
+        veiculo_id: 2,
+        consumo_km_l: 12.5,
+        custo_combustivel_km: 0.43,
+      },
+    ];
+    backup.tabelas.eventos_veiculo = [
+      {
+        id: 1,
+        veiculo_id: 2,
+        tipo_evento: 'abastecimento',
+      },
+    ];
+
+    const tabelas = validateBackupPayload(backup);
+    assert.equal((tabelas.abastecimentos as unknown[]).length, 1);
+    assert.equal(
+      (tabelas.consumo_veiculo_periodo as unknown[]).length,
+      1,
+    );
+    assert.equal((tabelas.eventos_veiculo as unknown[]).length, 1);
+  });
+
   it('aceita backup v4 sem tabela de origens de ganho', () => {
     const backup = makeBackup(BACKUP_APP_NAME, 4) as any;
     delete backup.tabelas.origens_ganho_usuario;
@@ -119,6 +154,18 @@ describe('backup schema validation', () => {
 
     const tabelas = validateBackupPayload(backup);
     assert.equal(tabelas.analises_corrida, undefined);
+  });
+
+  it('aceita backup antigo sem novas tabelas v9', () => {
+    const backup = makeBackup(BACKUP_APP_NAME, 8) as any;
+    delete backup.tabelas.abastecimentos;
+    delete backup.tabelas.consumo_veiculo_periodo;
+    delete backup.tabelas.eventos_veiculo;
+
+    const tabelas = validateBackupPayload(backup);
+    assert.equal(tabelas.abastecimentos, undefined);
+    assert.equal(tabelas.consumo_veiculo_periodo, undefined);
+    assert.equal(tabelas.eventos_veiculo, undefined);
   });
 
   it('rejeita backup de outro app', () => {

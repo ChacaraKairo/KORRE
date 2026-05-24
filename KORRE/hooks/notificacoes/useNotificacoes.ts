@@ -4,7 +4,6 @@ import {
   limparHistoricoNotificacoes,
   listarNotificacoes,
   marcarNotificacaoComoLida,
-  solicitarPermissaoNotificacoes,
 } from '../../notifications/NotificationService';
 import type {
   NotificacaoHistorico,
@@ -17,7 +16,6 @@ export function useNotificacoes() {
   >([]);
 
   useEffect(() => {
-    solicitarPermissaoNotificacoes();
     carregarNotificacoes();
   }, []);
 

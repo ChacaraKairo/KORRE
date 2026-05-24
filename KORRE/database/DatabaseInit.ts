@@ -6,7 +6,7 @@ import { SelicService } from '../utils/SelicService'; // Certifique-se de que o 
 const db = SQLite.openDatabaseSync('korre.db');
 
 // Versão inicial consolidada
-export const DATABASE_VERSION = 7;
+export const DATABASE_VERSION = 9;
 
 export const DatabaseInit = () => {
   try {
@@ -76,6 +76,20 @@ export const DatabaseInit = () => {
       db.execSync('PRAGMA user_version = 7;');
       currentDbVersion = 7;
       logger.info('[BANCO] Migracao V7 aplicada com sucesso.');
+    }
+
+    if (currentDbVersion < 8) {
+      migrateToV8();
+      db.execSync('PRAGMA user_version = 8;');
+      currentDbVersion = 8;
+      logger.info('[BANCO] Migracao V8 aplicada com sucesso.');
+    }
+
+    if (currentDbVersion < 9) {
+      migrateToV9();
+      db.execSync('PRAGMA user_version = 9;');
+      currentDbVersion = 9;
+      logger.info('[BANCO] Migracao V9 aplicada com sucesso.');
     }
 
     // DISPARO AUTOMÁTICO: Verifica a Selic sempre que o app inicia (Lógica de dia 1 está no Service)
@@ -419,6 +433,82 @@ const migrateToV7 = () => {
     'computar_no_custo',
     'INTEGER DEFAULT 1',
   );
+};
+
+const migrateToV8 = () => {
+  addColumnIfMissing(
+    'notificacoes',
+    'prioridade',
+    "TEXT DEFAULT 'media'",
+  );
+  addColumnIfMissing(
+    'notificacoes',
+    'canal',
+    "TEXT DEFAULT 'historico'",
+  );
+  addColumnIfMissing(
+    'notificacoes',
+    'grupo_preferencia',
+    'TEXT',
+  );
+};
+
+const migrateToV9 = () => {
+  db.execSync(`
+    CREATE TABLE IF NOT EXISTS abastecimentos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      veiculo_id INTEGER,
+      usuario_local_id INTEGER,
+      data_abastecimento DATETIME DEFAULT (datetime('now', 'localtime')),
+      km_atual INTEGER,
+      tipo_combustivel TEXT NOT NULL,
+      litros REAL,
+      valor_total REAL NOT NULL,
+      preco_unitario REAL,
+      tanque_cheio INTEGER DEFAULT 0,
+      cidade TEXT,
+      estado_uf TEXT,
+      origem TEXT DEFAULT 'calculadora_flex',
+      sincronizado INTEGER DEFAULT 0,
+      elegivel_estatistica INTEGER DEFAULT 0,
+      observacao TEXT,
+      criado_sem_login INTEGER DEFAULT 0,
+      vinculado_apos_cadastro INTEGER DEFAULT 0,
+      FOREIGN KEY (veiculo_id) REFERENCES veiculos(id) ON DELETE SET NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS consumo_veiculo_periodo (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      veiculo_id INTEGER,
+      periodo_inicio DATE,
+      periodo_fim DATE,
+      km_rodados REAL,
+      litros_consumidos REAL,
+      combustivel TEXT,
+      consumo_km_l REAL,
+      custo_combustivel_total REAL,
+      custo_combustivel_km REAL,
+      confianca_calculo TEXT DEFAULT 'baixa',
+      origem TEXT DEFAULT 'abastecimentos',
+      data_calculo DATETIME DEFAULT (datetime('now', 'localtime')),
+      FOREIGN KEY (veiculo_id) REFERENCES veiculos(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS eventos_veiculo (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      veiculo_id INTEGER,
+      tipo_evento TEXT NOT NULL,
+      data_evento DATETIME DEFAULT (datetime('now', 'localtime')),
+      km_evento INTEGER,
+      valor_total REAL DEFAULT 0,
+      categoria TEXT,
+      subcategoria TEXT,
+      origem TEXT DEFAULT 'manual',
+      detalhes_json TEXT,
+      elegivel_estatistica INTEGER DEFAULT 0,
+      FOREIGN KEY (veiculo_id) REFERENCES veiculos(id) ON DELETE CASCADE
+    );
+  `);
 };
 
 const createPerformanceIndexes = () => {

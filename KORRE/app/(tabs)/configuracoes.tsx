@@ -20,6 +20,8 @@ import { useTranslation } from 'react-i18next';
 import { useTema } from '../../hooks/modo_tema';
 import { useExportarDados } from '../../hooks/configuracao/useExportarDados';
 import { useGerenciarDados } from '../../hooks/configuracao/useGerenciarDados';
+import { useNotificationPreferences } from '../../hooks/configuracao/useNotificationPreferences';
+import { DataConsentService } from '../../modules/privacy/DataConsentService';
 import { styles } from '../../styles/telas/Configuracoes/configuracoesStyles';
 import {
   normalizeLanguage,
@@ -55,9 +57,14 @@ export default function ConfiguracoesScreen() {
     cancelBackupPassword: cancelRestorePassword,
   } = useGerenciarDados();
 
-  const [notificacoes, setNotificacoes] = useState(true);
   const [modalIdiomaVisible, setModalIdiomaVisible] =
     useState(false);
+  const { prefs, setPref } = useNotificationPreferences();
+  const [consentAnonData, setConsentAnonData] = useState(false);
+
+  React.useEffect(() => {
+    DataConsentService.getConsent().then(setConsentAnonData);
+  }, []);
 
   const bgColor = isDark ? '#0A0A0A' : '#F5F5F5';
   const cardColor = isDark ? '#161616' : '#FFFFFF';
@@ -122,8 +129,137 @@ export default function ConfiguracoesScreen() {
               title={t('configuracoes.notificacoes')}
               action="toggle"
               value={{
-                current: notificacoes,
-                setter: setNotificacoes,
+                current: true,
+                setter: () => undefined,
+              }}
+            />
+          </View>
+        </View>
+
+        <View>
+          <Text
+            style={[
+              styles.sectionTitle,
+              { color: textMuted },
+            ]}
+          >
+            {t('configuracoes.notificacoes')}
+          </Text>
+          <View
+            style={[
+              styles.sectionContainer,
+              { borderColor },
+            ]}
+          >
+            <SettingItem
+              isDark={isDark}
+              icon={Bell}
+              title={t('notificacoes.pref.manutencao')}
+              action="toggle"
+              value={{
+                current: Boolean(prefs?.notificacoes_manutencao_ativas),
+                setter: (v) =>
+                  void setPref('notificacoes_manutencao_ativas', v),
+              }}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={Bell}
+              title={t('notificacoes.pref.financeiro')}
+              action="toggle"
+              value={{
+                current: Boolean(prefs?.notificacoes_financeiro_ativas),
+                setter: (v) =>
+                  void setPref('notificacoes_financeiro_ativas', v),
+              }}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={Bell}
+              title={t('notificacoes.pref.backup')}
+              action="toggle"
+              value={{
+                current: Boolean(prefs?.notificacoes_backup_ativas),
+                setter: (v) =>
+                  void setPref('notificacoes_backup_ativas', v),
+              }}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={Bell}
+              title={t('notificacoes.pref.indices')}
+              action="toggle"
+              value={{
+                current: Boolean(prefs?.notificacoes_indices_ativas),
+                setter: (v) =>
+                  void setPref('notificacoes_indices_ativas', v),
+              }}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={Bell}
+              title={t('notificacoes.pref.corrida')}
+              action="toggle"
+              value={{
+                current: Boolean(prefs?.notificacoes_corrida_ativas),
+                setter: (v) =>
+                  void setPref('notificacoes_corrida_ativas', v),
+              }}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={ShieldCheck}
+              title={t('notificacoes.pref.seguranca')}
+              action="toggle"
+              value={{
+                current: Boolean(prefs?.notificacoes_seguranca_ativas),
+                setter: (v) =>
+                  void setPref('notificacoes_seguranca_ativas', v),
+              }}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={Bell}
+              title={t('notificacoes.pref.mei')}
+              action="toggle"
+              value={{
+                current: Boolean(prefs?.notificacoes_mei_ativas),
+                setter: (v) =>
+                  void setPref('notificacoes_mei_ativas', v),
+              }}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={Bell}
+              title={t('notificacoes.pref.uso_app')}
+              action="toggle"
+              value={{
+                current: Boolean(prefs?.notificacoes_uso_app_ativas),
+                setter: (v) =>
+                  void setPref('notificacoes_uso_app_ativas', v),
+              }}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={ShieldCheck}
+              title={t('notificacoes.pref.privacidade')}
+              action="toggle"
+              value={{
+                current: Boolean(prefs?.notificacoes_privacidade_ativas),
+                setter: (v) =>
+                  void setPref('notificacoes_privacidade_ativas', v),
+              }}
+            />
+            <SettingItem
+              isDark={isDark}
+              isLast={true}
+              icon={Bell}
+              title={t('notificacoes.pref.sistema')}
+              action="toggle"
+              value={{
+                current: Boolean(prefs?.notificacoes_sistema_ativas),
+                setter: (v) =>
+                  void setPref('notificacoes_sistema_ativas', v),
               }}
             />
           </View>
@@ -192,10 +328,25 @@ export default function ConfiguracoesScreen() {
             />
             <SettingItem
               isDark={isDark}
-              isLast={true}
+              isLast={false}
               icon={Trash2}
               title={t('configuracoes.zerar_app')}
               onClick={limparTodosOsDados}
+            />
+            <SettingItem
+              isDark={isDark}
+              isLast={true}
+              icon={ShieldCheck}
+              title={t('privacidade.allow_anonymous_data')}
+              subtitle={t('privacidade.allow_anonymous_data_sub')}
+              action="toggle"
+              value={{
+                current: consentAnonData,
+                setter: (v) => {
+                  setConsentAnonData(v);
+                  void DataConsentService.setConsent(v);
+                },
+              }}
             />
           </View>
         </View>

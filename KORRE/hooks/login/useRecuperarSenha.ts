@@ -9,6 +9,7 @@ import { hashPassword } from '../../utils/auth/passwordHash';
 import { clearAuthSession } from '../../utils/auth/authSession';
 import { resetarTentativasLogin } from '../../utils/auth/loginLockout';
 import { logger } from '../../utils/logger';
+import { criarNotificacao } from '../../notifications/NotificationService';
 
 const normalizeCpf = (value: string) => value.replace(/\D/g, '');
 const normalizePlate = (value: string) =>
@@ -68,6 +69,16 @@ export const useRecuperarSenha = () => {
     );
     await resetarTentativasLogin();
     clearAuthSession();
+    await criarNotificacao({
+      titulo: 'Senha redefinida',
+      mensagem: 'Sua senha foi redefinida com sucesso.',
+      tipo: 'seguranca',
+      prioridade: 'alta',
+      destino: AppRoutes.login,
+      canal: 'historico',
+      grupoPreferencia: 'seguranca',
+      dedupKey: `senha_redefinida:${Date.now()}`,
+    });
     Alert.alert(
       t('common.sucesso'),
       t('recuperar_senha.sucesso_msg'),

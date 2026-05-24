@@ -32,6 +32,7 @@
 - [x] Testes unitarios da Analise Manual de Corrida
 - [x] Testes de schema de backup com `analises_corrida`
 - [x] Testes de schema de backup com campos V7 de `itens_manutencao`
+- [x] Arquitetura de notificacoes por dominio com preferencia, dedup e historico local
 - [x] Validacao de entrada da Analise Manual de Corrida por typecheck/lint
 - [x] Acesso visual para Analise Manual de Corrida no Dashboard e na Auditoria KORRE
 - [ ] Testar Analise Manual de Corrida em aparelho fisico

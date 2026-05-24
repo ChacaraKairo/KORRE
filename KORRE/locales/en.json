@@ -321,6 +321,7 @@
       "usuario": "Manual value",
       "historico_oficina": "Workshop history",
       "historico_financeiro": "Finance history",
+      "historico_abastecimento": "Fuel history",
       "pre_cadastro": "Pre-registration",
       "padrao_tipo_veiculo": "Vehicle type estimate",
       "configuracao_app": "App setting",
@@ -497,7 +498,19 @@
     "testar": "TEST NOTIFICATION",
     "vazio": "No notifications right now.",
     "teste_titulo": "Goal is close!",
-    "teste_msg": "Only R$ 25 left to hit your daily goal!"
+    "teste_msg": "Only R$ 25 left to hit your daily goal!",
+    "pref": {
+      "manutencao": "Maintenance and workshop",
+      "financeiro": "Finance and goals",
+      "backup": "Backup",
+      "indices": "Indexes and audit",
+      "corrida": "Ride analysis",
+      "seguranca": "Security",
+      "mei": "MEI",
+      "uso_app": "App usage and onboarding",
+      "privacidade": "Privacy and terms",
+      "sistema": "System and support"
+    }
   },
   "ride_decision": {
     "title": "Analyze ride",
@@ -604,5 +617,71 @@
     "outras_despesas": "Other expenses",
     "outros": "Other",
     "outros_rendimentos": "Other earnings"
+  },
+  "fuel": {
+    "save_fuel_entry": "Save fuel entry",
+    "saved_title": "Fuel entry saved",
+    "saved_msg": "Fuel entry saved successfully.",
+    "saved_without_login_msg": "Fuel entry saved on this device. Create an account later to link it to your vehicle and track real consumption.",
+    "total_value": "Total paid",
+    "liters": "Liters",
+    "price_per_liter": "Price per liter",
+    "full_tank": "Full tank",
+    "fuel_type": "Fuel type",
+    "current_km": "Current KM",
+    "city": "City",
+    "state": "State",
+    "note": "Note",
+    "register_finance": "Also register in finance",
+    "real_consumption": "Real consumption",
+    "fuel_cost_km": "Fuel cost per km",
+    "calc_confidence": "Calculation confidence",
+    "types": {
+      "gasolina": "Gasoline",
+      "etanol": "Ethanol",
+      "diesel": "Diesel",
+      "gnv": "CNG",
+      "energia": "Electric energy",
+      "flex_outro": "Other"
+    }
+  },
+  "privacidade": {
+    "consent_title": "Anonymous and aggregated data",
+    "consent_message": "Do you allow KORRE to use anonymous and aggregated fuel and maintenance data for statistics? We never share your name, CPF, email, phone number or plate.",
+    "allow": "Allow",
+    "not_now": "Not now",
+    "learn_more": "Learn more",
+    "allow_anonymous_data": "Allow anonymous data for statistics",
+    "allow_anonymous_data_sub": "We never share name, CPF, email, phone or plate",
+    "link_saved_fuel_title": "We found fuel entries saved on this device",
+    "link_saved_fuel_msg": "Do you want to link these records to your vehicle?",
+    "link_active_vehicle": "Link to active vehicle",
+    "choose_vehicle": "Choose vehicle",
+    "keep_separate": "Keep separate",
+    "delete_records": "Delete records"
+  },
+  "termos": {
+    "titulo": "Terms of use",
+    "ultima_atualizacao": "Last updated: May 24, 2026",
+    "secao_servico_titulo": "Service nature",
+    "secao_servico_texto": "KORRE is an offline-first app to support vehicle, fuel, cost and productivity management.",
+    "secao_dados_titulo": "Stored data",
+    "secao_dados_texto": "The app may store fuel entries, estimated/real consumption, maintenance and operational data to improve KORRE Audit calculations.",
+    "uso_dados_anonimos_titulo": "Anonymous and aggregated data usage",
+    "uso_dados_anonimos_texto": "KORRE may generate anonymous and aggregated statistics on fuel, consumption, costs, maintenance and vehicle usage. These statistics may be used to improve the app, create market reports and develop future features. KORRE does not share name, CPF, email, phone, password, plate or individually identifiable data in statistical reports. The user can enable or disable participation in privacy settings.",
+    "secao_desativar_titulo": "User control",
+    "secao_desativar_texto": "You can change this consent in Settings > Privacy and data."
+  },
+  "politica": {
+    "titulo": "Privacy policy",
+    "ultima_atualizacao": "Last updated: May 24, 2026",
+    "secao_coleta_titulo": "Stored data",
+    "secao_coleta_texto": "KORRE stores local profile, vehicle, finance, maintenance and settings data for app operation.",
+    "secao_abastecimento_titulo": "Fuel, consumption and maintenance data",
+    "secao_abastecimento_texto": "The app may store fuel entries, fuel type, total value, liters, unit price, current KM, calculated consumption and maintenance costs.",
+    "secao_nunca_titulo": "Data never included in commercial reports",
+    "secao_nunca_texto": "Name, CPF, email, phone, password, hash, plate, photo, exact location and identifiable individual history are never included in commercial reports.",
+    "secao_desativar_titulo": "How to disable",
+    "secao_desativar_texto": "Settings > Privacy and data > disable anonymous data usage."
   }
 }
