@@ -2,6 +2,13 @@
 
 KORRE e um app mobile para motoristas e entregadores acompanharem custo real por km, lucro, despesas, manutencao, metas e viabilidade de corridas. O app foi desenhado como offline-first: os dados principais ficam no SQLite local do aparelho.
 
+## Documentacao completa
+
+- Indice geral: [docs/00-indice-geral.md](docs/00-indice-geral.md)
+- Versao navegavel (HTML): [docs/web/index.html](docs/web/index.html)
+
+Esta base documental cobre app mobile, arquitetura, banco local, backup, notificacoes, sincronizacao, privacidade, servidor/plataforma e paineis administrativos.
+
 ## Status do produto
 
 MVP avancado / beta tecnico. Indicado para testes controlados com usuarios conhecidos antes de qualquer venda publica.

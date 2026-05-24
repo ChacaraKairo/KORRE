@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KORRE Docs</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <h1>KORRE Docs</h1>
+      <input id="search" placeholder="Buscar seção..." />
+      <nav id="menu"></nav>
+    </aside>
+    <main class="content">
+      <section class="hero">
+        <h2>Documentação Técnica e de Produto</h2>
+        <p>Base completa do ecossistema KORRE: app mobile, banco local, sincronização, segurança e plataforma futura.</p>
+      </section>
+      <section class="cards" id="cards"></section>
+      <section>
+        <h3>Arquitetura resumida</h3>
+        <ul>
+          <li>App offline-first com SQLite local.</li>
+          <li>Módulos por domínio: financeiro, oficina, auditoria, abastecimento e notificações.</li>
+          <li>Integração futura com servidor e painéis administrativos.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Tabelas principais do banco</h3>
+        <table>
+          <thead><tr><th>Tabela</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td>veiculos</td><td>Cadastro e estado do veículo</td></tr>
+            <tr><td>parametros_financeiros</td><td>Base de cálculo de índices</td></tr>
+            <tr><td>transacoes_financeiras</td><td>Ganhos e despesas</td></tr>
+            <tr><td>itens_manutencao</td><td>Planejamento de manutenção</td></tr>
+            <tr><td>historico_manutencao</td><td>Manutenção real executada</td></tr>
+            <tr><td>abastecimentos</td><td>Registros de combustível</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h3>Fluxos principais</h3>
+        <ol>
+          <li>Auditoria KORRE e cálculo de índices.</li>
+          <li>Análise manual de corrida.</li>
+          <li>Manutenção planejada e real.</li>
+          <li>Backup/restauração e sync seguro.</li>
+        </ol>
+      </section>
+      <section>
+        <h3>Área de imagens pendentes</h3>
+        <p>Veja <a href="../images/README-imagens.txt">inventário de imagens</a>.</p>
+      </section>
+    </main>
+    <script src="./script.js"></script>
+  </body>
+  </html>

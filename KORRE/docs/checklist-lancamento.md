@@ -24,6 +24,16 @@
 - [ ] Gerar build preview
 - [ ] Instalar em aparelho físico
 - [ ] Testar modo offline
+- [ ] Testar salvamento de abastecimento sem login
+- [ ] Testar salvamento de abastecimento logado
+- [ ] Testar registro no financeiro pelo abastecimento
+- [ ] Testar consentimento de estatisticas anonimas
+- [ ] Testar desativacao de consentimento
+- [ ] Testar backup/restauracao V9
+- [ ] Testar sync com API_BASE_URL vazio
+- [ ] Testar REQUEST_DATA_SYNC
+- [ ] Testar payload sem dados sensiveis
+- [ ] Testar tela Privacidade e Dados
 
 ## Validado por comando em 2026-05-24
 

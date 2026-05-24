@@ -1,57 +1,86 @@
-# Dados de Veiculos e Estatisticas (KORRE)
+# Dados de Veículos e Estatísticas no KORRE
 
-## O que e salvo
-- Abastecimentos (`abastecimentos`)
-- Consumo calculado por periodo (`consumo_veiculo_periodo`)
-- Eventos estruturados do veiculo (`eventos_veiculo`)
-- Dados de manutencao e financeiro ja existentes
+## Dados salvos localmente
+- `abastecimentos`
+- `consumo_veiculo_periodo`
+- `eventos_veiculo`
+- `itens_manutencao`
+- `historico_manutencao`
+- `analises_corrida`
 
-## Dados sensiveis
-- Nome, CPF, e-mail, telefone, senha/hash, placa, foto e localizacao exata sao sensiveis.
-- Esses dados nao entram em visoes agregadas estatisticas.
+## Dados sensíveis
+- nome
+- CPF
+- e-mail
+- telefone
+- senha/hash
+- placa
+- foto
+- endereço e localização exata
 
-## Dados anonimos/agregados elegiveis
-- Tipo do veiculo, marca/modelo/ano (sem placa)
-- Tipo de combustivel
-- Consumo medio, custo por km, ticket medio, frequencia
-- Custos medios de manutencao
+## Dados que nunca podem sair do app
+- qualquer identificador pessoal direto
+- histórico bruto individual identificável
+- IDs locais brutos de usuário e veículo
 
-## Dados que nunca saem do aparelho
-- Registros individuais identificaveis
-- Nome/CPF/e-mail/telefone/senha/hash/placa/foto
-- Historico individual com identificador bruto
+## Dados que podem virar estatística
+- tipo de veículo, marca/modelo/ano
+- tipo de combustível
+- faixas de km e faixas de valor
+- consumo médio
+- custo combustível/km
+- eventos de manutenção por sistema/categoria
+- análises de corrida agregadas
 
 ## Consentimento
-- Chave local: `uso_dados_anonimos_estatisticas` (padrao `false`)
-- O usuario pode ativar/desativar em Configuracoes > Privacidade e dados.
-- Sem consentimento, `elegivel_estatistica = 0`.
+- Chave: `uso_dados_anonimos_estatisticas`
+- Padrão: `false`
+- Sem consentimento ativo: lote não é montado nem enviado.
+- Consentimento pode ser revogado a qualquer momento.
 
 ## Abastecimento sem login
-- Permitido salvar localmente (offline-first)
-- Marca `criado_sem_login = 1`
-- `veiculo_id` pode ficar `null`
-- Depois de login/cadastro, registros podem ser vinculados ao veiculo
+- Salva localmente com `criado_sem_login = 1`
+- `veiculo_id` pode ficar `NULL`
+- Pode ser vinculado depois ao veículo cadastrado
 
-## Vinculacao apos cadastro/login
+## Vínculo após cadastro/login
 - Atualiza `veiculo_id`
 - Marca `vinculado_apos_cadastro = 1`
-- Mantem historico original
+- Mantém histórico do registro
 
 ## Consumo real
-- Calculado a partir de abastecimentos com km/litros/valor
-- Confianca:
-  - alta: dados consistentes + tanque cheio recorrente
-  - media: dados suficientes sem tanque cheio recorrente
-  - baixa: dados incompletos
+- Calculado a partir de abastecimentos e km
+- Persistido em `consumo_veiculo_periodo`
+- Confiança: `alta`, `media`, `baixa`
 
-## Backup
-- Backup V9 inclui:
-  - `abastecimentos`
-  - `consumo_veiculo_periodo`
-  - `eventos_veiculo`
-- Continua compativel com backups anteriores.
+## Modelo de sync
+1. Verifica consentimento.
+2. Registra device público aleatório.
+3. Monta payload agregado.
+4. Anonimiza/remapeia campos sensíveis.
+5. Salva em `sync_batches_local`.
+6. Tenta envio quando API estiver configurada.
 
-## Regras para relatorios comerciais futuros
-- Somente agregados e anonimos
-- Sem nome, CPF, e-mail, telefone, placa ou identificador individual
-- Sem envio automatico para servidor nesta fase
+## Payload enviado ao servidor
+- `batchPublicId`
+- `devicePublicId`
+- `appVersion`
+- `databaseVersion`
+- `consentVersion`
+- `records[]` agregados
+
+## Campos proibidos no payload
+`cpf`, `documento`, `senha`, `password`, `hash`, `placa`, `plate`, `email`, `telefone`, `phone`, `nome`, `name`, `foto`, `photo`, `endereco`, `address`, `latitude`, `longitude`, `gps`, `route`, `rawUser`, `rawVehicle`.
+
+## Regras de anonimização
+- `km_atual` exato -> faixa (`20000-29999`)
+- data exata -> mês (`YYYY-MM`)
+- valor sensível -> faixa de valor
+- remoção de IDs locais
+- remoção de campos proibidos
+
+## Regras para relatórios comerciais futuros
+- somente dados agregados e anônimos
+- sem reidentificação individual
+- sem atributos sensíveis pessoais
+- sempre com consentimento explícito do usuário
