@@ -291,7 +291,37 @@
     "composicao_km": "Cost per km composition",
     "total_ikm": "Total IKM",
     "custos_existencia": "Existence costs (time)",
-    "fator_humano": "Human factor (you)"
+    "fator_humano": "Human factor (you)",
+    "auditoria_korre": "KORRE Audit",
+    "sugestoes_intro": "Choose a usage profile and let KORRE fill initial estimates. Values you already entered will not be overwritten.",
+    "preencher_para_mim": "Fill for me",
+    "sugestoes_aplicadas_titulo": "Suggestions applied",
+    "sugestoes_aplicadas_msg": "{{count}} field(s) were filled with estimates. Review before saving.",
+    "sugestoes_resumo": "{{count}} suggestion(s) filled",
+    "sugestoes_ignoradas": "{{count}} field(s) already had values and were kept.",
+    "modo_simples": "Simple",
+    "modo_avancado": "Advanced",
+    "confianca_sugestao": "Confidence: {{confianca}}",
+    "perfis_uso": {
+      "uso_leve": "Light use",
+      "uso_medio": "Medium use",
+      "uso_intenso": "Heavy use",
+      "uso_profissional_pesado": "Professional heavy use"
+    },
+    "fontes_sugestao": {
+      "usuario": "Manual value",
+      "historico_oficina": "Workshop history",
+      "historico_financeiro": "Finance history",
+      "pre_cadastro": "Pre-registration",
+      "padrao_tipo_veiculo": "Vehicle type estimate",
+      "configuracao_app": "App setting",
+      "estimativa_korre": "Based on usage profile"
+    },
+    "confiancas": {
+      "alta": "high",
+      "media": "medium",
+      "baixa": "low"
+    }
   },
   "origem_ganhos": {
     "adicionar_plataforma": "ADD NEW PLATFORM",
@@ -317,7 +347,10 @@
   "oficina": {
     "titulo": "Workshop",
     "novo_item_placeholder": "Ex: Oil change",
-    "manutencao_configurada": "Maintenance configured!"
+    "manutencao_configurada": "Maintenance configured!",
+    "sugestao_adicionar": "Suggestion to add",
+    "planejado_aguardando": "Planned by KORRE Audit",
+    "status_planejado": "Planned"
   },
   "historico": {
     "periodo": "Period",
@@ -450,6 +483,40 @@
     "teste_titulo": "Goal is close!",
     "teste_msg": "Only R$ 25 left to hit your daily goal!"
   },
+  "ride_decision": {
+    "title": "Analyze ride",
+    "subtitle": "Enter the offer data and see whether the ride respects your costs and goal.",
+    "dashboard_cta": "Analyze a ride manually",
+    "valor_oferta": "Ride offer amount",
+    "tempo_total": "Estimated total time (min)",
+    "km_embarque": "KM to pickup",
+    "km_viagem": "Trip KM",
+    "analisar": "Analyze ride",
+    "sem_indices_titulo": "Run the KORRE Audit first.",
+    "sem_indices_msg": "To decide safely, KORRE needs your cost per km, cost per minute and goal.",
+    "abrir_auditoria": "Open KORRE Audit",
+    "custo_estimado": "Estimated cost",
+    "lucro_liquido": "Net profit",
+    "lucro_hora": "Profit per hour",
+    "salvar_analise": "Save analysis",
+    "analise_salva": "Analysis saved",
+    "historico_titulo": "Recent history",
+    "decisoes": {
+      "ideal": "Ideal",
+      "aceitavel": "Acceptable",
+      "fraca": "Weak",
+      "toxica": "Toxic",
+      "prejuizo": "Loss"
+    },
+    "motivos": {
+      "ideal": "The offer is well above your profit-per-minute goal.",
+      "aceitavel": "The offer covers costs and reaches your goal.",
+      "fraca": "The offer is profitable, but below your goal.",
+      "toxica_meta": "The offer is far below your profit-per-minute goal.",
+      "toxica_deslocamento": "The pickup distance weighs too much on this ride.",
+      "prejuizo": "The offer does not cover your estimated costs."
+    }
+  },
   "recuperar_senha": {
     "title": "Recover password",
     "subtitle": "Use biometrics or confirm your data to set a new password.",
@@ -469,7 +536,7 @@
     "preencha_dados": "Fill email, CPF and plate to continue.",
     "validacao_falhou": "Could not validate the provided data.",
     "erro_banco": "Could not reset the password right now. Try again.",
-    "sucesso_msg": "Password reset successfully. We will open the Dashboard."
+    "sucesso_msg": "Password reset successfully. Sign in again with your new password."
   },
   "flex_calc": {
     "title": "Flex Calculator",

@@ -52,10 +52,13 @@ export function useModalNovoItem(
       }
 
       // 1. Salva o item de manutenção
+      const valorNumerico =
+        parseFloat(preco.replace(',', '.')) || 0;
+
       const result: any = await db.runAsync(
         `INSERT INTO itens_manutencao 
-        (veiculo_id, nome, icone, intervalo_km, intervalo_meses, ultima_troca_km, ultima_troca_data, criticidade) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        (veiculo_id, nome, icone, intervalo_km, intervalo_meses, ultima_troca_km, ultima_troca_data, criticidade, valor_previsto, origem, tem_historico_real, computar_no_custo) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'manual', ?, 1)`,
         [
           veiculoId,
           nome,
@@ -65,12 +68,12 @@ export function useModalNovoItem(
           parseInt(ultimaTrocaKm) || null,
           dataFormatada,
           'media',
+          valorNumerico,
+          salvarNoFinanceiro && valorNumerico > 0 ? 1 : 0,
         ],
       );
 
       const novoItemId = result.lastInsertRowId;
-      const valorNumerico =
-        parseFloat(preco.replace(',', '.')) || 0;
 
       // 2. Se o usuário quiser salvar no financeiro e houver um preço
       if (salvarNoFinanceiro && valorNumerico > 0) {

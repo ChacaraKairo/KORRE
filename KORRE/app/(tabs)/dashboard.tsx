@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
+  Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -149,6 +151,29 @@ export default function DashboardScreen() {
         />
 
         {/* Organism: Resumo de Performance Diária/Semanal */}
+        <TouchableOpacity
+          activeOpacity={0.85}
+          onPress={() => router.push(AppRoutes.analisarCorrida)}
+          style={{
+            marginHorizontal: 16,
+            marginBottom: 12,
+            padding: 16,
+            borderRadius: 14,
+            backgroundColor: '#00C853',
+          }}
+        >
+          <Text
+            style={{
+              color: '#06140C',
+              fontSize: 16,
+              fontWeight: '900',
+              textAlign: 'center',
+            }}
+          >
+            {t('ride_decision.dashboard_cta')}
+          </Text>
+        </TouchableOpacity>
+
         <GanhosCard
           ganhosTotal={financeiro?.ganhos || 0}
           metaValor={financeiro?.meta || 0}

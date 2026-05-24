@@ -69,7 +69,19 @@ export function useOficinaMutacoes(
       // 1. Se o item era virtual (sugerido), primeiro transformamos em item real no banco
       if (item.isVirtual) {
         const result: any = await db.runAsync(
-          `INSERT INTO itens_manutencao (veiculo_id, nome, icone, ultima_troca_km, intervalo_km, ultima_troca_data, intervalo_meses, criticidade) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO itens_manutencao (
+            veiculo_id,
+            nome,
+            icone,
+            ultima_troca_km,
+            intervalo_km,
+            ultima_troca_data,
+            intervalo_meses,
+            criticidade,
+            origem,
+            tem_historico_real,
+            computar_no_custo
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'manual', 1, 1)`,
           [
             veiculoConsultado.id,
             item.nome,
@@ -85,7 +97,14 @@ export function useOficinaMutacoes(
       } else {
         // Se já era real, apenas atualizamos a data e KM da última troca
         await db.runAsync(
-          'UPDATE itens_manutencao SET ultima_troca_km = ?, ultima_troca_data = ?, intervalo_km = ?, intervalo_meses = ? WHERE id = ?',
+          `UPDATE itens_manutencao
+           SET ultima_troca_km = ?,
+               ultima_troca_data = ?,
+               intervalo_km = ?,
+               intervalo_meses = ?,
+               origem = 'manual',
+               tem_historico_real = 1
+           WHERE id = ?`,
           [
             veiculoConsultado.km_atual,
             agoraLocal,

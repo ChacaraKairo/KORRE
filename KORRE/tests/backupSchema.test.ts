@@ -59,12 +59,42 @@ describe('backup schema validation', () => {
     );
   });
 
+  it('aceita backup KORRE v6 com analises de corrida', () => {
+    const backup = makeBackup(BACKUP_APP_NAME, 6) as any;
+    backup.tabelas.analises_corrida = [
+      {
+        id: 1,
+        veiculo_id: 2,
+        valor_oferecido: 35,
+        distancia_embarque_km: 2,
+        distancia_corrida_km: 10,
+        tempo_total_minutos: 30,
+        custo_estimado: 18,
+        lucro_estimado: 17,
+        lucro_por_hora: 34,
+        decisao: 'aceitavel',
+        data_analise: '2026-05-24 12:00:00',
+      },
+    ];
+
+    const tabelas = validateBackupPayload(backup);
+    assert.equal((tabelas.analises_corrida as unknown[]).length, 1);
+  });
+
   it('aceita backup v4 sem tabela de origens de ganho', () => {
     const backup = makeBackup(BACKUP_APP_NAME, 4) as any;
     delete backup.tabelas.origens_ganho_usuario;
 
     const tabelas = validateBackupPayload(backup);
     assert.equal(tabelas.origens_ganho_usuario, undefined);
+  });
+
+  it('aceita backup v5 sem tabela de analises de corrida', () => {
+    const backup = makeBackup(BACKUP_APP_NAME, 5) as any;
+    delete backup.tabelas.analises_corrida;
+
+    const tabelas = validateBackupPayload(backup);
+    assert.equal(tabelas.analises_corrida, undefined);
   });
 
   it('rejeita backup de outro app', () => {

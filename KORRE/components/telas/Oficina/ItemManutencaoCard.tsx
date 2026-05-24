@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import {
   RotateCcw,
   Droplets,
@@ -59,8 +60,12 @@ export const ItemManutencaoCard = ({
   info,
   onResetPress,
 }: Props) => {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
+  const isPlanejado =
+    item.origem === 'auditoria_korre' &&
+    Number(item.tem_historico_real ?? 0) === 0;
 
   return (
     <View
@@ -94,20 +99,44 @@ export const ItemManutencaoCard = ({
               ]}
             >
               {item.isVirtual
-                ? 'Sugestão para adicionar'
-                : `Ciclo: ${[
+                ? t('oficina.sugestao_adicionar')
+                : isPlanejado
+                  ? t('oficina.planejado_aguardando')
+                  : `Ciclo: ${[
                     item.intervalo_km
                       ? `${item.intervalo_km} km`
                       : null,
                     item.intervalo_meses
                       ? `${item.intervalo_meses} meses`
                       : null,
-                  ]
-                    .filter(Boolean)
-                    .join(' ou ')}`}
+                    ]
+                      .filter(Boolean)
+                      .join(' ou ')}`}
             </Text>
           </View>
         </View>
+        {isPlanejado && (
+          <View
+            style={{
+              alignSelf: 'flex-start',
+              marginTop: 8,
+              paddingHorizontal: 10,
+              paddingVertical: 4,
+              borderRadius: 999,
+              backgroundColor: isDark ? '#12301E' : '#E8F8EE',
+            }}
+          >
+            <Text
+              style={{
+                color: '#00C853',
+                fontSize: 11,
+                fontWeight: '900',
+              }}
+            >
+              {t('oficina.status_planejado')}
+            </Text>
+          </View>
+        )}
         <View
           style={itemManutencaoCardDynamicStyles.statusBadge(
             info.cor,

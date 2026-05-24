@@ -6,7 +6,7 @@ import { SelicService } from '../utils/SelicService'; // Certifique-se de que o 
 const db = SQLite.openDatabaseSync('korre.db');
 
 // Versão inicial consolidada
-export const DATABASE_VERSION = 5;
+export const DATABASE_VERSION = 7;
 
 export const DatabaseInit = () => {
   try {
@@ -62,6 +62,20 @@ export const DatabaseInit = () => {
       db.execSync('PRAGMA user_version = 5;');
       currentDbVersion = 5;
       logger.info('[BANCO] Migracao V5 aplicada com sucesso.');
+    }
+
+    if (currentDbVersion < 6) {
+      migrateToV6();
+      db.execSync('PRAGMA user_version = 6;');
+      currentDbVersion = 6;
+      logger.info('[BANCO] Migracao V6 aplicada com sucesso.');
+    }
+
+    if (currentDbVersion < 7) {
+      migrateToV7();
+      db.execSync('PRAGMA user_version = 7;');
+      currentDbVersion = 7;
+      logger.info('[BANCO] Migracao V7 aplicada com sucesso.');
     }
 
     // DISPARO AUTOMÁTICO: Verifica a Selic sempre que o app inicia (Lógica de dia 1 está no Service)
@@ -224,6 +238,10 @@ const initV1 = () => {
       ultima_troca_data DATE DEFAULT (date('now', 'localtime')),
       intervalo_meses INTEGER,
       criticidade TEXT CHECK(criticidade IN ('baixa', 'media', 'alta')) DEFAULT 'media',
+      valor_previsto REAL DEFAULT 0,
+      origem TEXT DEFAULT 'manual',
+      tem_historico_real INTEGER DEFAULT 0,
+      computar_no_custo INTEGER DEFAULT 1,
       FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE CASCADE
     );
 
@@ -253,6 +271,21 @@ const initV1 = () => {
       dados_json TEXT,
       dedup_key TEXT,
       data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS analises_corrida (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      veiculo_id INTEGER,
+      valor_oferecido REAL NOT NULL,
+      distancia_embarque_km REAL DEFAULT 0,
+      distancia_corrida_km REAL DEFAULT 0,
+      tempo_total_minutos REAL DEFAULT 0,
+      custo_estimado REAL DEFAULT 0,
+      lucro_estimado REAL DEFAULT 0,
+      lucro_por_hora REAL DEFAULT 0,
+      decisao TEXT NOT NULL,
+      data_analise DATETIME DEFAULT (datetime('now', 'localtime')),
+      FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE SET NULL
     );
 
     -- INSERÇÃO DE CATEGORIAS PADRÃO
@@ -341,6 +374,51 @@ const migrateToV4 = () => {
 
 const migrateToV5 = () => {
   createPerformanceIndexes();
+};
+
+const migrateToV6 = () => {
+  db.execSync(`
+    CREATE TABLE IF NOT EXISTS analises_corrida (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      veiculo_id INTEGER,
+      valor_oferecido REAL NOT NULL,
+      distancia_embarque_km REAL DEFAULT 0,
+      distancia_corrida_km REAL DEFAULT 0,
+      tempo_total_minutos REAL DEFAULT 0,
+      custo_estimado REAL DEFAULT 0,
+      lucro_estimado REAL DEFAULT 0,
+      lucro_por_hora REAL DEFAULT 0,
+      decisao TEXT NOT NULL,
+      data_analise DATETIME DEFAULT (datetime('now', 'localtime')),
+      FOREIGN KEY (veiculo_id) REFERENCES veiculos (id) ON DELETE SET NULL
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_analises_corrida_veiculo_data
+      ON analises_corrida (veiculo_id, data_analise);
+  `);
+};
+
+const migrateToV7 = () => {
+  addColumnIfMissing(
+    'itens_manutencao',
+    'valor_previsto',
+    'REAL DEFAULT 0',
+  );
+  addColumnIfMissing(
+    'itens_manutencao',
+    'origem',
+    "TEXT DEFAULT 'manual'",
+  );
+  addColumnIfMissing(
+    'itens_manutencao',
+    'tem_historico_real',
+    'INTEGER DEFAULT 0',
+  );
+  addColumnIfMissing(
+    'itens_manutencao',
+    'computar_no_custo',
+    'INTEGER DEFAULT 1',
+  );
 };
 
 const createPerformanceIndexes = () => {

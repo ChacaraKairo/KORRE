@@ -3,6 +3,7 @@ import { CalculadoraTempo } from '../domain/calculadoraTempo';
 import { CalculadoraDecisao as CalculadoraCustoPessoa } from '../domain/calculadoraDecisao';
 import type { FormularioViabilidade } from '../domain/types';
 import { CalculadoraRepository } from '../infra/indicesKorreRepository';
+import { MaintenancePlanningService } from '../../maintenancePlanning/MaintenancePlanningService';
 
 export const CalculadoraService = {
   carregarDadosCompletosVeiculo: async (
@@ -79,6 +80,11 @@ export const CalculadoraService = {
       iminCustoFixo,
       iminMetaFinal,
       completudeGeral,
+    );
+
+    await MaintenancePlanningService.sincronizarDaAuditoria(
+      veiculoId,
+      form,
     );
 
     return {

@@ -1,7 +1,7 @@
 import type { SQLiteBindValue } from 'expo-sqlite';
 
 export const BACKUP_APP_NAME = 'KORRE';
-export const BACKUP_SCHEMA_VERSION = 5;
+export const BACKUP_SCHEMA_VERSION = 7;
 
 export const BACKUP_TABLES = [
   'perfil_usuario',
@@ -12,6 +12,7 @@ export const BACKUP_TABLES = [
   'transacoes_financeiras',
   'itens_manutencao',
   'historico_manutencao',
+  'analises_corrida',
   'notificacoes',
 ] as const;
 
@@ -136,6 +137,10 @@ export const BACKUP_COLUMNS: Record<BackupTable, readonly string[]> = {
     'ultima_troca_data',
     'intervalo_meses',
     'criticidade',
+    'valor_previsto',
+    'origem',
+    'tem_historico_real',
+    'computar_no_custo',
   ],
   historico_manutencao: [
     'id',
@@ -146,6 +151,19 @@ export const BACKUP_COLUMNS: Record<BackupTable, readonly string[]> = {
     'km_servico',
     'diferenca_tempo_meses',
     'data_servico',
+  ],
+  analises_corrida: [
+    'id',
+    'veiculo_id',
+    'valor_oferecido',
+    'distancia_embarque_km',
+    'distancia_corrida_km',
+    'tempo_total_minutos',
+    'custo_estimado',
+    'lucro_estimado',
+    'lucro_por_hora',
+    'decisao',
+    'data_analise',
   ],
   notificacoes: [
     'id',
@@ -232,6 +250,10 @@ export const validateBackupPayload = (data: unknown) => {
       payload.versao_banco < 5 &&
       table === 'origens_ganho_usuario'
     ) {
+      continue;
+    }
+
+    if (payload.versao_banco < 6 && table === 'analises_corrida') {
       continue;
     }
 

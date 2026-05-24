@@ -2,7 +2,9 @@ import type { Href } from 'expo-router';
 
 export const AppRoutes = {
   cadastro: '/(auth)/cadastro',
+  analisarCorrida: '/(tabs)/analisar_corrida' as Href,
   calculadora: '/calculadora',
+  calculadoraKorre: '/(tabs)/calculadora_korre',
   configuracoes: '/(tabs)/configuracoes',
   dashboard: '/(tabs)/dashboard',
   finance: '/(tabs)/finance',

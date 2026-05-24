@@ -12,6 +12,7 @@ import type {
 import { logger } from '../../utils/logger';
 import { showCustomAlert } from '../alert/useCustomAlert';
 import { clearAuthSession } from '../../utils/auth/authSession';
+import { clearReturnRoute } from '../../utils/navigation/returnRoute';
 
 export function usePerfil() {
   const { t } = useTranslation();
@@ -181,6 +182,7 @@ export function usePerfil() {
           style: 'destructive',
           onPress: () => {
             clearAuthSession();
+            clearReturnRoute();
             router.replace(AppRoutes.login);
           },
         },

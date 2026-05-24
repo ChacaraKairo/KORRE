@@ -24,3 +24,13 @@
 - [ ] Gerar build preview
 - [ ] Instalar em aparelho físico
 - [ ] Testar modo offline
+
+## Validado por comando em 2026-05-24
+
+- [x] `npm run validate`
+- [x] `npm run i18n:scan`
+- [x] Testes unitarios da Analise Manual de Corrida
+- [x] Testes de schema de backup com `analises_corrida`
+- [ ] Testar Analise Manual de Corrida em aparelho fisico
+- [ ] Testar historico de analises em aparelho fisico
+- [ ] Testar manutencao planejada gerada pela Auditoria KORRE em aparelho fisico

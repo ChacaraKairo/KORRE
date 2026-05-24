@@ -23,6 +23,7 @@ import { executarVerificacoesLocais } from '../notifications/LocalNotificationSc
 import { NotificationHandler } from '../notifications/NotificationHandler';
 import { logger } from '../utils/logger';
 import { safeBack } from '../utils/navigation/safeBack';
+import { goBackToReturnRoute } from '../utils/navigation/returnRoute';
 import { getAuthSessionUserId } from '../utils/auth/authSession';
 
 import { inlineStyles } from '../styles/generated-inline/app/_layoutInlineStyles';
@@ -133,6 +134,11 @@ export default function RootLayout() {
         const fallbackRoute = isAuthenticated
           ? AppRoutes.dashboard
           : AppRoutes.login;
+
+        if (pathname === AppRoutes.calculadora) {
+          goBackToReturnRoute(router, fallbackRoute);
+          return true;
+        }
 
         if (!isAuthenticated) {
           if (

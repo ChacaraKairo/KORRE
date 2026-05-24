@@ -53,6 +53,18 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
+          name="calculadora_korre"
+          options={{
+            href: null,
+          }}
+        />
+        <Tabs.Screen
+          name="analisar_corrida"
+          options={{
+            href: null,
+          }}
+        />
+        <Tabs.Screen
           name="origemganhos"
           options={{
             href: null,

@@ -291,7 +291,37 @@
     "composicao_km": "Composicion del costo por km",
     "total_ikm": "Total IKM",
     "custos_existencia": "Costos de existencia (tiempo)",
-    "fator_humano": "Factor humano (tu)"
+    "fator_humano": "Factor humano (tu)",
+    "auditoria_korre": "Auditoria KORRE",
+    "sugestoes_intro": "Elige un perfil de uso y deja que KORRE complete estimaciones iniciales. Los valores que ya ingresaste no se sobrescriben.",
+    "preencher_para_mim": "Completar por mi",
+    "sugestoes_aplicadas_titulo": "Sugerencias aplicadas",
+    "sugestoes_aplicadas_msg": "{{count}} campo(s) fueron completados con estimaciones. Revisa antes de guardar.",
+    "sugestoes_resumo": "{{count}} sugerencia(s) completada(s)",
+    "sugestoes_ignoradas": "{{count}} campo(s) ya tenian valor y se mantuvieron.",
+    "modo_simples": "Simple",
+    "modo_avancado": "Avanzado",
+    "confianca_sugestao": "Confianza: {{confianca}}",
+    "perfis_uso": {
+      "uso_leve": "Uso ligero",
+      "uso_medio": "Uso medio",
+      "uso_intenso": "Uso intenso",
+      "uso_profissional_pesado": "Uso profesional pesado"
+    },
+    "fontes_sugestao": {
+      "usuario": "Valor manual",
+      "historico_oficina": "Historial de taller",
+      "historico_financeiro": "Historial financiero",
+      "pre_cadastro": "Pre-registro",
+      "padrao_tipo_veiculo": "Estimacion por tipo de vehiculo",
+      "configuracao_app": "Configuracion de la app",
+      "estimativa_korre": "Basado en el perfil de uso"
+    },
+    "confiancas": {
+      "alta": "alta",
+      "media": "media",
+      "baixa": "baja"
+    }
   },
   "origem_ganhos": {
     "adicionar_plataforma": "AGREGAR NUEVA PLATAFORMA",
@@ -317,7 +347,10 @@
   "oficina": {
     "titulo": "Taller",
     "novo_item_placeholder": "Ej: Cambio de aceite",
-    "manutencao_configurada": "Mantenimiento configurado!"
+    "manutencao_configurada": "Mantenimiento configurado!",
+    "sugestao_adicionar": "Sugerencia para agregar",
+    "planejado_aguardando": "Planificado por la Auditoria KORRE",
+    "status_planejado": "Planificado"
   },
   "historico": {
     "periodo": "Periodo",
@@ -450,6 +483,40 @@
     "teste_titulo": "Meta cercana!",
     "teste_msg": "Faltan solo R$ 25 para alcanzar tu meta diaria!"
   },
+  "ride_decision": {
+    "title": "Analizar viaje",
+    "subtitle": "Ingresa los datos de la oferta y mira si el viaje respeta tus costos y tu meta.",
+    "dashboard_cta": "Analizar viaje manualmente",
+    "valor_oferta": "Valor ofrecido por el viaje",
+    "tempo_total": "Tiempo total estimado (min)",
+    "km_embarque": "KM hasta la recogida",
+    "km_viagem": "KM del viaje",
+    "analisar": "Analizar viaje",
+    "sem_indices_titulo": "Haz primero la Auditoria KORRE.",
+    "sem_indices_msg": "Para decidir con seguridad, KORRE necesita conocer tu costo por km, costo por minuto y meta.",
+    "abrir_auditoria": "Abrir Auditoria KORRE",
+    "custo_estimado": "Costo estimado",
+    "lucro_liquido": "Ganancia neta",
+    "lucro_hora": "Ganancia por hora",
+    "salvar_analise": "Guardar analisis",
+    "analise_salva": "Analisis guardado",
+    "historico_titulo": "Historial reciente",
+    "decisoes": {
+      "ideal": "Ideal",
+      "aceitavel": "Aceptable",
+      "fraca": "Debil",
+      "toxica": "Toxica",
+      "prejuizo": "Perdida"
+    },
+    "motivos": {
+      "ideal": "La oferta queda muy por encima de tu meta por minuto.",
+      "aceitavel": "La oferta cubre los costos y alcanza tu meta.",
+      "fraca": "La oferta da ganancia, pero queda por debajo de tu meta.",
+      "toxica_meta": "La oferta queda muy por debajo de tu meta por minuto.",
+      "toxica_deslocamento": "El desplazamiento hasta la recogida pesa demasiado en este viaje.",
+      "prejuizo": "La oferta no cubre tus costos estimados."
+    }
+  },
   "recuperar_senha": {
     "title": "Recuperar contrasena",
     "subtitle": "Usa biometria o confirma tus datos para definir una nueva contrasena.",
@@ -469,7 +536,7 @@
     "preencha_dados": "Completa e-mail, CPF y placa para continuar.",
     "validacao_falhou": "No fue posible validar los datos informados.",
     "erro_banco": "No fue posible restablecer la contraseña ahora. Intenta nuevamente.",
-    "sucesso_msg": "Contraseña restablecida con éxito. Vamos a abrir el Dashboard."
+    "sucesso_msg": "Contraseña restablecida con éxito. Inicia sesión nuevamente con tu nueva contraseña."
   },
   "flex_calc": {
     "title": "Calculadora Flex",

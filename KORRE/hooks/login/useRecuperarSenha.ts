@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import db from '../../database/DatabaseInit';
 import { AppRoutes } from '../../constants/routes';
 import { hashPassword } from '../../utils/auth/passwordHash';
-import { setAuthSession } from '../../utils/auth/authSession';
+import { clearAuthSession } from '../../utils/auth/authSession';
 import { resetarTentativasLogin } from '../../utils/auth/loginLockout';
 import { logger } from '../../utils/logger';
 
@@ -67,14 +67,14 @@ export const useRecuperarSenha = () => {
       [novaHash, usuarioId],
     );
     await resetarTentativasLogin();
-    setAuthSession(usuarioId);
+    clearAuthSession();
     Alert.alert(
       t('common.sucesso'),
       t('recuperar_senha.sucesso_msg'),
       [
         {
           text: t('common.ok'),
-          onPress: () => router.replace(AppRoutes.dashboard),
+          onPress: () => router.replace(AppRoutes.login),
         },
       ],
     );

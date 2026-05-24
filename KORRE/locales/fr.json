@@ -291,7 +291,37 @@
     "composicao_km": "Composition du cout par km",
     "total_ikm": "Total IKM",
     "custos_existencia": "Couts d'existence (temps)",
-    "fator_humano": "Facteur humain (vous)"
+    "fator_humano": "Facteur humain (vous)",
+    "auditoria_korre": "Audit KORRE",
+    "sugestoes_intro": "Choisissez un profil d'utilisation et laissez KORRE remplir des estimations initiales. Les valeurs deja saisies ne seront pas remplacees.",
+    "preencher_para_mim": "Remplir pour moi",
+    "sugestoes_aplicadas_titulo": "Suggestions appliquees",
+    "sugestoes_aplicadas_msg": "{{count}} champ(s) ont ete remplis avec des estimations. Verifiez avant d'enregistrer.",
+    "sugestoes_resumo": "{{count}} suggestion(s) remplie(s)",
+    "sugestoes_ignoradas": "{{count}} champ(s) avaient deja une valeur et ont ete conserves.",
+    "modo_simples": "Simple",
+    "modo_avancado": "Avance",
+    "confianca_sugestao": "Confiance : {{confianca}}",
+    "perfis_uso": {
+      "uso_leve": "Usage leger",
+      "uso_medio": "Usage moyen",
+      "uso_intenso": "Usage intensif",
+      "uso_profissional_pesado": "Usage professionnel intensif"
+    },
+    "fontes_sugestao": {
+      "usuario": "Valeur manuelle",
+      "historico_oficina": "Historique atelier",
+      "historico_financeiro": "Historique financier",
+      "pre_cadastro": "Pre-inscription",
+      "padrao_tipo_veiculo": "Estimation par type de vehicule",
+      "configuracao_app": "Configuration de l'app",
+      "estimativa_korre": "Base sur le profil d'utilisation"
+    },
+    "confiancas": {
+      "alta": "elevee",
+      "media": "moyenne",
+      "baixa": "faible"
+    }
   },
   "origem_ganhos": {
     "adicionar_plataforma": "AJOUTER UNE PLATEFORME",
@@ -317,7 +347,10 @@
   "oficina": {
     "titulo": "Atelier",
     "novo_item_placeholder": "Ex: Vidange d'huile",
-    "manutencao_configurada": "Entretien configure!"
+    "manutencao_configurada": "Entretien configure!",
+    "sugestao_adicionar": "Suggestion a ajouter",
+    "planejado_aguardando": "Planifie par l'Audit KORRE",
+    "status_planejado": "Planifie"
   },
   "historico": {
     "periodo": "Periode",
@@ -450,6 +483,40 @@
     "teste_titulo": "Objectif proche!",
     "teste_msg": "Il ne reste que R$ 25 pour atteindre votre objectif quotidien!"
   },
+  "ride_decision": {
+    "title": "Analyser une course",
+    "subtitle": "Saisissez les donnees de l'offre et verifiez si la course respecte vos couts et votre objectif.",
+    "dashboard_cta": "Analyser une course manuellement",
+    "valor_oferta": "Montant propose pour la course",
+    "tempo_total": "Temps total estime (min)",
+    "km_embarque": "KM jusqu'au depart",
+    "km_viagem": "KM de la course",
+    "analisar": "Analyser la course",
+    "sem_indices_titulo": "Faites d'abord l'Audit KORRE.",
+    "sem_indices_msg": "Pour decider en securite, KORRE doit connaitre votre cout par km, cout par minute et objectif.",
+    "abrir_auditoria": "Ouvrir l'Audit KORRE",
+    "custo_estimado": "Cout estime",
+    "lucro_liquido": "Benefice net",
+    "lucro_hora": "Benefice par heure",
+    "salvar_analise": "Enregistrer l'analyse",
+    "analise_salva": "Analyse enregistree",
+    "historico_titulo": "Historique recent",
+    "decisoes": {
+      "ideal": "Ideal",
+      "aceitavel": "Acceptable",
+      "fraca": "Faible",
+      "toxica": "Toxique",
+      "prejuizo": "Perte"
+    },
+    "motivos": {
+      "ideal": "L'offre est largement au-dessus de votre objectif par minute.",
+      "aceitavel": "L'offre couvre les couts et atteint votre objectif.",
+      "fraca": "L'offre est rentable, mais reste sous votre objectif.",
+      "toxica_meta": "L'offre est tres en dessous de votre objectif par minute.",
+      "toxica_deslocamento": "Le trajet jusqu'au depart pese trop dans cette course.",
+      "prejuizo": "L'offre ne couvre pas vos couts estimes."
+    }
+  },
   "recuperar_senha": {
     "title": "Recuperer le mot de passe",
     "subtitle": "Utilisez la biometrie ou confirmez vos donnees pour definir un nouveau mot de passe.",
@@ -469,7 +536,7 @@
     "preencha_dados": "Remplissez e-mail, CPF et plaque pour continuer.",
     "validacao_falhou": "Impossible de valider les donnees fournies.",
     "erro_banco": "Impossible de reinitialiser le mot de passe maintenant. Reessayez.",
-    "sucesso_msg": "Mot de passe reinitialise avec succes. Nous allons ouvrir le Dashboard."
+    "sucesso_msg": "Mot de passe reinitialise avec succes. Connectez-vous avec votre nouveau mot de passe."
   },
   "flex_calc": {
     "title": "Calculatrice Flex",

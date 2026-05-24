@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import db from '../../../database/DatabaseInit';
 import type { FormularioViabilidade } from '../domain/types';
 import {
@@ -17,6 +18,12 @@ import {
   showAppLoadingAsync,
 } from '../../../hooks/ui/useAppLoading';
 import { safeBack } from '../../../utils/navigation/safeBack';
+import {
+  applySuggestionsToForm,
+  IndicesSuggestionsService,
+  PerfilUsoKorre,
+  SugestaoCampo,
+} from '../suggestions';
 
 const ESTADO_INICIAL_VAZIO: Partial<FormularioViabilidade> =
   {
@@ -33,6 +40,7 @@ const ESTADO_INICIAL_VAZIO: Partial<FormularioViabilidade> =
 
 export function useIndicesKorreForm() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [veiculosDisponiveis, setVeiculosDisponiveis] =
     useState<any[]>([]);
@@ -44,6 +52,12 @@ export function useIndicesKorreForm() {
   const [breakdownKm, setBreakdownKm] =
     useState<BreakdownCustoKm | null>(null);
   const [avisosKm, setAvisosKm] = useState<string[]>([]);
+  const [perfilUso, setPerfilUso] =
+    useState<PerfilUsoKorre>('uso_medio');
+  const [sugestoesAplicadas, setSugestoesAplicadas] =
+    useState<SugestaoCampo[]>([]);
+  const [sugestoesIgnoradas, setSugestoesIgnoradas] =
+    useState<SugestaoCampo[]>([]);
 
   useEffect(() => {
     const resultadoKm = CalculadoraMovimento.calcularCustoKm(
@@ -190,6 +204,32 @@ export function useIndicesKorreForm() {
     }
   };
 
+  const aplicarSugestoes = useCallback(() => {
+    const resultadoSugestoes =
+      IndicesSuggestionsService.gerarSugestoes({
+        form,
+        perfilUso,
+        tipoVeiculo: veiculoAtivo?.tipo,
+      });
+
+    const resultadoAplicacao = applySuggestionsToForm(
+      form,
+      resultadoSugestoes.sugestoes,
+      { sobrescrever: false },
+    );
+
+    setForm(resultadoAplicacao.form);
+    setSugestoesAplicadas(resultadoAplicacao.aplicadas);
+    setSugestoesIgnoradas(resultadoAplicacao.ignoradas);
+
+    showCustomAlert(
+      t('calculadora.sugestoes_aplicadas_titulo'),
+      t('calculadora.sugestoes_aplicadas_msg', {
+        count: resultadoAplicacao.aplicadas.length,
+      }),
+    );
+  }, [form, perfilUso, t, veiculoAtivo?.tipo]);
+
   const validarStatusSecoes = useCallback(() => {
     const operacaoCompleta =
       !!form.rendimento_energia_unidade &&
@@ -295,6 +335,11 @@ export function useIndicesKorreForm() {
     mudarVeiculoAtivo,
     validarStatusSecoes,
     calcularIPVAAutomatico,
+    perfilUso,
+    setPerfilUso,
+    aplicarSugestoes,
+    sugestoesAplicadas,
+    sugestoesIgnoradas,
   };
 }
 
