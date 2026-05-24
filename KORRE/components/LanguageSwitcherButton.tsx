@@ -12,6 +12,9 @@ interface Props {
   style?: object;
 }
 
+/**
+ * Executa a função de language switcher button.
+ */
 export const LanguageSwitcherButton = ({ style }: Props) => {
   const { i18n } = useTranslation();
   const [visible, setVisible] = useState(false);

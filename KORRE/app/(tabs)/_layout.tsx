@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { useTema } from '../../hooks/modo_tema';
 import { CustomAlert } from '../../components/ui/CustomAlert';
 
+/**
+ * Executa a função de tab layout.
+ */
 export default function TabLayout() {
   const { t } = useTranslation();
   const { tema } = useTema();

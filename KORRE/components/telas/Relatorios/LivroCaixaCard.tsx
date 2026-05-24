@@ -12,6 +12,9 @@ interface Props {
   };
 }
 
+/**
+ * Executa a função de livro caixa card.
+ */
 export function LivroCaixaCard({ dadosFiscais }: Props) {
   return (
     <View style={styles.livroCaixaCard}>

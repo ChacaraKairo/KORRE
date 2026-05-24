@@ -58,6 +58,9 @@ export const PerfilSecao: React.FC<PerfilProps> = ({
   const { t } = useTranslation();
   const [mostrarSenha, setMostrarSenha] = useState(false);
 
+  /**
+   * Executa a função de handle take action.
+   */
   const handleTakeAction = async () => {
     try {
       const savedUri = await PhotoService.takePhoto(foto);
@@ -71,6 +74,9 @@ export const PerfilSecao: React.FC<PerfilProps> = ({
     }
   };
 
+  /**
+   * Executa a função de handle cpf change.
+   */
   const handleCpfChange = (texto: string) => {
     let formatado = texto.replace(/\D/g, '');
     formatado = formatado.replace(/(\d{3})(\d)/, '$1.$2');

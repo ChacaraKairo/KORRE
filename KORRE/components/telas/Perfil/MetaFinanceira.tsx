@@ -33,11 +33,17 @@ export const MetaFinanceira = ({
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
+  /**
+   * Executa a função de handle save.
+   */
   const handleSave = () => {
     salvarMeta();
     setIsEditing(false);
   };
 
+  /**
+   * Executa a função de handle edit click.
+   */
   const handleEditClick = () => {
     setIsEditing(true);
     setTimeout(() => {

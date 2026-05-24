@@ -27,11 +27,17 @@ const BACKUP_PICKER_TYPES = [
   '*/*',
 ];
 
+/**
+ * Executa a função de mostrar erro backup.
+ */
 const mostrarErroBackup = (titulo: string, mensagem: string) => {
   Alert.alert(titulo, mensagem);
   showCustomAlert(titulo, mensagem);
 };
 
+/**
+ * Executa a função de use gerenciar dados.
+ */
 export function useGerenciarDados() {
   const router = useRouter();
   const { t } = useTranslation();
@@ -44,6 +50,9 @@ export function useGerenciarDados() {
     cancelPassword,
   } = useBackupPasswordPrompt();
 
+  /**
+   * Executa a função de decode backup content.
+   */
   const decodeBackupContent = async (content: string) => {
     try {
       return JSON.parse(content);
@@ -74,6 +83,9 @@ export function useGerenciarDados() {
     }
   };
 
+  /**
+   * Executa a função de executar restauracao.
+   */
   const executarRestauracao = async (data: unknown) => {
     setImportandoBackup(true);
     await showAppLoadingAsync(t('configuracoes.restaurando_backup'));
@@ -127,6 +139,9 @@ export function useGerenciarDados() {
     }
   };
 
+  /**
+   * Executa a função de importar backup.
+   */
   const importarBackup = async () => {
     if (importandoBackup) return;
 
@@ -168,6 +183,9 @@ export function useGerenciarDados() {
     }
   };
 
+  /**
+   * Executa a função de limpar todos os dados.
+   */
   const limparTodosOsDados = () => {
     Alert.alert(
       t('configuracoes.limpar_tudo_titulo'),

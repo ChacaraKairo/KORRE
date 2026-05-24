@@ -9,6 +9,9 @@ import { useCustomAlert } from '../../hooks/alert/useCustomAlert';
 import { useTema } from '../../hooks/modo_tema';
 
 import { styles } from '../../styles/generated/components/ui/CustomAlertStyles';
+/**
+ * Executa a função de custom alert.
+ */
 export const CustomAlert = () => {
   const { visible, title, message, buttons, hideAlert } =
     useCustomAlert();

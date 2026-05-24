@@ -8,6 +8,9 @@ const API_BASE_URL =
   process.env.EXPO_PUBLIC_KORRE_API_BASE_URL ?? '';
 const isExpoGo = Constants.appOwnership === 'expo';
 
+/**
+ * Executa a função de obter expo push token.
+ */
 export async function obterExpoPushToken() {
   if (isExpoGo) return null;
 
@@ -31,6 +34,9 @@ export async function obterExpoPushToken() {
   return token.data;
 }
 
+/**
+ * Executa a função de registrar dispositivo no servidor.
+ */
 export async function registrarDispositivoNoServidor() {
   const expoPushToken = await obterExpoPushToken();
   if (!expoPushToken || !API_BASE_URL) return;
@@ -51,6 +57,9 @@ export async function registrarDispositivoNoServidor() {
   });
 }
 
+/**
+ * Executa a função de get or create device id.
+ */
 const getOrCreateDeviceId = async () => {
   const existing = await db.getFirstAsync<{ valor: string }>(
     'SELECT valor FROM configuracoes_app WHERE chave = ?',

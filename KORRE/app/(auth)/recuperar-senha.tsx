@@ -12,6 +12,9 @@ import { useRouter } from 'expo-router';
 import { AppRoutes } from '../../constants/routes';
 import { useRecuperarSenha } from '../../hooks/login/useRecuperarSenha';
 
+/**
+ * Executa a função de recuperar senha screen.
+ */
 export default function RecuperarSenhaScreen() {
   const { t } = useTranslation();
   const router = useRouter();

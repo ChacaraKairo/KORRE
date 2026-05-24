@@ -18,15 +18,27 @@ import {
 } from '../ui/useAppLoading';
 import { getFraseDoMomento } from './frasesService';
 
+/**
+ * Executa a função de formatar data local.
+ */
 const formatarDataLocal = (data: Date) => {
+  /**
+   * Executa a função de pad.
+   */
   const pad = (valor: number) =>
     String(valor).padStart(2, '0');
   return `${data.getFullYear()}-${pad(data.getMonth() + 1)}-${pad(data.getDate())}`;
 };
 
+/**
+ * Executa a função de inicio do dia.
+ */
 const inicioDoDia = (data: Date) =>
   `${formatarDataLocal(data)} 00:00:00`;
 
+/**
+ * Executa a função de inicio da semana.
+ */
 const inicioDaSemana = (data: Date) => {
   const inicio = new Date(data);
   const dia = inicio.getDay();
@@ -36,6 +48,9 @@ const inicioDaSemana = (data: Date) => {
   return inicio;
 };
 
+/**
+ * Executa a função de use dashboard.
+ */
 export const useDashboard = () => {
   const router = useRouter();
   interface DashboardData {
@@ -177,6 +192,9 @@ export const useDashboard = () => {
     }, [carregarTudo]),
   );
 
+  /**
+   * Executa a função de on update km.
+   */
   const onUpdateKm = async (novoKm: number) => {
     if (!data.veiculo) return;
 

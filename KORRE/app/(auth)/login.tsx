@@ -23,6 +23,9 @@ import { setReturnRoute } from '../../utils/navigation/returnRoute';
 
 import { inlineStyles } from '../../styles/generated-inline/app/(auth)/loginInlineStyles';
 import { dynamicInlineStyles } from '../../styles/generated-dynamic/app/(auth)/loginDynamicStyles';
+/**
+ * Executa a função de login screen.
+ */
 const LoginScreen: React.FC = () => {
   const { t } = useTranslation();
   const router = useRouter();

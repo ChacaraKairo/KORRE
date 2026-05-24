@@ -2,6 +2,9 @@ import { useState, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 import db from '../../database/DatabaseInit';
 
+/**
+ * Executa a função de use fluxo caixa.
+ */
 export function useFluxoCaixa() {
   const [loading, setLoading] = useState(true);
   const [dataRef, setDataRef] = useState(new Date());
@@ -204,6 +207,9 @@ export function useFluxoCaixa() {
     setDataRef(novaData);
   };
 
+  /**
+   * Executa a função de toggle visao.
+   */
   const toggleVisao = () => {
     setTipoVisao((prev) =>
       prev === 'mensal' ? 'semanal' : 'mensal',

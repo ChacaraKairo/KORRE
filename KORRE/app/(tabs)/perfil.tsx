@@ -28,6 +28,9 @@ import { VeiculoResumo } from '../../components/telas/Perfil/VeiculoResumo';
 import { AcoesGrid } from '../../components/telas/Perfil/AcoesGrid';
 import { ModalEditarPerfil } from '../../components/telas/Perfil/ModalEditarPerfil';
 
+/**
+ * Executa a função de perfil screen.
+ */
 export default function PerfilScreen() {
   const { t } = useTranslation();
   const {
@@ -55,12 +58,18 @@ export default function PerfilScreen() {
   const [veiculosDisponiveis, setVeiculosDisponiveis] =
     useState<Veiculo[]>([]);
 
+  /**
+   * Executa a função de abrir modal troca.
+   */
   const abrirModalTroca = async () => {
     const lista = await listarVeiculosDoUsuario();
     setVeiculosDisponiveis(lista);
     setModalTrocaAberto(true);
   };
 
+  /**
+   * Executa a função de selecionar veiculo ativo.
+   */
   const selecionarVeiculoAtivo = async (id: number) => {
     const trocou = await trocarVeiculoAtivo(id);
     if (trocou) {

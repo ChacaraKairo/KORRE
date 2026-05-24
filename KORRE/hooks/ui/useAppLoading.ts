@@ -16,10 +16,16 @@ export const useAppLoading = create<AppLoadingState>((set) => ({
   hideLoading: () => set({ visible: false }),
 }));
 
+/**
+ * Executa a função de show app loading.
+ */
 export const showAppLoading = (message?: string) => {
   useAppLoading.getState().showLoading(message);
 };
 
+/**
+ * Executa a função de wait for app loading frame.
+ */
 export const waitForAppLoadingFrame = () =>
   new Promise<void>((resolve) => {
     requestAnimationFrame(() =>
@@ -31,11 +37,17 @@ export const waitForAppLoadingFrame = () =>
     );
   });
 
+/**
+ * Executa a função de show app loading async.
+ */
 export const showAppLoadingAsync = async (message?: string) => {
   showAppLoading(message);
   await waitForAppLoadingFrame();
 };
 
+/**
+ * Executa a função de hide app loading.
+ */
 export const hideAppLoading = () => {
   useAppLoading.getState().hideLoading();
 };

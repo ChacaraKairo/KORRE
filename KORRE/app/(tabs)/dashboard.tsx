@@ -31,6 +31,9 @@ import { VeiculoCard } from '../../components/telas/Dashboard/VeiculoCard';
 import { AppRoutes } from '../../constants/routes';
 import { setReturnRoute } from '../../utils/navigation/returnRoute';
 
+/**
+ * Executa a função de dashboard screen.
+ */
 export default function DashboardScreen() {
   const { t } = useTranslation();
   const { tema } = useTema();
@@ -65,10 +68,19 @@ export default function DashboardScreen() {
   // Handlers de Navegação
   const onPressConfig = () =>
     router.push(AppRoutes.configuracoes);
+  /**
+   * Executa a função de on trocar veiculo.
+   */
   const onTrocarVeiculo = () =>
     router.push(AppRoutes.garagem);
+  /**
+   * Executa a função de on ir para oficina.
+   */
   const onIrParaOficina = () =>
     router.push(AppRoutes.oficina);
+  /**
+   * Executa a função de abrir calculadora.
+   */
   const abrirCalculadora = () => {
     setReturnRoute(AppRoutes.dashboard);
     router.push(AppRoutes.calculadora);

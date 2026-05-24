@@ -6,8 +6,11 @@ import { SelicService } from '../utils/SelicService'; // Certifique-se de que o 
 const db = SQLite.openDatabaseSync('korre.db');
 
 // Versão inicial consolidada
-export const DATABASE_VERSION = 9;
+export const DATABASE_VERSION = 10;
 
+/**
+ * Executa a função de database init.
+ */
 export const DatabaseInit = () => {
   try {
     let { user_version: currentDbVersion } =
@@ -92,6 +95,13 @@ export const DatabaseInit = () => {
       logger.info('[BANCO] Migracao V9 aplicada com sucesso.');
     }
 
+    if (currentDbVersion < 10) {
+      migrateToV10();
+      db.execSync('PRAGMA user_version = 10;');
+      currentDbVersion = 10;
+      logger.info('[BANCO] Migracao V10 aplicada com sucesso.');
+    }
+
     // DISPARO AUTOMÁTICO: Verifica a Selic sempre que o app inicia (Lógica de dia 1 está no Service)
     SelicService.validarEAtualizarSelic();
   } catch (error) {
@@ -102,6 +112,9 @@ export const DatabaseInit = () => {
   }
 };
 
+/**
+ * Executa a função de init v1.
+ */
 const initV1 = () => {
   db.execSync(`
     -- 1. CONFIGURAÇÕES DO APP (Selic, Versões de Dados, etc)
@@ -312,6 +325,9 @@ const initV1 = () => {
   `);
 };
 
+/**
+ * Executa a função de migrate to v2.
+ */
 const migrateToV2 = () => {
   const historicoInfo = db.getAllSync<{ name: string }>(
     'PRAGMA table_info(historico_manutencao);',
@@ -331,6 +347,9 @@ const migrateToV2 = () => {
   }
 };
 
+/**
+ * Executa a função de migrate to v3.
+ */
 const migrateToV3 = () => {
   db.execSync(`
     CREATE TABLE IF NOT EXISTS notificacao_dedup (
@@ -358,6 +377,9 @@ const migrateToV3 = () => {
   addColumnIfMissing('notificacoes', 'dedup_key', 'TEXT');
 };
 
+/**
+ * Executa a função de migrate to v4.
+ */
 const migrateToV4 = () => {
   addColumnIfMissing(
     'parametros_financeiros',
@@ -386,10 +408,16 @@ const migrateToV4 = () => {
   );
 };
 
+/**
+ * Executa a função de migrate to v5.
+ */
 const migrateToV5 = () => {
   createPerformanceIndexes();
 };
 
+/**
+ * Executa a função de migrate to v6.
+ */
 const migrateToV6 = () => {
   db.execSync(`
     CREATE TABLE IF NOT EXISTS analises_corrida (
@@ -412,6 +440,9 @@ const migrateToV6 = () => {
   `);
 };
 
+/**
+ * Executa a função de migrate to v7.
+ */
 const migrateToV7 = () => {
   addColumnIfMissing(
     'itens_manutencao',
@@ -435,6 +466,9 @@ const migrateToV7 = () => {
   );
 };
 
+/**
+ * Executa a função de migrate to v8.
+ */
 const migrateToV8 = () => {
   addColumnIfMissing(
     'notificacoes',
@@ -453,6 +487,9 @@ const migrateToV8 = () => {
   );
 };
 
+/**
+ * Executa a função de migrate to v9.
+ */
 const migrateToV9 = () => {
   db.execSync(`
     CREATE TABLE IF NOT EXISTS abastecimentos (
@@ -511,6 +548,27 @@ const migrateToV9 = () => {
   `);
 };
 
+/**
+ * Executa a função de migrate to v10.
+ */
+const migrateToV10 = () => {
+  db.execSync(`
+    CREATE TABLE IF NOT EXISTS sync_batches_local (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      batch_public_id TEXT UNIQUE NOT NULL,
+      payload_json TEXT NOT NULL,
+      status TEXT DEFAULT 'pending',
+      tentativas INTEGER DEFAULT 0,
+      erro TEXT,
+      criado_em DATETIME DEFAULT (datetime('now', 'localtime')),
+      enviado_em DATETIME
+    );
+  `);
+};
+
+/**
+ * Executa a função de create performance indexes.
+ */
 const createPerformanceIndexes = () => {
   db.execSync(`
     CREATE INDEX IF NOT EXISTS idx_transacoes_veiculo_tipo_data

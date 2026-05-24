@@ -15,6 +15,9 @@ import { useTema } from '../../../hooks/modo_tema';
 import { styles } from '../../../styles/generated/components/telas/CalculadoraFlex/ModalAjudaStyles';
 import { inlineStyles } from '../../../styles/generated-inline/components/telas/CalculadoraFlex/ModalAjudaInlineStyles';
 
+/**
+ * Executa a função de modal ajuda.
+ */
 export default function ModalAjuda({
   modalAjuda,
   setModalAjuda,

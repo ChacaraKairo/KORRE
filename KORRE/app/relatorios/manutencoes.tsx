@@ -30,6 +30,9 @@ import { useManutencoesReport } from '../../hooks/relatorios/useManutencoesRepor
 import { styles } from '../../styles/telas/Relatorios/manutencoesStyles';
 import { safeBack } from '../../utils/navigation/safeBack';
 
+/**
+ * Executa a função de manutencoes report screen.
+ */
 export default function ManutencoesReportScreen() {
   const router = useRouter();
   const { tema } = useTema();
@@ -66,6 +69,9 @@ export default function ManutencoesReportScreen() {
   const textColor = isDark ? '#FFFFFF' : '#1A1A1A';
   const textMuted = isDark ? '#888' : '#666';
 
+  /**
+   * Executa a função de formatar moeda.
+   */
   const formatarMoeda = (valor: number) => {
     if (ocultarValores) return 'R$ ***';
     return `R$ ${valor.toFixed(2).replace('.', ',')}`;

@@ -16,6 +16,9 @@ interface ListaProps {
   onSelect: (item: any) => void;
 }
 
+/**
+ * Executa a função de lista movimentacoes.
+ */
 export function ListaMovimentacoes({
   movimentacoes,
   onSelect,

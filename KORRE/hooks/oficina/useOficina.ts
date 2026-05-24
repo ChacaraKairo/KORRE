@@ -3,6 +3,9 @@ import { useOficinaData } from './useOficinaData';
 import { useOficinaCalculos } from './useOficinaCalculos';
 import { useOficinaMutacoes } from './useOficinaMutacoes';
 
+/**
+ * Executa a função de use oficina.
+ */
 export function useOficina() {
   // 1. Instancia o Hook de Dados (Busca no SQLite)
   const dados = useOficinaData();

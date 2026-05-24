@@ -9,6 +9,9 @@ import { VeiculoService } from '../cadastro/veiculoService';
 import { showCustomAlert } from '../alert/useCustomAlert';
 import { logger } from '../../utils/logger';
 
+/**
+ * Executa a função de use garagem.
+ */
 export function useGaragem() {
   const [veiculos, setVeiculos] = useState<Veiculo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,6 +58,9 @@ export function useGaragem() {
     carregarVeiculos();
   }, [carregarVeiculos]);
 
+  /**
+   * Executa a função de ativar veiculo.
+   */
   const ativarVeiculo = async (veiculo: Veiculo) => {
     try {
       const user = await db.getFirstAsync<UsuarioLocal>(
@@ -80,6 +86,9 @@ export function useGaragem() {
     }
   };
 
+  /**
+   * Executa a função de adicionar veiculo.
+   */
   const adicionarVeiculo = async (novoVeiculo: NovoVeiculo) => {
     try {
       const user = await db.getFirstAsync<UsuarioLocal>(
@@ -115,14 +124,23 @@ export function useGaragem() {
     }
   };
 
+  /**
+   * Executa a função de solicitar exclusao.
+   */
   const solicitarExclusao = (veiculo: Veiculo) => {
     setConfirmacaoPlaca('');
     setModalDelete({ visivel: true, veiculo });
   };
 
+  /**
+   * Executa a função de cancelar exclusao.
+   */
   const cancelarExclusao = () =>
     setModalDelete({ visivel: false, veiculo: null });
 
+  /**
+   * Executa a função de confirmar exclusao.
+   */
   const confirmarExclusao = async () => {
     if (!modalDelete.veiculo) return;
 

@@ -10,6 +10,9 @@ import { styles } from '../../../styles/generated/components/telas/Cadastro/Cust
 // Importe a store correta
 import { useCustomAlert } from '../../../hooks/alert/useCustomAlert';
 
+/**
+ * Executa a função de custom alert.
+ */
 export function CustomAlert() {
   // Conecta ao Zustand
   const { visible, title, message, buttons, hideAlert } =

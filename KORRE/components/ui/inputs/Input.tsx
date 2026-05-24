@@ -24,11 +24,17 @@ export const Input: React.FC<InputProps> = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
+  /**
+   * Executa a função de handle focus.
+   */
   const handleFocus = (e: any) => {
     setIsFocused(true);
     if (onFocus) onFocus(e);
   };
 
+  /**
+   * Executa a função de handle blur.
+   */
   const handleBlur = (e: any) => {
     setIsFocused(false);
     if (onBlur) onBlur(e);

@@ -15,16 +15,25 @@ import {
 import { setAuthSession } from '../../utils/auth/authSession';
 import { showCustomAlert } from '../alert/useCustomAlert';
 
+/**
+ * Executa a função de mostrar aviso.
+ */
 const mostrarAviso = (titulo: string, mensagem: string) => {
   Alert.alert(titulo, mensagem);
   showCustomAlert(titulo, mensagem);
 };
 
+/**
+ * Executa a função de use restaurar backup.
+ */
 export function useRestaurarBackup() {
   const router = useRouter();
   const { t } = useTranslation();
   const [carregando, setCarregando] = useState(false);
 
+  /**
+   * Executa a função de solicitar senha backup.
+   */
   const solicitarSenhaBackup = () =>
     new Promise<string | null>((resolve) => {
       Alert.prompt(
@@ -46,6 +55,9 @@ export function useRestaurarBackup() {
       );
     });
 
+  /**
+   * Executa a função de executar restauracao.
+   */
   const executarRestauracao = async (data: unknown) => {
     setCarregando(true);
 
@@ -79,6 +91,9 @@ export function useRestaurarBackup() {
     }
   };
 
+  /**
+   * Executa a função de selecionar arquivo.
+   */
   const selecionarArquivo = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({

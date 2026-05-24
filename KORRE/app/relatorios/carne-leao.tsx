@@ -24,6 +24,9 @@ import { ImpostoCard } from '../../components/telas/Relatorios/ImpostoCard';
 import { LivroCaixaCard } from '../../components/telas/Relatorios/LivroCaixaCard';
 import { safeBack } from '../../utils/navigation/safeBack';
 
+/**
+ * Executa a função de carne leao screen.
+ */
 export default function CarneLeaoScreen() {
   const router = useRouter();
   const {

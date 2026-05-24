@@ -5,6 +5,9 @@ import { ActivityIndicator, Image, Text, View } from "react-native";
 import { useSplash } from "../hooks/splash/useSplash";
 import { styles } from "../styles/SplashStyles";
 
+/**
+ * Executa a função de splash screen.
+ */
 export default function SplashScreen() {
   const { t } = useTranslation();
   useSplash();

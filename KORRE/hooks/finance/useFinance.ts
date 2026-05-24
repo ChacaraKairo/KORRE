@@ -29,6 +29,9 @@ import {
   showAppLoadingAsync,
 } from '../ui/useAppLoading';
 
+/**
+ * Executa a função de use finance.
+ */
 export const useFinance = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
@@ -136,6 +139,9 @@ export const useFinance = () => {
     useCallback(() => {
       let telaAtiva = true;
 
+      /**
+       * Executa a função de load data.
+       */
       async function loadData() {
         try {
           const tipoInicial = getTipoInicial();
@@ -211,6 +217,9 @@ export const useFinance = () => {
     }, [carregarCategorias, getTipoInicial, params.ts]),
   );
 
+  /**
+   * Executa a função de handle value change.
+   */
   const handleValueChange = (text: string) => {
     const cleanText = text.replace(/\D/g, '');
     if (!cleanText) {
@@ -228,6 +237,9 @@ export const useFinance = () => {
     setValor(formattedValue);
   };
 
+  /**
+   * Executa a função de handle save.
+   */
   const handleSave = async () => {
     if (salvando || valorNumerico <= 0) return;
 
@@ -294,6 +306,9 @@ export const useFinance = () => {
     }
   };
 
+  /**
+   * Executa a função de handle add categoria.
+   */
   const handleAddCategoria = async () => {
     if (!novaCategoriaNome.trim()) return;
 

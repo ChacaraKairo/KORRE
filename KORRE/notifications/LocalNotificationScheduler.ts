@@ -8,6 +8,9 @@ import { OnboardingNotificationChecker } from './checkers/OnboardingNotification
 import { SystemNotificationChecker } from './checkers/SystemNotificationChecker';
 import { GarageNotificationChecker } from './checkers/GarageNotificationChecker';
 
+/**
+ * Executa a função de executar verificacoes locais.
+ */
 export async function executarVerificacoesLocais() {
   await MaintenanceNotificationChecker.run();
   await FinancialNotificationChecker.run();
@@ -20,30 +23,51 @@ export async function executarVerificacoesLocais() {
   await SystemNotificationChecker.run();
 }
 
+/**
+ * Executa a função de verificar alertas manutencao.
+ */
 export async function verificarAlertasManutencao() {
   await MaintenanceNotificationChecker.run();
 }
 
+/**
+ * Executa a função de verificar meta diaria.
+ */
 export async function verificarMetaDiaria() {
   await FinancialNotificationChecker.verificarMetaDiaria();
 }
 
+/**
+ * Executa a função de verificar lancamentos recentes.
+ */
 export async function verificarLancamentosRecentes() {
   await FinancialNotificationChecker.verificarSemLancamentos();
 }
 
+/**
+ * Executa a função de verificar gastos acima da media.
+ */
 export async function verificarGastosAcimaDaMedia() {
   return;
 }
 
+/**
+ * Executa a função de verificar indices financeiros desatualizados.
+ */
 export async function verificarIndicesFinanceirosDesatualizados() {
   await IndicesNotificationChecker.run();
 }
 
+/**
+ * Executa a função de verificar backup pendente.
+ */
 export async function verificarBackupPendente() {
   await BackupNotificationChecker.run();
 }
 
+/**
+ * Executa a função de verificar das mei pendente.
+ */
 export async function verificarDasMeiPendente() {
   await MeiNotificationChecker.run();
 }

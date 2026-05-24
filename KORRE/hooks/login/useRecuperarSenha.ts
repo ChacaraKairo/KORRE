@@ -11,10 +11,19 @@ import { resetarTentativasLogin } from '../../utils/auth/loginLockout';
 import { logger } from '../../utils/logger';
 import { criarNotificacao } from '../../notifications/NotificationService';
 
+/**
+ * Executa a função de normalize cpf.
+ */
 const normalizeCpf = (value: string) => value.replace(/\D/g, '');
+/**
+ * Executa a função de normalize plate.
+ */
 const normalizePlate = (value: string) =>
   value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
 
+/**
+ * Executa a função de use recuperar senha.
+ */
 export const useRecuperarSenha = () => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -30,6 +39,9 @@ export const useRecuperarSenha = () => {
   const [hardware, setHardware] = useState<boolean | null>(null);
   const [enrolled, setEnrolled] = useState<boolean | null>(null);
 
+  /**
+   * Executa a função de check biometria.
+   */
   const checkBiometria = async () => {
     if (hardware !== null && enrolled !== null) return;
     const hasHardware =
@@ -42,6 +54,9 @@ export const useRecuperarSenha = () => {
 
   const hasBiometria = Boolean(hardware && enrolled);
 
+  /**
+   * Executa a função de validar senha.
+   */
   const validarSenha = () => {
     if (!novaSenha.trim() || !confirmarSenha.trim()) {
       setErro(t('recuperar_senha.preencha_nova_senha'));
@@ -61,6 +76,9 @@ export const useRecuperarSenha = () => {
     return true;
   };
 
+  /**
+   * Executa a função de resetar senha.
+   */
   const resetarSenha = async (usuarioId: number) => {
     const novaHash = await hashPassword(novaSenha.trim());
     await db.runAsync(
@@ -91,6 +109,9 @@ export const useRecuperarSenha = () => {
     );
   };
 
+  /**
+   * Executa a função de recuperar com biometria.
+   */
   const recuperarComBiometria = async () => {
     setErro('');
     if (!validarSenha()) return;
@@ -130,6 +151,9 @@ export const useRecuperarSenha = () => {
     }
   };
 
+  /**
+   * Executa a função de recuperar com dados.
+   */
   const recuperarComDados = async () => {
     setErro('');
     if (!validarSenha()) return;

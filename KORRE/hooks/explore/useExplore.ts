@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 import db from '../../database/DatabaseInit';
 
+/**
+ * Executa a função de use explore.
+ */
 export const useExplore = () => {
   const [tabelas, setTabelas] = useState<string[]>([]);
   const [tabelaSelecionada, setTabelaSelecionada] =
@@ -19,6 +22,9 @@ export const useExplore = () => {
     }
   }, [tabelaSelecionada]);
 
+  /**
+   * Executa a função de carregar tabelas.
+   */
   const carregarTabelas = async () => {
     try {
       const resultado: any[] = await db.getAllAsync(
@@ -55,6 +61,9 @@ export const useExplore = () => {
     }
   };
 
+  /**
+   * Executa a função de limpar tabela.
+   */
   const limparTabela = async () => {
     if (!tabelaSelecionada) return;
     Alert.alert(

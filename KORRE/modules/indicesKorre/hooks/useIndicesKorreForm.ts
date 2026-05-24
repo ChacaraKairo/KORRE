@@ -37,6 +37,9 @@ const ESTADO_INICIAL_VAZIO: Partial<FormularioViabilidade> =
     limpeza_higienizacao_por_km: 0,
   };
 
+/**
+ * Executa a função de use indices korre form.
+ */
 export function useIndicesKorreForm() {
   const router = useRouter();
   const { t } = useTranslation();
@@ -184,6 +187,9 @@ export function useIndicesKorreForm() {
     [veiculoAtivo, carregarFormularioVeiculo],
   );
 
+  /**
+   * Executa a função de calcular esalvar.
+   */
   const calcularESalvar = async () => {
     if (!veiculoAtivo) return;
     try {

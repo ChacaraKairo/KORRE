@@ -1,5 +1,8 @@
 import type { FuelEntryRecord, FuelConsumptionSummary } from '../domain/fuelTypes';
 
+/**
+ * Executa a função de diff days.
+ */
 function diffDays(aIso: string, bIso: string) {
   const a = new Date(aIso).getTime();
   const b = new Date(bIso).getTime();

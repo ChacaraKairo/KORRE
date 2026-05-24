@@ -26,6 +26,9 @@ import { safeBack } from '../../utils/navigation/safeBack';
 // Componentes
 import { RelatorioItem } from '../../components/telas/Relatorios/RelatorioItem';
 
+/**
+ * Executa a função de relatorios screen.
+ */
 export default function RelatoriosScreen() {
   const { t } = useTranslation();
   const router = useRouter();

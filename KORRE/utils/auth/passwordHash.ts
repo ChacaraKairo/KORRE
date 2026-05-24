@@ -6,6 +6,9 @@ import {
   timingSafeEqual,
 } from './passwordHashFormat';
 
+/**
+ * Executa a função de hash password.
+ */
 export const hashPassword = async (password: string) => {
   const salt = Crypto.randomUUID();
   const hash = await deriveHash(password, salt, HASH_ITERATIONS);

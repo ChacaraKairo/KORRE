@@ -4,7 +4,9 @@ export type RemoteCommand =
   | 'GET_MAINTENANCE_SUMMARY'
   | 'CREATE_NOTIFICATION'
   | 'SYNC_REMOTE_CONFIG'
-  | 'REQUEST_BACKUP_EXPORT';
+  | 'REQUEST_BACKUP_EXPORT'
+  | 'REQUEST_DATA_SYNC'
+  | 'REQUEST_CONSENT_STATUS';
 
 export interface RemoteCommandPayload {
   kind: 'command';
@@ -20,8 +22,13 @@ const ALLOWED_COMMANDS = new Set<RemoteCommand>([
   'CREATE_NOTIFICATION',
   'SYNC_REMOTE_CONFIG',
   'REQUEST_BACKUP_EXPORT',
+  'REQUEST_DATA_SYNC',
+  'REQUEST_CONSENT_STATUS',
 ]);
 
+/**
+ * Executa a função de parse remote command payload.
+ */
 export function parseRemoteCommandPayload(
   payload: unknown,
 ): RemoteCommandPayload {

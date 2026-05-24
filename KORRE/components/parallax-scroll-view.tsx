@@ -20,6 +20,9 @@ type Props = PropsWithChildren<{
   headerBackgroundColor: { dark: string; light: string };
 }>;
 
+/**
+ * Executa a função de parallax scroll view.
+ */
 export default function ParallaxScrollView({
   children,
   headerImage,

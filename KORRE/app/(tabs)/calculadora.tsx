@@ -9,6 +9,9 @@ import ModalAjuda from '../../components/telas/CalculadoraFlex/ModalAjuda';
 import { useTema } from '../../hooks/modo_tema';
 
 import { styles } from '../../styles/generated/app/(tabs)/calculadoraStyles';
+/**
+ * Executa a função de calculadora flex screen.
+ */
 export default function CalculadoraFlexScreen() {
   const [modalAjuda, setModalAjuda] = useState(false);
   const { tema } = useTema();

@@ -13,6 +13,9 @@ import { translateCategoryName } from '../../../utils/i18n/translateDomainValue'
 
 import { inlineStyles } from '../../../styles/generated-inline/components/telas/historico/ModalOpcoesRegistroInlineStyles';
 import { dynamicInlineStyles } from '../../../styles/generated-dynamic/components/telas/historico/ModalOpcoesRegistroDynamicStyles';
+/**
+ * Executa a função de modal opcoes registro.
+ */
 export function ModalOpcoesRegistro({
   visible,
   item,

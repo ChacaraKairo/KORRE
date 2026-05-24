@@ -111,6 +111,9 @@ export const ModalNovoVeiculo = ({
     setPopVisivel(true);
   };
 
+  /**
+   * Executa a função de handle salvar.
+   */
   const handleSalvar = async () => {
     const config = VEICULOS_CONFIG[tipo];
     if (
@@ -149,6 +152,9 @@ export const ModalNovoVeiculo = ({
     }
   };
 
+  /**
+   * Executa a função de limpar campos.
+   */
   const limparCampos = () => {
     setTipo('moto');
     setMarca('');

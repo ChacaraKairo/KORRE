@@ -5,6 +5,9 @@ export const LOGIN_LOCKED_UNTIL = 'login_locked_until';
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_MS = 5 * 60 * 1000;
 
+/**
+ * Executa a função de get login lockout value.
+ */
 export const getLoginLockoutValue = async (chave: string) => {
   const row = await db.getFirstAsync<{ valor: string }>(
     'SELECT valor FROM configuracoes_app WHERE chave = ?',
@@ -24,6 +27,9 @@ export const setLoginLockoutValue = async (
   );
 };
 
+/**
+ * Executa a função de registrar falha login.
+ */
 export const registrarFalhaLogin = async () => {
   const failedAttempts =
     (await getLoginLockoutValue(LOGIN_FAILED_ATTEMPTS)) + 1;
@@ -42,6 +48,9 @@ export const registrarFalhaLogin = async () => {
   }
 };
 
+/**
+ * Executa a função de resetar tentativas login.
+ */
 export const resetarTentativasLogin = async () => {
   await setLoginLockoutValue(LOGIN_FAILED_ATTEMPTS, '0');
   await setLoginLockoutValue(LOGIN_LOCKED_UNTIL, '0');

@@ -10,6 +10,9 @@ import type {
   TipoNotificacao,
 } from '../../notifications/NotificationTypes';
 
+/**
+ * Executa a função de use notificacoes.
+ */
 export function useNotificacoes() {
   const [notificacoes, setNotificacoes] = useState<
     NotificacaoHistorico[]
@@ -19,6 +22,9 @@ export function useNotificacoes() {
     carregarNotificacoes();
   }, []);
 
+  /**
+   * Executa a função de carregar notificacoes.
+   */
   const carregarNotificacoes = async () => {
     try {
       const dados = await listarNotificacoes();
@@ -48,11 +54,17 @@ export function useNotificacoes() {
     }
   };
 
+  /**
+   * Executa a função de marcar como lida.
+   */
   const marcarComoLida = async (id: number) => {
     await marcarNotificacaoComoLida(id);
     await carregarNotificacoes();
   };
 
+  /**
+   * Executa a função de limpar historico.
+   */
   const limparHistorico = async () => {
     await limparHistoricoNotificacoes();
     await carregarNotificacoes();

@@ -47,6 +47,9 @@ export const IndicesMCCard = ({
 
   // Cálculo do Faturamento Ideal por Hora
   const metaPorHora = metaPorMinuto * 60;
+  /**
+   * Executa a função de handle ajuda.
+   */
   const handleAjuda = () => {
     const exKm = 8;
     const exMin = 15;

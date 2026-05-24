@@ -11,6 +11,9 @@ import {
 } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * Executa a função de use relatorios.
+ */
 export function useRelatorios() {
   const { t } = useTranslation();
   // PILAR 1: Saúde Financeira

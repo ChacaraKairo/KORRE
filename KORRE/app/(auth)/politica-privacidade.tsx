@@ -16,6 +16,9 @@ import { useTema } from '../../hooks/modo_tema';
 import { styles } from '../../styles/telas/Termos/termosStyles';
 import { safeBack } from '../../utils/navigation/safeBack';
 
+/**
+ * Executa a função de politica privacidade screen.
+ */
 export default function PoliticaPrivacidadeScreen() {
   const { t } = useTranslation();
   const router = useRouter();

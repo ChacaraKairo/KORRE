@@ -7,6 +7,9 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
 import { styles } from '../styles/generated/app/modalStyles';
+/**
+ * Executa a função de modal screen.
+ */
 export default function ModalScreen() {
   const { t } = useTranslation();
   return (

@@ -29,6 +29,9 @@ import { useTema } from '../../hooks/modo_tema';
 import { safeBack } from '../../utils/navigation/safeBack';
 import { AppRoutes } from '../../constants/routes';
 
+/**
+ * Executa a função de add transaction screen.
+ */
 export default function AddTransactionScreen() {
   const { t } = useTranslation();
   const {

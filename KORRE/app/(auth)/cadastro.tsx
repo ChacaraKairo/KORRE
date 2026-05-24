@@ -31,6 +31,9 @@ import { inlineStyles } from '../../styles/generated-inline/app/(auth)/cadastroI
 import { styles } from '../../styles/telas/Cadastro/componentes/cadastroStyles';
 import { TipoVeiculo } from '../../type/typeVeiculos';
 
+/**
+ * Executa a função de cadastro screen.
+ */
 export default function CadastroScreen() {
   const { t } = useTranslation();
   const {

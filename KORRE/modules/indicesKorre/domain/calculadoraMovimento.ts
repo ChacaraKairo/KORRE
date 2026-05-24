@@ -56,6 +56,9 @@ export interface FormularioMovimento {
   limpeza_higienizacao_por_km?: number | string;
 }
 
+/**
+ * Executa a função de calcular km mes.
+ */
 const calcularKmMes = (form: FormularioMovimento) => {
   const kmEstimadoMes = toNumber(form.km_estimado_mes);
   if (kmEstimadoMes > 0) return kmEstimadoMes;

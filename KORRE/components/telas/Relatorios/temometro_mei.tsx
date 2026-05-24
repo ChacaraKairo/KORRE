@@ -16,6 +16,9 @@ import { useTermometroMEI } from '../../../hooks/relatorios/useTermometroMEI';
 import { styles } from '../../../styles/generated/components/telas/Relatorios/temometro_meiStyles';
 import { inlineStyles } from '../../../styles/generated-inline/components/telas/Relatorios/temometro_meiInlineStyles';
 
+/**
+ * Executa a função de formatar moeda.
+ */
 const formatarMoeda = (valor: number) => {
   return valor.toLocaleString('pt-BR', {
     style: 'currency',
@@ -23,6 +26,9 @@ const formatarMoeda = (valor: number) => {
   });
 };
 
+/**
+ * Executa a função de termometro mei.
+ */
 export function TermometroMEI() {
   const { dados, loading, alternarDasPago } = useTermometroMEI();
 
@@ -37,6 +43,9 @@ export function TermometroMEI() {
     );
   }
 
+  /**
+   * Executa a função de get cor.
+   */
   const getCor = (percent: number) => {
     if (percent >= 90) return '#EF4444';
     if (percent >= 75) return '#F59E0B';

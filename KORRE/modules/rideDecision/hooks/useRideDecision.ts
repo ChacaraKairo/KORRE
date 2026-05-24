@@ -10,14 +10,23 @@ import type { RideDecisionResult } from '../domain/types';
 import { criarNotificacao } from '../../../notifications/NotificationService';
 import { AppRoutes } from '../../../constants/routes';
 
+/**
+ * Executa a função de parse number.
+ */
 const parseNumber = (value: string) => {
   const normalized = value.replace(',', '.').replace(/[^0-9.]/g, '');
   const parsed = Number(normalized);
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+/**
+ * Executa a função de is blank.
+ */
 const isBlank = (value: string) => value.trim().length === 0;
 
+/**
+ * Executa a função de use ride decision.
+ */
 export function useRideDecision() {
   const [veiculoAtivo, setVeiculoAtivo] =
     useState<Veiculo | null>(null);
@@ -38,6 +47,9 @@ export function useRideDecision() {
   );
 
   useEffect(() => {
+    /**
+     * Executa a função de carregar veiculo ativo.
+     */
     async function carregarVeiculoAtivo() {
       try {
         const veiculo = await db.getFirstAsync<Veiculo>(
@@ -56,6 +68,9 @@ export function useRideDecision() {
     void carregarVeiculoAtivo();
   }, []);
 
+  /**
+   * Executa a função de carregar historico.
+   */
   const carregarHistorico = async () => {
     setHistorico(await RideAnalysisRepository.listarRecentes());
   };
@@ -70,6 +85,9 @@ export function useRideDecision() {
       veiculoAtivo?.meta_ganho_minuto_calculado,
   );
 
+  /**
+   * Executa a função de analisar.
+   */
   const analisar = () => {
     setErroValidacao(null);
 
@@ -128,6 +146,9 @@ export function useRideDecision() {
     setAnaliseSalva(false);
   };
 
+  /**
+   * Executa a função de salvar analise.
+   */
   const salvarAnalise = async () => {
     if (!resultado) return;
 

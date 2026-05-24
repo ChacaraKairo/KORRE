@@ -3,6 +3,9 @@ import { Alert } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import db from '../../database/DatabaseInit';
 
+/**
+ * Executa a função de use historico.
+ */
 export function useHistorico() {
   const [loading, setLoading] = useState(true);
 
@@ -43,6 +46,9 @@ export function useHistorico() {
 
   // Formatação baseada na data local para evitar problemas de fuso horário (Timezone UTC)
   const formatSQL = (d: Date) => {
+    /**
+     * Executa a função de pad.
+     */
     const pad = (n: number) =>
       n.toString().padStart(2, '0');
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -202,6 +208,9 @@ export function useHistorico() {
     setFiltros((prev) => ({ ...prev, ...novosFiltros }));
   };
 
+  /**
+   * Executa a função de navegar data.
+   */
   const navegarData = (dir: number) => {
     const d = new Date(filtros.dataRef);
     if (filtros.periodo === 'dia')
@@ -278,6 +287,9 @@ export function useHistorico() {
     data: Date,
   ) => {
     try {
+      /**
+       * Executa a função de pad.
+       */
       const pad = (n: number) =>
         n.toString().padStart(2, '0');
       const sqlData = `${data.getFullYear()}-${pad(data.getMonth() + 1)}-${pad(data.getDate())} ${pad(data.getHours())}:${pad(data.getMinutes())}:${pad(data.getSeconds())}`;

@@ -15,6 +15,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { styles } from '../../../styles/generated/components/telas/historico/ModalEditarRegistroStyles';
 import { dynamicInlineStyles } from '../../../styles/generated-dynamic/components/telas/historico/ModalEditarRegistroDynamicStyles';
+/**
+ * Executa a função de modal editar registro.
+ */
 export function ModalEditarRegistro({
   visible,
   registro,
@@ -52,6 +55,9 @@ export function ModalEditarRegistro({
     }
   };
 
+  /**
+   * Executa a função de handle save.
+   */
   const handleSave = () => {
     const num = parseFloat(valor.replace(',', '.'));
     if (!isNaN(num)) {

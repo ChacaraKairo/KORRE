@@ -10,6 +10,9 @@ import { UploadCloud } from 'lucide-react-native';
 import { useRestaurarBackup } from '../../../hooks/cadastro/useRestaurarBackup';
 
 import { inlineStyles } from '../../../styles/generated-inline/components/telas/Cadastro/RestaurarFluxoCadastroInlineStyles';
+/**
+ * Executa a função de restaurar fluxo cadastro.
+ */
 export function RestaurarFluxoCadastro() {
   const { selecionarArquivo, carregando } =
     useRestaurarBackup();

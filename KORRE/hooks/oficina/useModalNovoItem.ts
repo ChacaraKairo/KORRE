@@ -7,6 +7,9 @@ import {
   showAppLoadingAsync,
 } from '../ui/useAppLoading';
 
+/**
+ * Executa a função de use modal novo item.
+ */
 export function useModalNovoItem(
   veiculoId: number,
   onSucesso: () => void,
@@ -23,6 +26,9 @@ export function useModalNovoItem(
   const [salvarNoFinanceiro, setSalvarNoFinanceiro] =
     useState(true);
 
+  /**
+   * Executa a função de reset form.
+   */
   const resetForm = () => {
     setNome('');
     setIntervalo('');
@@ -34,6 +40,9 @@ export function useModalNovoItem(
     setSalvarNoFinanceiro(true);
   };
 
+  /**
+   * Executa a função de salvar manutencao.
+   */
   const salvarManutencao = async () => {
     if (!nome || (!intervalo && !tempo)) {
       showCustomAlert(

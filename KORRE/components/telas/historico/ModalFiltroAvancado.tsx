@@ -11,6 +11,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { styles } from '../../../styles/generated/components/telas/historico/ModalFiltroAvancadoStyles';
 import { dynamicInlineStyles } from '../../../styles/generated-dynamic/components/telas/historico/ModalFiltroAvancadoDynamicStyles';
+/**
+ * Executa a função de modal filtro avancado.
+ */
 export function ModalFiltroAvancado({
   visible,
   onClose,
@@ -55,6 +58,9 @@ export function ModalFiltroAvancado({
     }
   }, [visible, filtrosAtuais]);
 
+  /**
+   * Executa a função de toggle categoria.
+   */
   const toggleCategoria = (id: number) => {
     setCategoriasSelecionadas((prev) =>
       prev.includes(id)
@@ -63,6 +69,9 @@ export function ModalFiltroAvancado({
     );
   };
 
+  /**
+   * Executa a função de handle aplicar.
+   */
   const handleAplicar = () => {
     onAplicar({
       tipo,

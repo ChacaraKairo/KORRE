@@ -85,6 +85,9 @@ const FAQItem = ({
   );
 };
 
+/**
+ * Executa a função de suporte screen.
+ */
 export default function SuporteScreen() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -120,6 +123,9 @@ export default function SuporteScreen() {
     hasComplaints ||
     hasPrivacyPolicy;
 
+  /**
+   * Executa a função de show channel not configured.
+   */
   const showChannelNotConfigured = () => {
     showCustomAlert(
       t('suporte.canal_nao_configurado_titulo'),
@@ -127,6 +133,9 @@ export default function SuporteScreen() {
     );
   };
 
+  /**
+   * Executa a função de open external url.
+   */
   const openExternalUrl = async (url: string, errorMessage: string) => {
     if (!url) {
       showChannelNotConfigured();
@@ -138,6 +147,9 @@ export default function SuporteScreen() {
     });
   };
 
+  /**
+   * Executa a função de abrir whats app.
+   */
   const abrirWhatsApp = () => {
     const phone = COMPANY_CONTACTS.support.whatsappNumber;
     if (!phone) {
@@ -152,6 +164,9 @@ export default function SuporteScreen() {
     );
   };
 
+  /**
+   * Executa a função de abrir email.
+   */
   const abrirEmail = () => {
     const email = COMPANY_CONTACTS.support.email;
     if (!email) {

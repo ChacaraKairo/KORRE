@@ -23,6 +23,9 @@ import { useOrigemGanhos } from '../../hooks/OrigemGanhos/useOrigemGanhos';
 import { useTema } from '../../hooks/modo_tema';
 import { styles } from '../../styles/telas/OrigemGanhos/OrigemGanhosStyles';
 
+/**
+ * Executa a função de origem ganhos screen.
+ */
 export default function OrigemGanhosScreen() {
   const { t } = useTranslation();
   // Puxando toda a lógica do nosso Hook

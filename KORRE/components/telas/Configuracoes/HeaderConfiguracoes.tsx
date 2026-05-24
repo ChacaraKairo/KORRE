@@ -14,6 +14,9 @@ interface Props {
   borderColor: string;
 }
 
+/**
+ * Executa a função de header configuracoes.
+ */
 export const HeaderConfiguracoes = ({ isDark, cardColor, borderColor }: Props) => {
   const router = useRouter();
   const { t } = useTranslation();

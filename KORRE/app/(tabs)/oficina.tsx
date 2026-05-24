@@ -25,6 +25,9 @@ import { ModalNovoItem } from '../../components/telas/Oficina/ModalNovoItem';
 import { ModalResetManutencao } from '../../components/telas/Oficina/ModalResetManutencao';
 import { GridItensManutencao } from '../../components/telas/Oficina/GridItensManutencao';
 
+/**
+ * Executa a função de oficina screen.
+ */
 export default function OficinaScreen() {
   const { t } = useTranslation();
   const router = useRouter();

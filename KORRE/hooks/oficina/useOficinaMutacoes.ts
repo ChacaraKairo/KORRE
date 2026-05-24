@@ -5,6 +5,9 @@ import { showCustomAlert } from '../alert/useCustomAlert';
 import { criarNotificacao } from '../../notifications/NotificationService';
 import { AppRoutes } from '../../constants/routes';
 
+/**
+ * Executa a função de use oficina mutacoes.
+ */
 export function useOficinaMutacoes(
   veiculoConsultado: any,
   atualizarDadosTela: () => Promise<void>,
@@ -23,6 +26,9 @@ export function useOficinaMutacoes(
    * Helper para formatar data local (YYYY-MM-DD) e evitar erro de fuso horário
    */
   const formatarDataLocal = (d: Date) => {
+    /**
+     * Executa a função de pad.
+     */
     const pad = (n: number) =>
       n.toString().padStart(2, '0');
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;

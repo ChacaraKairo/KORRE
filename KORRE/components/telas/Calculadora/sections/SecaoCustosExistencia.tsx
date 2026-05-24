@@ -57,6 +57,9 @@ export const SecaoCustosExistencia = memo(
       REGRAS_IPVA_ESTADOS,
     ) as SiglaEstado[];
 
+    /**
+     * Executa a função de handle selecionar uf.
+     */
     const handleSelecionarUF = (uf: SiglaEstado) => {
       setModalUFVisivel(false);
       onCalcularIPVA(uf);

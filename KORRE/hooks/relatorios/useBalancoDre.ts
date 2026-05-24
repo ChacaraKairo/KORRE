@@ -2,6 +2,9 @@ import { useState, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 import db from '../../database/DatabaseInit';
 
+/**
+ * Executa a função de use balanco dre.
+ */
 export function useBalancoDre() {
   const [loading, setLoading] = useState(true);
   const [dataRef, setDataRef] = useState(new Date());

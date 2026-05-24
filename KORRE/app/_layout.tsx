@@ -25,8 +25,12 @@ import { logger } from '../utils/logger';
 import { safeBack } from '../utils/navigation/safeBack';
 import { goBackToReturnRoute } from '../utils/navigation/returnRoute';
 import { getAuthSessionUserId } from '../utils/auth/authSession';
+import { DataSyncService } from '../modules/sync/DataSyncService';
 
 import { inlineStyles } from '../styles/generated-inline/app/_layoutInlineStyles';
+/**
+ * Executa a função de root layout.
+ */
 export default function RootLayout() {
   const { t } = useTranslation();
   const [isReady, setIsReady] = useState(false);
@@ -40,6 +44,9 @@ export default function RootLayout() {
   useEffect(() => {
     const subscriptions: { remove: () => void }[] = [];
 
+    /**
+     * Executa a função de setup.
+     */
     async function setup() {
       setIsReady(false);
       setStartupError(false);
@@ -63,6 +70,8 @@ export default function RootLayout() {
         if (existeUsuario) {
           await executarVerificacoesLocais();
         }
+        void DataSyncService.registerDeviceIfPossible();
+        void DataSyncService.flushPendingBatches();
       } catch (error) {
         logger.error('[RootLayout] Falha no setup inicial:', error);
         setStartupError(true);

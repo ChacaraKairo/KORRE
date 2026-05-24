@@ -13,6 +13,9 @@ interface RelatorioItemProps {
   onPress: () => void;
 }
 
+/**
+ * Executa a função de relatorio item.
+ */
 export function RelatorioItem({
   item,
   cardColor,

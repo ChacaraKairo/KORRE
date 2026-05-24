@@ -65,6 +65,9 @@ const dadosIniciais: DadosTermometroMEI = {
   projecaoEstouro: false,
 };
 
+/**
+ * Executa a função de use termometro mei.
+ */
 export function useTermometroMEI() {
   const [loading, setLoading] = useState(true);
   const [dados, setDados] =

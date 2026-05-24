@@ -8,6 +8,9 @@ import { showCustomAlert } from '../alert/useCustomAlert';
 import { safeBack } from '../../utils/navigation/safeBack';
 import { AppRoutes } from '../../constants/routes';
 
+/**
+ * Executa a função de use origem ganhos.
+ */
 export function useOrigemGanhos() {
   const router = useRouter();
 
@@ -33,6 +36,9 @@ export function useOrigemGanhos() {
     });
   }, [carregarOrigens]);
 
+  /**
+   * Executa a função de toggle origem.
+   */
   const toggleOrigem = (id: number) => {
     setSelecionados((prev) =>
       prev.includes(id)
@@ -41,6 +47,9 @@ export function useOrigemGanhos() {
     );
   };
 
+  /**
+   * Executa a função de adicionar origem.
+   */
   const adicionarOrigem = async () => {
     const nome = novoNome.trim();
     if (!nome) return;
@@ -65,6 +74,9 @@ export function useOrigemGanhos() {
     }
   };
 
+  /**
+   * Executa a função de concluir configuracao.
+   */
   const concluirConfiguracao = async () => {
     try {
       await OrigemGanhosRepository.salvarSelecionadas(selecionados);
@@ -81,6 +93,9 @@ export function useOrigemGanhos() {
     }
   };
 
+  /**
+   * Executa a função de voltar tela.
+   */
   const voltarTela = () => {
     safeBack(router);
   };

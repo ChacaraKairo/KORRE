@@ -141,6 +141,9 @@ export const VEHICLE_DEFAULT_COSTS: Record<
   },
 };
 
+/**
+ * Executa a função de get vehicle default costs.
+ */
 export function getVehicleDefaultCosts(
   tipoVeiculo?: string | null,
 ): VehicleDefaultCostProfile {

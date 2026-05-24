@@ -14,6 +14,9 @@ import { waitForUiFeedback } from '../../utils/ui/waitForUiFeedback';
 import { setAuthSession } from '../../utils/auth/authSession';
 import { FuelEntryService } from '../../modules/fuel/application/FuelEntryService';
 
+/**
+ * Executa a função de use cadastro.
+ */
 export const useCadastro = () => {
   const router = useRouter();
   const { t } = useTranslation();
@@ -42,6 +45,9 @@ export const useCadastro = () => {
   const [erro, setErro] = useState(false);
   const [salvando, setSalvando] = useState(false);
 
+  /**
+   * Executa a função de salvar cadastro.
+   */
   const salvarCadastro = async () => {
     if (salvando) return;
 

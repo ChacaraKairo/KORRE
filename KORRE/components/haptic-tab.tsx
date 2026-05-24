@@ -2,6 +2,9 @@ import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { PlatformPressable } from '@react-navigation/elements';
 import * as Haptics from 'expo-haptics';
 
+/**
+ * Executa a função de haptic tab.
+ */
 export function HapticTab(props: BottomTabBarButtonProps) {
   return (
     <PlatformPressable

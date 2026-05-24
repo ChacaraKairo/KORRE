@@ -34,6 +34,9 @@ export default function NotificacoesScreen() {
     dispararNotificacao,
   } = useNotificacoes();
 
+  /**
+   * Executa a função de get icone.
+   */
   const getIcone = (tipo: string) => {
     switch (tipo) {
       case 'alerta':

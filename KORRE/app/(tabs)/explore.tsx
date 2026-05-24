@@ -16,6 +16,9 @@ import { useExplore } from '../../hooks/explore/useExplore';
 import { exploreStyles as styles } from '../../styles/telas/Explore/exploreStyles';
 import { useTema } from '../../hooks/modo_tema';
 
+/**
+ * Executa a função de database viewer screen.
+ */
 export default function DatabaseViewerScreen() {
   const { t } = useTranslation();
   const {

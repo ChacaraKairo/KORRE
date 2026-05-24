@@ -1,6 +1,9 @@
 import { useCallback, useMemo } from 'react';
 import { calcularDesgasteItem } from '../../utils/calculoManutencao';
 
+/**
+ * Executa a função de use oficina calculos.
+ */
 export function useOficinaCalculos(
   veiculoConsultado: any,
   itensVisiveis: any[],

@@ -19,6 +19,9 @@ const PROFILE_EXPLANATION =
 const VEHICLE_EXPLANATION =
   'Estimativa conservadora baseada no tipo de veiculo. Use como ponto de partida.';
 
+/**
+ * Executa a função de build suggestions.
+ */
 function buildSuggestions(
   form: Partial<FormularioViabilidade>,
   valores: Partial<FormularioViabilidade>,

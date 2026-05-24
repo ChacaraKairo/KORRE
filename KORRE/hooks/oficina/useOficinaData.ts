@@ -6,6 +6,9 @@ import { MANUTENCOES_PADRAO } from '../../constants/manutencaoPadrao';
 import db from '../../database/DatabaseInit';
 import { TipoVeiculo } from '../../type/typeVeiculos';
 
+/**
+ * Executa a função de use oficina data.
+ */
 export function useOficinaData() {
   const [veiculoConsultado, setVeiculoConsultado] =
     useState<any>(null);

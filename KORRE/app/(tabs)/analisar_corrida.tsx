@@ -12,9 +12,15 @@ import { AppRoutes } from '../../constants/routes';
 import { useTema } from '../../hooks/modo_tema';
 import { useRideDecision } from '../../modules/rideDecision/hooks/useRideDecision';
 
+/**
+ * Executa a função de format currency.
+ */
 const formatCurrency = (value: number) =>
   `R$ ${value.toFixed(2).replace('.', ',')}`;
 
+/**
+ * Executa a função de analisar corrida screen.
+ */
 export default function AnalisarCorridaScreen() {
   const { t } = useTranslation();
   const router = useRouter();

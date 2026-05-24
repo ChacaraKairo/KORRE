@@ -23,6 +23,9 @@ interface ModalEnvioProps {
   textMuted: string;
 }
 
+/**
+ * Executa a função de modal envio.
+ */
 export function ModalEnvio({
   visible,
   onClose,

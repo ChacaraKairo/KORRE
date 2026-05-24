@@ -24,6 +24,9 @@ import { AppRoutes } from '../../constants/routes';
 const BACKUP_MIME = 'application/octet-stream';
 const BACKUP_EXTENSION = 'korrebackup';
 
+/**
+ * Executa a função de use exportar dados.
+ */
 export function useExportarDados() {
   const { t } = useTranslation();
   const [isExportando, setIsExportando] = useState(false);
@@ -34,6 +37,9 @@ export function useExportarDados() {
     cancelPassword,
   } = useBackupPasswordPrompt();
 
+  /**
+   * Executa a função de montar backup.
+   */
   const montarBackup = async () => {
     const backupData: any = {
       app: BACKUP_APP_NAME,
@@ -66,6 +72,9 @@ export function useExportarDados() {
     return backupData;
   };
 
+  /**
+   * Executa a função de registrar backup exportado.
+   */
   const registrarBackupExportado = async () => {
     await db.runAsync(
       'INSERT OR REPLACE INTO configuracoes_app (chave, valor) VALUES (?, ?)',
@@ -73,6 +82,9 @@ export function useExportarDados() {
     );
   };
 
+  /**
+   * Executa a função de exportar dados.
+   */
   const exportarDados = async () => {
     if (isExportando) return;
 

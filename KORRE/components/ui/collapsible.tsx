@@ -12,6 +12,9 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 
 import { styles } from '../../styles/generated/components/ui/collapsibleStyles';
 import { dynamicInlineStyles } from '../../styles/generated-dynamic/components/ui/collapsibleDynamicStyles';
+/**
+ * Executa a função de collapsible.
+ */
 export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const theme = useColorScheme() ?? 'light';

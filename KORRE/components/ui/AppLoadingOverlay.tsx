@@ -8,6 +8,9 @@ import {
 } from 'react-native';
 import { useAppLoading } from '../../hooks/ui/useAppLoading';
 
+/**
+ * Executa a função de app loading overlay.
+ */
 export const AppLoadingOverlay = () => {
   const { visible, message } = useAppLoading();
 

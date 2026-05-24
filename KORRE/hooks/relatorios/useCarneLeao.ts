@@ -3,6 +3,9 @@ import { Alert } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import db from '../../database/DatabaseInit';
 
+/**
+ * Executa a função de use carne leao.
+ */
 export function useCarneLeao() {
   const [mesRef, setMesRef] = useState(new Date());
   const [pago, setPago] = useState(false);

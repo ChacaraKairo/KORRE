@@ -82,6 +82,9 @@ export const ModalResetManutencao = ({
     itemIntervaloMeses,
   ]);
 
+  /**
+   * Executa a função de handle value change.
+   */
   const handleValueChange = (text: string) => {
     const cleanText = text.replace(/\D/g, '');
     if (!cleanText) {
@@ -99,6 +102,9 @@ export const ModalResetManutencao = ({
     setValor(formattedValue);
   };
 
+  /**
+   * Executa a função de handle confirm.
+   */
   const handleConfirm = () => {
     const valorNumerico = parseFloat(
       valor.replace(/\./g, '').replace(',', '.') || '0',

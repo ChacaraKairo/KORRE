@@ -1,3 +1,6 @@
+/**
+ * Executa a função de is maintenance overdue.
+ */
 export function isMaintenanceOverdue(params: {
   kmAtual: number;
   ultimaTrocaKm: number;
@@ -9,6 +12,9 @@ export function isMaintenanceOverdue(params: {
   return Number(params.kmAtual || 0) >= limite;
 }
 
+/**
+ * Executa a função de is maintenance near due.
+ */
 export function isMaintenanceNearDue(params: {
   kmAtual: number;
   ultimaTrocaKm: number;
@@ -22,6 +28,9 @@ export function isMaintenanceNearDue(params: {
   return restante > 0 && restante <= Number(params.thresholdKm ?? 500);
 }
 
+/**
+ * Executa a função de is planned maintenance without history.
+ */
 export function isPlannedMaintenanceWithoutHistory(params: {
   origem?: string | null;
   temHistoricoReal?: number | null;
@@ -32,6 +41,9 @@ export function isPlannedMaintenanceWithoutHistory(params: {
   );
 }
 
+/**
+ * Executa a função de should notify backup old.
+ */
 export function shouldNotifyBackupOld(lastBackupIso: string | null, days = 7) {
   if (!lastBackupIso) return true;
   const diff =
@@ -39,10 +51,16 @@ export function shouldNotifyBackupOld(lastBackupIso: string | null, days = 7) {
   return diff >= days;
 }
 
+/**
+ * Executa a função de is meta hit.
+ */
 export function isMetaHit(totalGanhos: number, meta: number) {
   return meta > 0 && totalGanhos >= meta;
 }
 
+/**
+ * Executa a função de is meta incomplete after hour.
+ */
 export function isMetaIncompleteAfterHour(params: {
   totalGanhos: number;
   meta: number;

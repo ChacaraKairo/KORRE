@@ -24,6 +24,9 @@ import { useBalancoDre } from '../../hooks/relatorios/useBalancoDre';
 import { styles } from '../../styles/telas/Relatorios/balancoDreStyles';
 import { safeBack } from '../../utils/navigation/safeBack';
 
+/**
+ * Executa a função de balanco dre screen.
+ */
 export default function BalancoDreScreen() {
   const router = useRouter();
   const { tema } = useTema();

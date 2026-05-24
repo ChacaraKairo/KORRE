@@ -18,6 +18,9 @@ import { ResumoGrafico } from '../../components/telas/historico/ResumoGrafico';
 import { ListaMovimentacoes } from '../../components/telas/historico/ListaMovimentacoes';
 import { ModalFiltroAvancado } from '../../components/telas/historico/ModalFiltroAvancado';
 
+/**
+ * Executa a função de historico screen.
+ */
 export default function HistoricoScreen() {
   const { tema } = useTema();
   const isDark = tema === 'escuro';

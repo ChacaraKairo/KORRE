@@ -51,11 +51,17 @@ const FIELD_MAP: Array<{
   },
 ];
 
+/**
+ * Executa a função de to number.
+ */
 function toNumber(value: unknown): number | null {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
 }
 
+/**
+ * Executa a função de push suggestion.
+ */
 function pushSuggestion(
   target: SugestaoCampo[],
   usedFields: Set<keyof FormularioViabilidade>,

@@ -4,6 +4,9 @@ import type {
   RideDecisionStatus,
 } from './types';
 
+/**
+ * Executa a função de round money.
+ */
 const roundMoney = (value: number) =>
   Math.round((value + Number.EPSILON) * 100) / 100;
 

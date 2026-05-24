@@ -2,6 +2,9 @@ import { DataConsentService } from '../../privacy/DataConsentService';
 import { FuelEntryRepository } from '../data/FuelEntryRepository';
 import type { FuelEntryInput } from '../domain/fuelTypes';
 
+/**
+ * Executa a função de to positive.
+ */
 function toPositive(value: number | null | undefined) {
   const num = Number(value ?? 0);
   return Number.isFinite(num) && num > 0 ? num : null;

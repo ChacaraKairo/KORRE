@@ -4,6 +4,9 @@ import {
   type NotificationPreferences,
 } from '../../notifications/NotificationPreferencesService';
 
+/**
+ * Executa a função de use notification preferences.
+ */
 export function useNotificationPreferences() {
   const [loading, setLoading] = useState(true);
   const [prefs, setPrefs] = useState<NotificationPreferences | null>(

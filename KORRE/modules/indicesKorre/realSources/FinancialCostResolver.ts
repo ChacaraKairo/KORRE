@@ -44,16 +44,25 @@ const CATEGORY_MAP: Array<{
   },
 ];
 
+/**
+ * Executa a função de add days.
+ */
 function addDays(date: Date, days: number): Date {
   const next = new Date(date);
   next.setDate(next.getDate() + days);
   return next;
 }
 
+/**
+ * Executa a função de to date string.
+ */
 function toDateString(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
+/**
+ * Executa a função de confidence for count.
+ */
 function confidenceForCount(count: number): 'alta' | 'media' | 'baixa' {
   if (count >= 8) return 'alta';
   if (count >= 4) return 'media';

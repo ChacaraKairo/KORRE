@@ -12,6 +12,9 @@ interface Props {
   impostoDevido: number;
 }
 
+/**
+ * Executa a função de imposto card.
+ */
 export function ImpostoCard({
   pago,
   impostoDevido,

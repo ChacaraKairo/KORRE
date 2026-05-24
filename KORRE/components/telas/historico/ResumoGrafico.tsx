@@ -12,6 +12,9 @@ interface ResumoGraficoProps {
   };
 }
 
+/**
+ * Executa a função de resumo grafico.
+ */
 export function ResumoGrafico({
   dados,
 }: ResumoGraficoProps) {

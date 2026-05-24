@@ -19,6 +19,9 @@ const INCOME_ORIGIN_GROUP_KEYS: Record<string, string> = {
   Personalizado: 'origem_ganhos.categorias.personalizado',
 };
 
+/**
+ * Executa a função de translate category name.
+ */
 export function translateCategoryName(t: TFunction, name?: string | null) {
   if (!name) return '';
 
@@ -26,6 +29,9 @@ export function translateCategoryName(t: TFunction, name?: string | null) {
   return key ? t(key) : name;
 }
 
+/**
+ * Executa a função de translate income origin group.
+ */
 export function translateIncomeOriginGroup(
   t: TFunction,
   name?: string | null,

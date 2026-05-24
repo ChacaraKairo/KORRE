@@ -7,6 +7,9 @@ export const formatPasswordHash = (
   hash: string,
 ) => `${HASH_PREFIX}$${iterations}$${salt}$${hash}`;
 
+/**
+ * Executa a função de parse password hash.
+ */
 export const parsePasswordHash = (storedHash?: string | null) => {
   if (!storedHash) return null;
 
@@ -27,6 +30,9 @@ export const parsePasswordHash = (storedHash?: string | null) => {
   };
 };
 
+/**
+ * Executa a função de timing safe equal.
+ */
 export const timingSafeEqual = (a: string, b: string) => {
   if (a.length !== b.length) return false;
 

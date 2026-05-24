@@ -26,6 +26,9 @@ import { useFluxoCaixa } from '../../hooks/relatorios/useFluxoCaixa';
 import { styles } from '../../styles/telas/Relatorios/fluxoCaixaStyles';
 import { safeBack } from '../../utils/navigation/safeBack';
 
+/**
+ * Executa a função de fluxo caixa screen.
+ */
 export default function FluxoCaixaScreen() {
   const router = useRouter();
   const { tema } = useTema();
@@ -48,6 +51,9 @@ export default function FluxoCaixaScreen() {
   const textColor = isDark ? '#FFFFFF' : '#1A1A1A';
   const textMuted = isDark ? '#888' : '#666';
 
+  /**
+   * Executa a função de formatar moeda.
+   */
   const formatarMoeda = (valor: number) => {
     return `R$ ${valor.toFixed(2).replace('.', ',')}`;
   };

@@ -1,5 +1,8 @@
 import { Stack } from 'expo-router';
 
+/**
+ * Executa a função de relatorios layout.
+ */
 export default function RelatoriosLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>

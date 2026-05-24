@@ -29,6 +29,9 @@ interface HeaderHistoricoProps {
   ) => void;
 }
 
+/**
+ * Executa a função de header historico.
+ */
 export function HeaderHistorico({
   getLabelData,
   navegarData,

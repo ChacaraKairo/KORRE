@@ -27,6 +27,9 @@ import { useReceitaPlataforma } from '../../hooks/relatorios/useReceitaPlataform
 import { styles } from '../../styles/telas/Relatorios/receitaPlataformaStyles';
 import { safeBack } from '../../utils/navigation/safeBack';
 
+/**
+ * Executa a função de receita plataforma screen.
+ */
 export default function ReceitaPlataformaScreen() {
   const router = useRouter();
   const { tema } = useTema();
@@ -55,6 +58,9 @@ export default function ReceitaPlataformaScreen() {
   const textColor = isDark ? '#FFFFFF' : '#1A1A1A';
   const textMuted = isDark ? '#888' : '#666';
 
+  /**
+   * Executa a função de formatar moeda.
+   */
   const formatarMoeda = (valor: number) => {
     return `R$ ${valor.toFixed(2).replace('.', ',')}`;
   };

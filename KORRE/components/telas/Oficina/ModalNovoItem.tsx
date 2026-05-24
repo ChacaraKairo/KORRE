@@ -70,6 +70,9 @@ export const ModalNovoItem = ({
     onClose();
   });
 
+  /**
+   * Executa a função de handle date change.
+   */
   const handleDateChange = (text: string) => {
     let formatted = text.replace(/\D/g, '');
     if (formatted.length > 2)

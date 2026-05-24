@@ -12,6 +12,9 @@ import { useTema } from '../../../hooks/modo_tema';
 import { goBackToReturnRoute } from '../../../utils/navigation/returnRoute';
 
 import { styles } from '../../../styles/generated/components/telas/CalculadoraFlex/HeaderCalculadoraFlexStyles';
+/**
+ * Executa a função de header calculadora flex.
+ */
 export default function HeaderCalculadoraFlex({
   setModalAjuda,
 }: {
@@ -25,6 +28,9 @@ export default function HeaderCalculadoraFlex({
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
+  /**
+   * Executa a função de handle back.
+   */
   const handleBack = () => {
     goBackToReturnRoute(router, AppRoutes.login);
   };

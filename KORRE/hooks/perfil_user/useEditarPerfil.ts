@@ -19,6 +19,9 @@ interface VeiculoPerfil {
   placa?: string | null;
 }
 
+/**
+ * Executa a função de use editar perfil.
+ */
 export function useEditarPerfil(
   visivel: boolean,
   onClose: () => void,
@@ -34,6 +37,9 @@ export function useEditarPerfil(
   );
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Executa a função de carregar dados.
+   */
   const carregarDados = async () => {
     try {
       const user =
@@ -70,6 +76,9 @@ export function useEditarPerfil(
     }
   }, [visivel]);
 
+  /**
+   * Executa a função de salvar dados.
+   */
   const salvarDados = async () => {
     if (!nome.trim()) {
       showCustomAlert(
@@ -116,6 +125,9 @@ export function useEditarPerfil(
     }
   };
 
+  /**
+   * Executa a função de apagar veiculo.
+   */
   const apagarVeiculo = (id: number, modelo: string) => {
     showCustomAlert(
       t('perfil.apagar_veiculo_titulo'),

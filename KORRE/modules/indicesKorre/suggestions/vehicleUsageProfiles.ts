@@ -66,6 +66,9 @@ export const VEHICLE_USAGE_PROFILES: Record<
   },
 };
 
+/**
+ * Executa a função de get vehicle usage profile.
+ */
 export function getVehicleUsageProfile(
   perfilUso: PerfilUsoKorre = 'uso_medio',
 ): VehicleUsageProfile {

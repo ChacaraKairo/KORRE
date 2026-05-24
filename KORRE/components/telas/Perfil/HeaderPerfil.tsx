@@ -5,6 +5,9 @@ import { Moon, Sun } from 'lucide-react-native';
 import { styles } from '../../../styles/telas/Perfil/perfilStyles';
 import { useTema } from '../../../hooks/modo_tema';
 
+/**
+ * Executa a função de header perfil.
+ */
 export const HeaderPerfil = () => {
   const { t } = useTranslation();
   const { tema, toggleTema } = useTema();

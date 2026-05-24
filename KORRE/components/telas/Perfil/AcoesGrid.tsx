@@ -17,6 +17,9 @@ import { styles } from '../../../styles/telas/Perfil/perfilStyles';
 import { useTema } from '../../../hooks/modo_tema';
 import { useExportarDados } from '../../../hooks/perfil_user/useExportarDados';
 
+/**
+ * Executa a função de acoes grid.
+ */
 export const AcoesGrid = () => {
   const { t } = useTranslation();
   const { tema } = useTema();

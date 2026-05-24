@@ -40,6 +40,9 @@ const GROUP_TO_KEY: Record<GrupoPreferenciaNotificacao, keyof NotificationPrefer
   sistema: 'notificacoes_sistema_ativas',
 };
 
+/**
+ * Executa a função de to bool.
+ */
 function toBool(value: string | null | undefined, fallback: boolean) {
   if (value === undefined || value === null) return fallback;
   return value === '1' || value.toLowerCase() === 'true';

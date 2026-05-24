@@ -4,6 +4,9 @@ import type {
   SugestaoCampo,
 } from './suggestionTypes';
 
+/**
+ * Executa a função de is campo vazio.
+ */
 export function isCampoVazio(value: unknown): boolean {
   return (
     value === undefined ||
@@ -14,6 +17,9 @@ export function isCampoVazio(value: unknown): boolean {
   );
 }
 
+/**
+ * Executa a função de apply suggestions to form.
+ */
 export function applySuggestionsToForm(
   form: Partial<FormularioViabilidade>,
   sugestoes: SugestaoCampo[],

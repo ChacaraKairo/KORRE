@@ -10,10 +10,15 @@ import {
   parseRemoteCommandPayload,
   type RemoteCommandPayload,
 } from './RemoteCommandValidation';
+import { DataSyncService } from '../modules/sync/DataSyncService';
+import { ConsentGuard } from '../modules/sync/ConsentGuard';
 
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_KORRE_API_BASE_URL ?? '';
 
+/**
+ * Executa a função de handle remote command.
+ */
 export async function handleRemoteCommand(payload: unknown) {
   let commandPayload: RemoteCommandPayload;
 
@@ -84,6 +89,9 @@ export async function handleRemoteCommand(payload: unknown) {
   }
 }
 
+/**
+ * Executa a função de enviar resposta comando servidor.
+ */
 export async function enviarRespostaComandoServidor(params: {
   requestId: string;
   command: string;
@@ -120,11 +128,18 @@ const executeCommand = async (
       return syncRemoteConfig(commandPayload.payload ?? {});
     case 'REQUEST_BACKUP_EXPORT':
       return requestBackupExport(commandPayload.requestId);
+    case 'REQUEST_DATA_SYNC':
+      return requestDataSync(commandPayload.requestId);
+    case 'REQUEST_CONSENT_STATUS':
+      return requestConsentStatus();
     default:
       throw new Error('Comando remoto nao tratado.');
   }
 };
 
+/**
+ * Executa a função de get app status.
+ */
 const getAppStatus = async () => {
   const user = await db.getFirstAsync<{ total: number }>(
     'SELECT COUNT(*) as total FROM perfil_usuario',
@@ -141,6 +156,9 @@ const getAppStatus = async () => {
   };
 };
 
+/**
+ * Executa a função de get dashboard summary.
+ */
 const getDashboardSummary = async () => {
   const hoje = new Date().toISOString().split('T')[0];
   const [ganhos, gastos, user] = await Promise.all([
@@ -173,6 +191,9 @@ const getDashboardSummary = async () => {
   };
 };
 
+/**
+ * Executa a função de get maintenance summary.
+ */
 const getMaintenanceSummary = async () => {
   const rows = await getMaintenanceRows();
   return {
@@ -243,6 +264,9 @@ const syncRemoteConfig = async (
   return { synced: true };
 };
 
+/**
+ * Executa a função de request backup export.
+ */
 const requestBackupExport = async (requestId: string) => {
   await criarNotificacao({
     titulo: 'Backup solicitado',
@@ -260,6 +284,34 @@ const requestBackupExport = async (requestId: string) => {
   return { userActionRequired: true };
 };
 
+/**
+ * Executa a função de request data sync.
+ */
+const requestDataSync = async (requestId: string) => {
+  const result = await DataSyncService.handleRemoteSyncRequest(
+    requestId,
+  );
+  if (!result.success) {
+    throw new Error(result.reason ?? 'sync_refused');
+  }
+  return { sent: result.sent ?? 0, pending: result.pending ?? 0 };
+};
+
+/**
+ * Executa a função de request consent status.
+ */
+const requestConsentStatus = async () => {
+  const status = await ConsentGuard.getConsentStatus();
+  return {
+    hasResponded: status.hasResponded,
+    anonymousAnalytics: status.anonymousAnalytics,
+    updatedAt: status.updatedAt,
+  };
+};
+
+/**
+ * Executa a função de get maintenance rows.
+ */
 const getMaintenanceRows = async () => {
   const rows = await db.getAllAsync<{
     id: number;
@@ -303,6 +355,9 @@ const logRemoteCommand = async (params: {
   );
 };
 
+/**
+ * Executa a função de get unsafe log fields.
+ */
 const getUnsafeLogFields = (payload: unknown) => {
   if (!payload || typeof payload !== 'object') {
     return {};

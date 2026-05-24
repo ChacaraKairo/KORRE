@@ -4,6 +4,9 @@ import { Alert } from 'react-native';
 import * as Sharing from 'expo-sharing';
 import db from '../../database/DatabaseInit';
 
+/**
+ * Executa a função de use manutencoes report.
+ */
 export function useManutencoesReport() {
   const viewShotRef = useRef<any>(null);
 
@@ -159,11 +162,17 @@ export function useManutencoesReport() {
     ]),
   );
 
+  /**
+   * Executa a função de trocar veiculo.
+   */
   const trocarVeiculo = (id: number) => {
     setModalFiltroVeiculo(false);
     carregarDados(id, periodoSelecionado.id);
   };
 
+  /**
+   * Executa a função de trocar periodo.
+   */
   const trocarPeriodo = (p: any) => {
     setPeriodoSelecionado(p);
     setPeriodo(p.nome);

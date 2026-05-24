@@ -5,6 +5,9 @@ const KEY_SIZE_WORDS = 256 / 32;
 const SALT_BYTES = 16;
 const IV_BYTES = 16;
 
+/**
+ * Executa a função de parse encrypted payload.
+ */
 const parseEncryptedPayload = (payload: string) => {
   const parts = payload.trim().split(':');
 
@@ -21,9 +24,15 @@ const parseEncryptedPayload = (payload: string) => {
   throw new Error('Formato de backup criptografado invalido.');
 };
 
+/**
+ * Executa a função de is encrypted payload.
+ */
 export const isEncryptedPayload = (payload: string) =>
   payload.trim().includes(':');
 
+/**
+ * Executa a função de derive key.
+ */
 const deriveKey = (passphrase: string, salt: string) =>
   CryptoJS.PBKDF2(passphrase, salt, {
     keySize: KEY_SIZE_WORDS,
@@ -31,6 +40,9 @@ const deriveKey = (passphrase: string, salt: string) =>
     hasher: CryptoJS.algo.SHA256,
   });
 
+/**
+ * Executa a função de get random hex.
+ */
 const getRandomHex = (bytes: number) => {
   const random = new Uint8Array(bytes);
 

@@ -6,10 +6,16 @@ export const DIAS_BACKUP_ALERTA = 7;
 export const HORARIO_ALERTA_META = 20;
 export const DIA_VENCIMENTO_DAS = 20;
 
+/**
+ * Executa a função de get today.
+ */
 export function getToday() {
   return new Date().toISOString().slice(0, 10);
 }
 
+/**
+ * Executa a função de get year week.
+ */
 export function getYearWeek(date = new Date()) {
   const d = new Date(date);
   const day = d.getUTCDay() || 7;
@@ -21,10 +27,16 @@ export function getYearWeek(date = new Date()) {
   return `${d.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
 }
 
+/**
+ * Executa a função de get year month.
+ */
 export function getYearMonth(date = new Date()) {
   return date.toISOString().slice(0, 7);
 }
 
+/**
+ * Executa a função de get veiculo ativo.
+ */
 export async function getVeiculoAtivo() {
   return db.getFirstAsync<{
     id: number;

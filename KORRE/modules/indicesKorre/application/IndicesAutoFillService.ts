@@ -22,6 +22,9 @@ export interface ResultadoAutoFillIndices {
   };
 }
 
+/**
+ * Executa a função de is different.
+ */
 function isDifferent(current: unknown, incoming: unknown): boolean {
   const n1 = Number(current);
   const n2 = Number(incoming);

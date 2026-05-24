@@ -22,6 +22,11 @@ import { useExportarDados } from '../../hooks/configuracao/useExportarDados';
 import { useGerenciarDados } from '../../hooks/configuracao/useGerenciarDados';
 import { useNotificationPreferences } from '../../hooks/configuracao/useNotificationPreferences';
 import { DataConsentService } from '../../modules/privacy/DataConsentService';
+import { DeviceRegistrationService } from '../../modules/sync/DeviceRegistrationService';
+import { SyncApiClient } from '../../modules/sync/SyncApiClient';
+import { ConsentGuard } from '../../modules/sync/ConsentGuard';
+import { OnlineBackupConsentGuard } from '../../modules/onlineBackup/OnlineBackupConsentGuard';
+import { OnlineBackupService } from '../../modules/onlineBackup/OnlineBackupService';
 import { styles } from '../../styles/telas/Configuracoes/configuracoesStyles';
 import {
   normalizeLanguage,
@@ -35,6 +40,9 @@ import { HeaderConfiguracoes } from '../../components/telas/Configuracoes/Header
 import { ModalIdioma } from '../../components/telas/Configuracoes/ModalIdioma';
 import { BackupPasswordModal } from '../../components/telas/Configuracoes/BackupPasswordModal';
 
+/**
+ * Executa a função de configuracoes screen.
+ */
 export default function ConfiguracoesScreen() {
   const router = useRouter();
   const { i18n, t } = useTranslation();
@@ -61,9 +69,11 @@ export default function ConfiguracoesScreen() {
     useState(false);
   const { prefs, setPref } = useNotificationPreferences();
   const [consentAnonData, setConsentAnonData] = useState(false);
+  const [onlineBackupEnabled, setOnlineBackupEnabled] = useState(false);
 
   React.useEffect(() => {
     DataConsentService.getConsent().then(setConsentAnonData);
+    OnlineBackupConsentGuard.isEnabled().then(setOnlineBackupEnabled);
   }, []);
 
   const bgColor = isDark ? '#0A0A0A' : '#F5F5F5';
@@ -132,6 +142,59 @@ export default function ConfiguracoesScreen() {
                 current: true,
                 setter: () => undefined,
               }}
+            />
+          </View>
+        </View>
+
+        <View>
+          <Text
+            style={[
+              styles.sectionTitle,
+              { color: textMuted },
+            ]}
+          >
+            {t('online_backup.title')}
+          </Text>
+          <View
+            style={[
+              styles.sectionContainer,
+              { borderColor },
+            ]}
+          >
+            <SettingItem
+              isDark={isDark}
+              icon={ShieldCheck}
+              title={t('online_backup.enable')}
+              subtitle={t('online_backup.privacy_note')}
+              action="toggle"
+              value={{
+                current: onlineBackupEnabled,
+                setter: (v) => {
+                  setOnlineBackupEnabled(v);
+                  void (v
+                    ? OnlineBackupService.enableOnlineBackup()
+                    : OnlineBackupService.disableOnlineBackup());
+                },
+              }}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={UploadCloud}
+              title={t('online_backup.create_now')}
+              onClick={() => void OnlineBackupService.createBackupNow()}
+            />
+            <SettingItem
+              isDark={isDark}
+              icon={DownloadCloud}
+              title={t('online_backup.restore')}
+              onClick={() => void OnlineBackupService.restoreLatestBackup()}
+            />
+            <SettingItem
+              isDark={isDark}
+              isLast={true}
+              icon={Trash2}
+              title={t('online_backup.delete_remote')}
+              onClick={() => void OnlineBackupService.deleteRemoteBackups()}
             />
           </View>
         </View>
@@ -344,7 +407,17 @@ export default function ConfiguracoesScreen() {
                 current: consentAnonData,
                 setter: (v) => {
                   setConsentAnonData(v);
-                  void DataConsentService.setConsent(v);
+                  void (async () => {
+                    await DataConsentService.setConsent(v);
+                    const device = await DeviceRegistrationService.getDeviceContext();
+                    const status = await ConsentGuard.getConsentStatus();
+                    await SyncApiClient.sendConsent({
+                      devicePublicId: device.devicePublicId,
+                      consentType: 'anonymous_analytics',
+                      accepted: v,
+                      consentVersion: status.updatedAt ?? new Date().toISOString(),
+                    });
+                  })();
                 },
               }}
             />

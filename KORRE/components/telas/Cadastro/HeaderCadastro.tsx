@@ -12,6 +12,9 @@ interface HeaderProps {
   tipoVeiculo?: any;
 }
 
+/**
+ * Executa a função de header cadastro.
+ */
 export const HeaderCadastro: React.FC<HeaderProps> = () => {
   const { t } = useTranslation();
   return (

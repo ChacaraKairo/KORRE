@@ -37,6 +37,9 @@ import { AppRoutes } from '../../constants/routes';
 // UI Genérica
 import { MainButton as Button } from '../../components/ui/buttons/Button'; // Mantido caso seja global
 
+/**
+ * Executa a função de calculadora screen.
+ */
 export default function CalculadoraScreen() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -101,6 +104,9 @@ export default function CalculadoraScreen() {
     'uso_profissional_pesado',
   ];
 
+  /**
+   * Executa a função de formatar campo sugestao.
+   */
   const formatarCampoSugestao = (campo: string) =>
     campo.replace(/_/g, ' ');
 

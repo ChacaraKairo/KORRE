@@ -15,6 +15,9 @@ const DEFAULT_COORDS = {
   lon: -46.6333,
 };
 
+/**
+ * Executa a função de use header clima dashboard.
+ */
 export const useHeaderClimaDashboard = () => {
   const [clima, setClima] = useState<ClimaInfo | null>(
     null,
@@ -22,6 +25,9 @@ export const useHeaderClimaDashboard = () => {
   const [loadingClima, setLoadingClima] = useState(true);
 
   useEffect(() => {
+    /**
+     * Executa a função de fetch clima.
+     */
     const fetchClima = async () => {
       try {
         const { lat, lon } = DEFAULT_COORDS;

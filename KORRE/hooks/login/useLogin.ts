@@ -35,6 +35,9 @@ type UsuarioLogin = {
 
 const CONFIG_LEMBRAR_IDENTIFICACAO = 'lembrar_identificacao';
 
+/**
+ * Executa a função de use login.
+ */
 export const useLogin = () => {
   const router = useRouter();
   const { t } = useTranslation();
@@ -54,6 +57,9 @@ export const useLogin = () => {
     carregarDadosSalvos();
   }, []);
 
+  /**
+   * Executa a função de carregar dados salvos.
+   */
   const carregarDadosSalvos = async () => {
     try {
       const usuario = await db.getFirstAsync<UsuarioLogin>(
@@ -80,6 +86,9 @@ export const useLogin = () => {
     }
   };
 
+  /**
+   * Executa a função de check device for hardware.
+   */
   const checkDeviceForHardware = async () => {
     const compatible =
       await LocalAuthentication.hasHardwareAsync();
@@ -88,6 +97,9 @@ export const useLogin = () => {
     setBiometriaDisponivel(compatible && enrolled);
   };
 
+  /**
+   * Executa a função de start bounce.
+   */
   const startBounce = () => {
     Animated.loop(
       Animated.sequence([
@@ -105,6 +117,9 @@ export const useLogin = () => {
     ).start();
   };
 
+  /**
+   * Executa a função de realizar login manual.
+   */
   const realizarLoginManual = async () => {
     setErro('');
 
@@ -217,6 +232,9 @@ export const useLogin = () => {
     }
   };
 
+  /**
+   * Executa a função de resolver pendencias abastecimento.
+   */
   const resolverPendenciasAbastecimento = async () => {
     const pendentes = await FuelEntryService.contarPendentesSemLogin();
     if (!pendentes) return;
@@ -256,6 +274,9 @@ export const useLogin = () => {
     });
   };
 
+  /**
+   * Executa a função de realizar login biometrico.
+   */
   const realizarLoginBiometrico = async () => {
     try {
       const result =
@@ -288,6 +309,9 @@ export const useLogin = () => {
     }
   };
 
+  /**
+   * Executa a função de recuperar senha.
+   */
   const recuperarSenha = async () => {
     try {
       const usuario = await db.getFirstAsync<UsuarioLogin>(

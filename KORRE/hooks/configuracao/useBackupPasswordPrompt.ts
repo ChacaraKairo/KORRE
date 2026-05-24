@@ -6,6 +6,9 @@ export interface BackupPasswordPromptState {
   message?: string;
 }
 
+/**
+ * Executa a função de use backup password prompt.
+ */
 export const useBackupPasswordPrompt = () => {
   const [state, setState] = useState<BackupPasswordPromptState>({
     visible: false,

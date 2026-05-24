@@ -16,6 +16,9 @@ import { useTema } from '../../hooks/modo_tema';
 import { styles } from '../../styles/telas/Termos/termosStyles';
 import { safeBack } from '../../utils/navigation/safeBack';
 
+/**
+ * Executa a função de termos screen.
+ */
 export default function TermosScreen() {
   const { t } = useTranslation();
   const router = useRouter();

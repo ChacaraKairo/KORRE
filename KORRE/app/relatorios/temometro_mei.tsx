@@ -12,6 +12,9 @@ import { styles } from '../../styles/generated/app/relatorios/temometro_meiStyle
 // Verifique se o caminho do componente está exatamente assim na sua estrutura
 import { TermometroMEI } from '../../components/telas/Relatorios/temometro_mei';
 
+/**
+ * Executa a função de relatorios screen.
+ */
 export default function RelatoriosScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>

@@ -43,6 +43,9 @@ export const CardVeiculoGaragem = ({
   const config =
     VEICULOS_CONFIG[tipo] || VEICULOS_CONFIG.moto;
 
+  /**
+   * Executa a função de render icon.
+   */
   const renderIcon = (size: number, color: string) => {
     const Icone = config.icone;
     return <Icone size={size} color={color} />;

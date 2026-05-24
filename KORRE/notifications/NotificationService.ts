@@ -20,6 +20,9 @@ const carregarNotifications =
     return import('expo-notifications');
   };
 
+/**
+ * Executa a função de solicitar permissao notificacoes.
+ */
 export async function solicitarPermissaoNotificacoes() {
   const Notifications = await carregarNotifications();
   if (!Notifications) return false;
@@ -31,6 +34,9 @@ export async function solicitarPermissaoNotificacoes() {
   return result.status === 'granted';
 }
 
+/**
+ * Executa a função de criar notificacao.
+ */
 export async function criarNotificacao(
   input: CriarNotificacaoInput,
 ) {
@@ -69,6 +75,9 @@ export async function criarNotificacao(
   await salvarNotificacao(normalizada);
 }
 
+/**
+ * Executa a função de criar notificacao agendada.
+ */
 export async function criarNotificacaoAgendada(
   input: CriarNotificacaoInput,
   trigger: NotificationTriggerInput,
@@ -108,6 +117,9 @@ export async function criarNotificacaoAgendada(
   await salvarNotificacao(normalizada);
 }
 
+/**
+ * Executa a função de listar notificacoes.
+ */
 export async function listarNotificacoes() {
   const rows = await db.getAllAsync<
     NotificacaoHistorico & { dados_json?: string | null }
@@ -119,6 +131,9 @@ export async function listarNotificacoes() {
   }));
 }
 
+/**
+ * Executa a função de marcar notificacao como lida.
+ */
 export async function marcarNotificacaoComoLida(id: number) {
   await db.runAsync(
     'UPDATE notificacoes SET lida = 1 WHERE id = ?',
@@ -126,10 +141,16 @@ export async function marcarNotificacaoComoLida(id: number) {
   );
 }
 
+/**
+ * Executa a função de limpar historico notificacoes.
+ */
 export async function limparHistoricoNotificacoes() {
   await db.runAsync('DELETE FROM notificacoes');
 }
 
+/**
+ * Executa a função de registrar dedup key.
+ */
 export async function registrarDedupKey(dedupKey: string) {
   await db.runAsync(
     'INSERT OR IGNORE INTO notificacao_dedup (chave) VALUES (?)',
@@ -137,6 +158,9 @@ export async function registrarDedupKey(dedupKey: string) {
   );
 }
 
+/**
+ * Executa a função de has dedup key.
+ */
 export async function hasDedupKey(dedupKey: string) {
   const row = await db.getFirstAsync<{ chave: string }>(
     'SELECT chave FROM notificacao_dedup WHERE chave = ? LIMIT 1',
@@ -189,6 +213,9 @@ const buildNotificationContent = (
   },
 });
 
+/**
+ * Executa a função de parse dados json.
+ */
 const parseDadosJson = (dadosJson?: string | null) => {
   if (!dadosJson) return undefined;
 
@@ -220,6 +247,9 @@ const sanitizeDados = (
   return Object.fromEntries(entries);
 };
 
+/**
+ * Executa a função de sanitize message.
+ */
 const sanitizeMessage = (message: string) =>
   message
     .replace(/\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g, '***')

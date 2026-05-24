@@ -5,6 +5,9 @@ import {
   ResultadoViabilidade,
 } from '../../type/viabilidadeCorrida'; // Confirme se a pasta é 'types' ou 'type'
 
+/**
+ * Executa a função de use viabilidade.
+ */
 export function useViabilidade() {
   const [indices, setIndices] = useState<{
     ikm: number;

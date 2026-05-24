@@ -43,6 +43,9 @@ export const HeaderDashboard: React.FC<HeaderProps> = ({
   useEffect(() => {
     let ativo = true;
 
+    /**
+     * Executa a função de validar foto local.
+     */
     const validarFotoLocal = async () => {
       setImageError(false);
 

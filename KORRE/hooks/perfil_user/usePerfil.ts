@@ -14,6 +14,9 @@ import { showCustomAlert } from '../alert/useCustomAlert';
 import { clearAuthSession } from '../../utils/auth/authSession';
 import { clearReturnRoute } from '../../utils/navigation/returnRoute';
 
+/**
+ * Executa a função de use perfil.
+ */
 export function usePerfil() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -27,6 +30,9 @@ export function usePerfil() {
     useState<TipoMeta>('diaria');
   const [loading, setLoading] = useState(true);
 
+  /**
+   * Executa a função de carregar dados.
+   */
   const carregarDados = async () => {
     try {
       const user =
@@ -78,6 +84,9 @@ export function usePerfil() {
     carregarDados();
   }, []);
 
+  /**
+   * Executa a função de listar veiculos do usuario.
+   */
   const listarVeiculosDoUsuario = async () => {
     if (!usuario) return [];
 
@@ -95,6 +104,9 @@ export function usePerfil() {
     }
   };
 
+  /**
+   * Executa a função de trocar veiculo ativo.
+   */
   const trocarVeiculoAtivo = async (veiculoId: number) => {
     if (!usuario) return false;
 
@@ -119,6 +131,9 @@ export function usePerfil() {
     }
   };
 
+  /**
+   * Executa a função de salvar meta.
+   */
   const salvarMeta = async () => {
     if (!usuario) return;
 
@@ -148,6 +163,9 @@ export function usePerfil() {
     }
   };
 
+  /**
+   * Executa a função de alterar foto.
+   */
   const alterarFoto = async () => {
     if (!usuario) return;
 
@@ -171,6 +189,9 @@ export function usePerfil() {
     }
   };
 
+  /**
+   * Executa a função de realizar logout.
+   */
   const realizarLogout = () => {
     showCustomAlert(
       t('perfil.sair_titulo'),

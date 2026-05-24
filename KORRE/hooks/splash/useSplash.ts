@@ -4,6 +4,9 @@ import { useRouter } from 'expo-router';
 import * as NavigationBar from 'expo-navigation-bar';
 import db from '../../database/DatabaseInit';
 
+/**
+ * Executa a função de use splash.
+ */
 export const useSplash = () => {
   const router = useRouter();
 
@@ -13,6 +16,9 @@ export const useSplash = () => {
       NavigationBar.setVisibilityAsync('visible').catch(() => {});
     }
 
+    /**
+     * Executa a função de verificar usuario unico.
+     */
     const verificarUsuarioUnico = async () => {
       try {
         const usuarioExistente = await db.getFirstAsync(

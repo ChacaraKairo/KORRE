@@ -2,6 +2,9 @@ import { useState, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 import db from '../../database/DatabaseInit';
 
+/**
+ * Executa a função de use receita plataforma.
+ */
 export function useReceitaPlataforma() {
   const [loading, setLoading] = useState(true);
 
@@ -160,11 +163,17 @@ export function useReceitaPlataforma() {
     }, [carregarDados, periodoObj, veiculoObj]),
   );
 
+  /**
+   * Executa a função de trocar periodo.
+   */
   const trocarPeriodo = (p: any) => {
     setPeriodoObj(p);
     setModalPeriodo(false);
   };
 
+  /**
+   * Executa a função de trocar veiculo.
+   */
   const trocarVeiculo = (v: any) => {
     setVeiculoObj(v);
     setModalVeiculo(false);

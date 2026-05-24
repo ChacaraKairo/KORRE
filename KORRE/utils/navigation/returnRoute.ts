@@ -8,12 +8,21 @@ type RouterWithBack = {
 
 let returnRoute: Href | null = null;
 
+/**
+ * Executa a função de set return route.
+ */
 export const setReturnRoute = (route: Href) => {
   returnRoute = route;
 };
 
+/**
+ * Executa a função de get return route.
+ */
 export const getReturnRoute = () => returnRoute;
 
+/**
+ * Executa a função de clear return route.
+ */
 export const clearReturnRoute = () => {
   returnRoute = null;
 };
