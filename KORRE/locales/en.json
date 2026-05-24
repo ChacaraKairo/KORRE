@@ -299,6 +299,15 @@
     "sugestoes_aplicadas_msg": "{{count}} field(s) were filled with estimates. Review before saving.",
     "sugestoes_resumo": "{{count}} suggestion(s) filled",
     "sugestoes_ignoradas": "{{count}} field(s) already had values and were kept.",
+    "sugestoes_revisao": "Suggestions to review",
+    "usar_valor_sugerido": "Use suggested value",
+    "manter_meu_valor": "Keep my value",
+    "preenchimento_inteligente": "Smart autofill",
+    "baseado_oficina": "Based on Workshop",
+    "baseado_financeiro": "Based on Finance",
+    "baseado_planejado": "Based on planned maintenance",
+    "baseado_perfil": "Based on usage profile",
+    "baseado_padrao": "Based on KORRE standard",
     "modo_simples": "Simple",
     "modo_avancado": "Advanced",
     "confianca_sugestao": "Confidence: {{confianca}}",
@@ -353,9 +362,11 @@
     "status_planejado": "Planned",
     "aguardando_primeira_manutencao": "Waiting for the first registered maintenance.",
     "valor_previsto": "Estimated value",
+    "intervalo_previsto": "Estimated interval",
     "origem_auditoria": "Source: KORRE Audit",
     "desgaste_atual": "Current wear",
-    "realizada": "Done"
+    "realizada": "Done",
+    "registrar_primeira_manutencao": "Register first maintenance"
   },
   "historico": {
     "periodo": "Period",

@@ -173,6 +173,11 @@ export const ItemManutencaoCard = ({
               {valorPrevisto.toFixed(2).replace('.', ',')}
             </Text>
           )}
+          {Number(item.intervalo_km ?? 0) > 0 && (
+            <Text style={{ color: isDark ? '#9CA3AF' : '#4B5563' }}>
+              {t('oficina.intervalo_previsto')}: {item.intervalo_km} km
+            </Text>
+          )}
           <Text style={{ color: isDark ? '#9CA3AF' : '#4B5563' }}>
             {t('oficina.origem_auditoria')}
           </Text>
@@ -218,7 +223,9 @@ export const ItemManutencaoCard = ({
           <Text
             style={dynamicInlineStyles.inline5({ isDark })}
           >
-            {t('oficina.realizada')}
+            {isPlanejado
+              ? t('oficina.registrar_primeira_manutencao')
+              : t('oficina.realizada')}
           </Text>
         </TouchableOpacity>
       </View>

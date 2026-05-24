@@ -299,6 +299,15 @@
     "sugestoes_aplicadas_msg": "{{count}} campo(s) fueron completados con estimaciones. Revisa antes de guardar.",
     "sugestoes_resumo": "{{count}} sugerencia(s) completada(s)",
     "sugestoes_ignoradas": "{{count}} campo(s) ya tenian valor y se mantuvieron.",
+    "sugestoes_revisao": "Sugerencias para revisar",
+    "usar_valor_sugerido": "Usar valor sugerido",
+    "manter_meu_valor": "Mantener mi valor",
+    "preenchimento_inteligente": "Relleno inteligente",
+    "baseado_oficina": "Basado en Taller",
+    "baseado_financeiro": "Basado en Finanzas",
+    "baseado_planejado": "Basado en mantenimiento planificado",
+    "baseado_perfil": "Basado en perfil de uso",
+    "baseado_padrao": "Basado en estandar KORRE",
     "modo_simples": "Simple",
     "modo_avancado": "Avanzado",
     "confianca_sugestao": "Confianza: {{confianca}}",
@@ -353,9 +362,11 @@
     "status_planejado": "Planificado",
     "aguardando_primeira_manutencao": "Esperando el primer mantenimiento registrado.",
     "valor_previsto": "Valor previsto",
+    "intervalo_previsto": "Intervalo previsto",
     "origem_auditoria": "Origen: Auditoria KORRE",
     "desgaste_atual": "Desgaste actual",
-    "realizada": "Realizado"
+    "realizada": "Realizado",
+    "registrar_primeira_manutencao": "Registrar primer mantenimiento"
   },
   "historico": {
     "periodo": "Periodo",

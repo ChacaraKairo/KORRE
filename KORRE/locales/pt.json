@@ -299,6 +299,15 @@
     "sugestoes_aplicadas_msg": "{{count}} campo(s) foram preenchidos com estimativas. Revise antes de salvar.",
     "sugestoes_resumo": "{{count}} sugestao(oes) preenchida(s)",
     "sugestoes_ignoradas": "{{count}} campo(s) ja tinham valor e foram mantidos.",
+    "sugestoes_revisao": "Sugestoes para revisar",
+    "usar_valor_sugerido": "Usar valor sugerido",
+    "manter_meu_valor": "Manter meu valor",
+    "preenchimento_inteligente": "Preenchimento inteligente",
+    "baseado_oficina": "Baseado na Oficina",
+    "baseado_financeiro": "Baseado no Financeiro",
+    "baseado_planejado": "Baseado em manutencao planejada",
+    "baseado_perfil": "Baseado no perfil de uso",
+    "baseado_padrao": "Baseado no padrao KORRE",
     "modo_simples": "Simples",
     "modo_avancado": "Avancado",
     "confianca_sugestao": "Confianca: {{confianca}}",
@@ -353,9 +362,11 @@
     "status_planejado": "Planejado",
     "aguardando_primeira_manutencao": "Aguardando primeira manutencao registrada.",
     "valor_previsto": "Valor previsto",
+    "intervalo_previsto": "Intervalo previsto",
     "origem_auditoria": "Origem: Auditoria KORRE",
     "desgaste_atual": "Desgaste atual",
-    "realizada": "Realizada"
+    "realizada": "Realizada",
+    "registrar_primeira_manutencao": "Registrar primeira manutencao"
   },
   "historico": {
     "periodo": "Periodo",

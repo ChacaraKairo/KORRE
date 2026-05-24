@@ -299,6 +299,15 @@
     "sugestoes_aplicadas_msg": "{{count}} champ(s) ont ete remplis avec des estimations. Verifiez avant d'enregistrer.",
     "sugestoes_resumo": "{{count}} suggestion(s) remplie(s)",
     "sugestoes_ignoradas": "{{count}} champ(s) avaient deja une valeur et ont ete conserves.",
+    "sugestoes_revisao": "Suggestions a revoir",
+    "usar_valor_sugerido": "Utiliser la valeur suggeree",
+    "manter_meu_valor": "Garder ma valeur",
+    "preenchimento_inteligente": "Remplissage intelligent",
+    "baseado_oficina": "Base sur l'Atelier",
+    "baseado_financeiro": "Base sur le Financier",
+    "baseado_planejado": "Base sur la maintenance planifiee",
+    "baseado_perfil": "Base sur le profil d'utilisation",
+    "baseado_padrao": "Base sur le standard KORRE",
     "modo_simples": "Simple",
     "modo_avancado": "Avance",
     "confianca_sugestao": "Confiance : {{confianca}}",
@@ -353,9 +362,11 @@
     "status_planejado": "Planifie",
     "aguardando_primeira_manutencao": "En attente du premier entretien enregistre.",
     "valor_previsto": "Valeur estimee",
+    "intervalo_previsto": "Intervalle prevu",
     "origem_auditoria": "Source : Audit KORRE",
     "desgaste_atual": "Usure actuelle",
-    "realizada": "Effectuee"
+    "realizada": "Effectuee",
+    "registrar_primeira_manutencao": "Enregistrer le premier entretien"
   },
   "historico": {
     "periodo": "Periode",

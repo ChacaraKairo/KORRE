@@ -19,11 +19,10 @@ import {
 } from '../../../hooks/ui/useAppLoading';
 import { safeBack } from '../../../utils/navigation/safeBack';
 import {
-  applySuggestionsToForm,
-  IndicesSuggestionsService,
   PerfilUsoKorre,
   SugestaoCampo,
 } from '../suggestions';
+import { IndicesAutoFillService } from '../application/IndicesAutoFillService';
 
 const ESTADO_INICIAL_VAZIO: Partial<FormularioViabilidade> =
   {
@@ -58,6 +57,15 @@ export function useIndicesKorreForm() {
     useState<SugestaoCampo[]>([]);
   const [sugestoesIgnoradas, setSugestoesIgnoradas] =
     useState<SugestaoCampo[]>([]);
+  const [sugestoesRevisao, setSugestoesRevisao] =
+    useState<SugestaoCampo[]>([]);
+  const [resumoSugestoes, setResumoSugestoes] = useState({
+    historicoOficina: 0,
+    historicoFinanceiro: 0,
+    preCadastro: 0,
+    perfilUso: 0,
+    padraoKorre: 0,
+  });
 
   useEffect(() => {
     const resultadoKm = CalculadoraMovimento.calcularCustoKm(
@@ -204,31 +212,31 @@ export function useIndicesKorreForm() {
     }
   };
 
-  const aplicarSugestoes = useCallback(() => {
-    const resultadoSugestoes =
-      IndicesSuggestionsService.gerarSugestoes({
+  const aplicarSugestoes = useCallback(async () => {
+    if (!veiculoAtivo?.id) {
+      return;
+    }
+    const resultado =
+      await IndicesAutoFillService.preencherInteligente({
+        veiculoId: veiculoAtivo.id,
         form,
         perfilUso,
         tipoVeiculo: veiculoAtivo?.tipo,
       });
 
-    const resultadoAplicacao = applySuggestionsToForm(
-      form,
-      resultadoSugestoes.sugestoes,
-      { sobrescrever: false },
-    );
-
-    setForm(resultadoAplicacao.form);
-    setSugestoesAplicadas(resultadoAplicacao.aplicadas);
-    setSugestoesIgnoradas(resultadoAplicacao.ignoradas);
+    setForm(resultado.form);
+    setSugestoesAplicadas(resultado.sugestoesAplicadas);
+    setSugestoesIgnoradas(resultado.sugestoesIgnoradas);
+    setSugestoesRevisao(resultado.sugestoesRevisao);
+    setResumoSugestoes(resultado.resumo);
 
     showCustomAlert(
       t('calculadora.sugestoes_aplicadas_titulo'),
       t('calculadora.sugestoes_aplicadas_msg', {
-        count: resultadoAplicacao.aplicadas.length,
+        count: resultado.sugestoesAplicadas.length,
       }),
     );
-  }, [form, perfilUso, t, veiculoAtivo?.tipo]);
+  }, [form, perfilUso, t, veiculoAtivo]);
 
   const validarStatusSecoes = useCallback(() => {
     const operacaoCompleta =
@@ -340,6 +348,9 @@ export function useIndicesKorreForm() {
     aplicarSugestoes,
     sugestoesAplicadas,
     sugestoesIgnoradas,
+    sugestoesRevisao,
+    resumoSugestoes,
+    setSugestoesRevisao,
   };
 }
 

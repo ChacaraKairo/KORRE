@@ -55,6 +55,12 @@ export function useOficinaCalculos(
   const getStatusResumo = useCallback(() => {
     // Filtra quantos itens estão fora do padrão OK ou Inicial
     const pendentes = itensVisiveis.filter((item: any) => {
+      const isPlanejado =
+        item.origem === 'auditoria_korre' &&
+        Number(item.tem_historico_real ?? 0) === 0;
+      if (isPlanejado) {
+        return false;
+      }
       const status = calcularProgresso(item).status;
       return status !== 'OK' && status !== 'Inicial';
     }).length;
