@@ -8,6 +8,7 @@
     "limpar": "Effacer",
     "erro": "Erreur",
     "sucesso": "Succes",
+    "ok": "OK",
     "em_breve": "Bientot",
     "sem_placa": "Sans plaque",
     "loading_local": "Chargement des donnees locales...",
@@ -466,7 +467,9 @@
     "senha_curta": "Le nouveau mot de passe doit contenir au moins 7 caracteres.",
     "senhas_diferentes": "Les mots de passe ne correspondent pas.",
     "preencha_dados": "Remplissez e-mail, CPF et plaque pour continuer.",
-    "validacao_falhou": "Impossible de valider les donnees fournies."
+    "validacao_falhou": "Impossible de valider les donnees fournies.",
+    "erro_banco": "Impossible de reinitialiser le mot de passe maintenant. Reessayez.",
+    "sucesso_msg": "Mot de passe reinitialise avec succes. Nous allons ouvrir le Dashboard."
   },
   "flex_calc": {
     "title": "Calculatrice Flex",

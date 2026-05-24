@@ -16,6 +16,12 @@ import { AppRoutes } from '../../constants/routes';
 import { logger } from '../../utils/logger';
 import { waitForUiFeedback } from '../../utils/ui/waitForUiFeedback';
 import { setAuthSession } from '../../utils/auth/authSession';
+import {
+  getLoginLockoutValue,
+  LOGIN_LOCKED_UNTIL,
+  registrarFalhaLogin,
+  resetarTentativasLogin,
+} from '../../utils/auth/loginLockout';
 
 type UsuarioLogin = {
   id: number;
@@ -26,10 +32,6 @@ type UsuarioLogin = {
 };
 
 const CONFIG_LEMBRAR_IDENTIFICACAO = 'lembrar_identificacao';
-const LOGIN_FAILED_ATTEMPTS = 'login_failed_attempts';
-const LOGIN_LOCKED_UNTIL = 'login_locked_until';
-const MAX_FAILED_ATTEMPTS = 5;
-const LOCKOUT_MS = 5 * 60 * 1000;
 
 export const useLogin = () => {
   const router = useRouter();
@@ -114,7 +116,8 @@ export const useLogin = () => {
     try {
       await waitForUiFeedback();
 
-      const lockedUntil = await getConfigNumber(LOGIN_LOCKED_UNTIL);
+      const lockedUntil =
+        await getLoginLockoutValue(LOGIN_LOCKED_UNTIL);
       if (lockedUntil && Date.now() < lockedUntil) {
         const minutosRestantes = Math.ceil(
           (lockedUntil - Date.now()) / 60000,
@@ -205,45 +208,6 @@ export const useLogin = () => {
     } catch (error) {
       logger.error('[LOGIN] Falha ao atualizar hash:', error);
     }
-  };
-
-  const getConfigNumber = async (chave: string) => {
-    const row = await db.getFirstAsync<{ valor: string }>(
-      'SELECT valor FROM configuracoes_app WHERE chave = ?',
-      [chave],
-    );
-    const value = Number(row?.valor ?? 0);
-    return Number.isFinite(value) ? value : 0;
-  };
-
-  const setConfigValue = async (chave: string, valor: string) => {
-    await db.runAsync(
-      'INSERT OR REPLACE INTO configuracoes_app (chave, valor) VALUES (?, ?)',
-      [chave, valor],
-    );
-  };
-
-  const registrarFalhaLogin = async () => {
-    const failedAttempts =
-      (await getConfigNumber(LOGIN_FAILED_ATTEMPTS)) + 1;
-
-    await setConfigValue(
-      LOGIN_FAILED_ATTEMPTS,
-      String(failedAttempts),
-    );
-
-    if (failedAttempts >= MAX_FAILED_ATTEMPTS) {
-      await setConfigValue(
-        LOGIN_LOCKED_UNTIL,
-        String(Date.now() + LOCKOUT_MS),
-      );
-      await setConfigValue(LOGIN_FAILED_ATTEMPTS, '0');
-    }
-  };
-
-  const resetarTentativasLogin = async () => {
-    await setConfigValue(LOGIN_FAILED_ATTEMPTS, '0');
-    await setConfigValue(LOGIN_LOCKED_UNTIL, '0');
   };
 
   const realizarLoginBiometrico = async () => {

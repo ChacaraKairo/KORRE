@@ -2,7 +2,7 @@
 
 ## Obrigatório antes do beta
 
-- [ ] Rodar `npm run validate`
+- [x] Rodar `npm run validate`
 - [ ] Testar cadastro novo
 - [ ] Testar login com senha correta e incorreta
 - [ ] Testar bloqueio por tentativas

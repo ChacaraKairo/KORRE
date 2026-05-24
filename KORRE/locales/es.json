@@ -8,6 +8,7 @@
     "limpar": "Limpiar",
     "erro": "Error",
     "sucesso": "Exito",
+    "ok": "OK",
     "em_breve": "Pronto",
     "sem_placa": "Sin placa",
     "loading_local": "Cargando datos locales...",
@@ -466,7 +467,9 @@
     "senha_curta": "La nueva contrasena debe tener al menos 7 caracteres.",
     "senhas_diferentes": "Las contrasenas no coinciden.",
     "preencha_dados": "Completa e-mail, CPF y placa para continuar.",
-    "validacao_falhou": "No fue posible validar los datos informados."
+    "validacao_falhou": "No fue posible validar los datos informados.",
+    "erro_banco": "No fue posible restablecer la contraseña ahora. Intenta nuevamente.",
+    "sucesso_msg": "Contraseña restablecida con éxito. Vamos a abrir el Dashboard."
   },
   "flex_calc": {
     "title": "Calculadora Flex",

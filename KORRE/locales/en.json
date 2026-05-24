@@ -8,6 +8,7 @@
     "limpar": "Clear",
     "erro": "Error",
     "sucesso": "Success",
+    "ok": "OK",
     "em_breve": "Coming soon",
     "sem_placa": "No plate",
     "loading_local": "Loading local data...",
@@ -466,7 +467,9 @@
     "senha_curta": "The new password must be at least 7 characters.",
     "senhas_diferentes": "Passwords do not match.",
     "preencha_dados": "Fill email, CPF and plate to continue.",
-    "validacao_falhou": "Could not validate the provided data."
+    "validacao_falhou": "Could not validate the provided data.",
+    "erro_banco": "Could not reset the password right now. Try again.",
+    "sucesso_msg": "Password reset successfully. We will open the Dashboard."
   },
   "flex_calc": {
     "title": "Flex Calculator",

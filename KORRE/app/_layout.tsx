@@ -88,8 +88,10 @@ export default function RootLayout() {
       rootSegment === '';
     const inAuthGroup = rootSegment === '(auth)';
     const inTabsGroup = rootSegment === '(tabs)';
-    const isPublicRoute =
-      inAuthGroup || pathname === AppRoutes.calculadora;
+    const isAuthPublicRoute =
+      inAuthGroup &&
+      pathname !== AppRoutes.termos &&
+      pathname !== '/(auth)/politica-privacidade';
     const isPrivateRoute =
       inTabsGroup && pathname !== AppRoutes.calculadora;
 
@@ -107,12 +109,7 @@ export default function RootLayout() {
       return;
     }
 
-    if (
-      isAuthenticated &&
-      isPublicRoute &&
-      pathname !== AppRoutes.termos &&
-      pathname !== '/(auth)/politica-privacidade'
-    ) {
+    if (isAuthenticated && isAuthPublicRoute) {
       router.replace(AppRoutes.dashboard);
     }
   }, [

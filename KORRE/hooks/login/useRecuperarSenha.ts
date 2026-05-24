@@ -1,11 +1,14 @@
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import db from '../../database/DatabaseInit';
 import { AppRoutes } from '../../constants/routes';
 import { hashPassword } from '../../utils/auth/passwordHash';
 import { setAuthSession } from '../../utils/auth/authSession';
+import { resetarTentativasLogin } from '../../utils/auth/loginLockout';
+import { logger } from '../../utils/logger';
 
 const normalizeCpf = (value: string) => value.replace(/\D/g, '');
 const normalizePlate = (value: string) =>
@@ -63,8 +66,18 @@ export const useRecuperarSenha = () => {
       'UPDATE perfil_usuario SET senha = ? WHERE id = ?',
       [novaHash, usuarioId],
     );
+    await resetarTentativasLogin();
     setAuthSession(usuarioId);
-    router.replace(AppRoutes.dashboard);
+    Alert.alert(
+      t('common.sucesso'),
+      t('recuperar_senha.sucesso_msg'),
+      [
+        {
+          text: t('common.ok'),
+          onPress: () => router.replace(AppRoutes.dashboard),
+        },
+      ],
+    );
   };
 
   const recuperarComBiometria = async () => {
@@ -95,6 +108,12 @@ export const useRecuperarSenha = () => {
       }
 
       await resetarSenha(usuario.id);
+    } catch (error) {
+      logger.error(
+        '[RecuperarSenha] Falha ao redefinir senha por biometria:',
+        error,
+      );
+      setErro(t('recuperar_senha.erro_banco'));
     } finally {
       setLoading(false);
     }
@@ -132,6 +151,12 @@ export const useRecuperarSenha = () => {
       }
 
       await resetarSenha(usuario.id);
+    } catch (error) {
+      logger.error(
+        '[RecuperarSenha] Falha ao redefinir senha por dados:',
+        error,
+      );
+      setErro(t('recuperar_senha.erro_banco'));
     } finally {
       setLoading(false);
     }

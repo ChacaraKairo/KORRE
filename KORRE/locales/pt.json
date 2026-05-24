@@ -8,6 +8,7 @@
     "limpar": "Limpar",
     "erro": "Erro",
     "sucesso": "Sucesso",
+    "ok": "OK",
     "em_breve": "Em breve",
     "sem_placa": "Sem placa",
     "loading_local": "Carregando dados locais...",
@@ -466,7 +467,9 @@
     "senha_curta": "A nova senha precisa ter pelo menos 7 caracteres.",
     "senhas_diferentes": "As senhas nao coincidem.",
     "preencha_dados": "Preencha e-mail, CPF e placa para continuar.",
-    "validacao_falhou": "Nao foi possivel validar os dados informados."
+    "validacao_falhou": "Nao foi possivel validar os dados informados.",
+    "erro_banco": "Nao foi possivel redefinir a senha agora. Tente novamente.",
+    "sucesso_msg": "Senha redefinida com sucesso. Vamos abrir o Dashboard."
   },
   "flex_calc": {
     "title": "Calculadora Flex",

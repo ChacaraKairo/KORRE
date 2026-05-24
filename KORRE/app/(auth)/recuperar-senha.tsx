@@ -6,7 +6,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import { safeBack } from '../../utils/navigation/safeBack';
 import { useRouter } from 'expo-router';
