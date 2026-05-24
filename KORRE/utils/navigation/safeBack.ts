@@ -9,7 +9,7 @@ type RouterWithBack = {
 
 export const safeBack = (
   router: RouterWithBack,
-  fallback: Href = AppRoutes.dashboard,
+  fallback: Href = AppRoutes.login,
 ) => {
   if (router.canGoBack?.()) {
     router.back();

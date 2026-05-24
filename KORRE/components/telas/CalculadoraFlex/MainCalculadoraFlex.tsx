@@ -1,7 +1,9 @@
 import {
   FontAwesome5,
-  Ionicons } from '@expo/vector-icons';
+  Ionicons,
+} from '@expo/vector-icons';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,7 +16,9 @@ import { useTema } from '../../../hooks/modo_tema';
 
 import { styles } from '../../../styles/generated/components/telas/CalculadoraFlex/MainCalculadoraFlexStyles';
 import { inlineStyles } from '../../../styles/generated-inline/components/telas/CalculadoraFlex/MainCalculadoraFlexInlineStyles';
+
 export default function MainCalculadoraFlex() {
+  const { t } = useTranslation();
   const [precoEtanol, setPrecoEtanol] = useState('');
   const [precoGasolina, setPrecoGasolina] = useState('');
 
@@ -22,8 +26,9 @@ export default function MainCalculadoraFlex() {
     const alc = parseFloat(precoEtanol.replace(',', '.'));
     const gas = parseFloat(precoGasolina.replace(',', '.'));
 
-    if (!alc || !gas || isNaN(alc) || isNaN(gas))
+    if (!alc || !gas || Number.isNaN(alc) || Number.isNaN(gas)) {
       return null;
+    }
 
     const paridade = (alc / gas) * 100;
     const compensaEtanol = paridade <= 75;
@@ -36,56 +41,39 @@ export default function MainCalculadoraFlex() {
   };
 
   const resultado = calcularVantagem();
-
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
   return (
     <KeyboardAvoidingView
       style={inlineStyles.inline1}
-      behavior={
-        Platform.OS === 'ios' ? 'padding' : undefined
-      }
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView
         contentContainerStyle={styles.main}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        {/* INPUTS */}
         <View style={styles.inputsSection}>
-          {/* Etanol */}
           <View style={styles.inputGroup}>
-            <Text
-              style={[
-                styles.inputLabel,
-                { color: '#00C853' },
-              ]}
-            >
-              Preço do Etanol (Litro)
+            <Text style={[styles.inputLabel, { color: '#00C853' }]}>
+              {t('flex_calc.ethanol_price_label')}
             </Text>
             <View
               style={[
                 styles.inputWrapper,
                 {
-                  backgroundColor: isDark
-                    ? '#161616'
-                    : '#FFFFFF',
+                  backgroundColor: isDark ? '#161616' : '#FFFFFF',
                   borderColor: isDark ? '#222' : '#E0E0E0',
                 },
               ]}
             >
-              <Text
-                style={[
-                  styles.inputPrefix,
-                  { color: '#00C853' },
-                ]}
-              >
+              <Text style={[styles.inputPrefix, { color: '#00C853' }]}>
                 R$
               </Text>
               <TextInput
                 style={[styles.input, { color: '#00C853' }]}
-                placeholder="0.00"
+                placeholder={t('flex_calc.placeholder_price')}
                 placeholderTextColor="rgba(0,200,83,0.2)"
                 keyboardType="decimal-pad"
                 value={precoEtanol}
@@ -95,39 +83,26 @@ export default function MainCalculadoraFlex() {
             </View>
           </View>
 
-          {/* Gasolina */}
           <View style={styles.inputGroup}>
-            <Text
-              style={[
-                styles.inputLabel,
-                { color: '#EAB308' },
-              ]}
-            >
-              Preço da Gasolina (Litro)
+            <Text style={[styles.inputLabel, { color: '#EAB308' }]}>
+              {t('flex_calc.gasoline_price_label')}
             </Text>
             <View
               style={[
                 styles.inputWrapper,
                 styles.inputWrapperGas,
                 {
-                  backgroundColor: isDark
-                    ? '#161616'
-                    : '#FFFFFF',
+                  backgroundColor: isDark ? '#161616' : '#FFFFFF',
                   borderColor: isDark ? '#222' : '#E0E0E0',
                 },
               ]}
             >
-              <Text
-                style={[
-                  styles.inputPrefix,
-                  { color: '#EAB308' },
-                ]}
-              >
+              <Text style={[styles.inputPrefix, { color: '#EAB308' }]}>
                 R$
               </Text>
               <TextInput
                 style={[styles.input, { color: '#EAB308' }]}
-                placeholder="0.00"
+                placeholder={t('flex_calc.placeholder_price')}
                 placeholderTextColor="rgba(234,179,8,0.2)"
                 keyboardType="decimal-pad"
                 value={precoGasolina}
@@ -138,7 +113,6 @@ export default function MainCalculadoraFlex() {
           </View>
         </View>
 
-        {/* RESULTADO */}
         {resultado ? (
           <View
             style={[
@@ -149,7 +123,7 @@ export default function MainCalculadoraFlex() {
             ]}
           >
             <Text style={styles.resultLabel}>
-              Ponto de Equilíbrio:
+              {t('flex_calc.break_even')}
             </Text>
             <Text
               style={[
@@ -162,8 +136,8 @@ export default function MainCalculadoraFlex() {
               ]}
             >
               {resultado.compensaEtanol
-                ? 'Etanol'
-                : 'Gasolina'}
+                ? t('flex_calc.ethanol')
+                : t('flex_calc.gasoline')}
             </Text>
 
             <View style={styles.resultDivider} />
@@ -171,7 +145,7 @@ export default function MainCalculadoraFlex() {
             <View style={styles.resultStats}>
               <View style={styles.resultStat}>
                 <Text style={styles.resultStatLabel}>
-                  Rendimento
+                  {t('flex_calc.performance')}
                 </Text>
                 <Text
                   style={[
@@ -194,7 +168,7 @@ export default function MainCalculadoraFlex() {
                     { color: isDark ? '#888' : '#555' },
                   ]}
                 >
-                  Limite Etanol
+                  {t('flex_calc.ethanol_limit')}
                 </Text>
                 <Text
                   style={[
@@ -212,9 +186,7 @@ export default function MainCalculadoraFlex() {
             style={[
               styles.emptyCard,
               {
-                backgroundColor: isDark
-                  ? '#0A0A0A'
-                  : '#FFFFFF',
+                backgroundColor: isDark ? '#0A0A0A' : '#FFFFFF',
                 borderColor: isDark ? '#222' : '#E0E0E0',
               },
             ]}
@@ -230,12 +202,11 @@ export default function MainCalculadoraFlex() {
                 { color: isDark ? '#333' : '#888' },
               ]}
             >
-              Insira os preços{'\n'}para o diagnóstico
+              {t('flex_calc.empty_state')}
             </Text>
           </View>
         )}
 
-        {/* INFO BOX */}
         <View
           style={[
             styles.infoBox,
@@ -259,7 +230,7 @@ export default function MainCalculadoraFlex() {
                 { color: isDark ? '#fff' : '#000' },
               ]}
             >
-              Cálculo Atualizado
+              {t('flex_calc.updated_calc_title')}
             </Text>
             <Text
               style={[
@@ -267,11 +238,9 @@ export default function MainCalculadoraFlex() {
                 { color: isDark ? '#666' : '#555' },
               ]}
             >
-              O ponto de viragem agora é de{' '}
-              <Text style={styles.infoHighlight}>75%</Text>.
-              Se o álcool custar menos de 75% da gasolina,
-              ele é financeiramente superior para motores
-              modernos e para a nova mistura E30.
+              {t('flex_calc.updated_calc_text_before')}{' '}
+              <Text style={styles.infoHighlight}>75%</Text>{' '}
+              {t('flex_calc.updated_calc_text_after')}
             </Text>
           </View>
         </View>
@@ -279,5 +248,4 @@ export default function MainCalculadoraFlex() {
     </KeyboardAvoidingView>
   );
 }
-
 

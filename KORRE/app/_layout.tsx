@@ -23,6 +23,7 @@ import { executarVerificacoesLocais } from '../notifications/LocalNotificationSc
 import { NotificationHandler } from '../notifications/NotificationHandler';
 import { logger } from '../utils/logger';
 import { safeBack } from '../utils/navigation/safeBack';
+import { getAuthSessionUserId } from '../utils/auth/authSession';
 
 import { inlineStyles } from '../styles/generated-inline/app/_layoutInlineStyles';
 export default function RootLayout() {
@@ -56,7 +57,6 @@ export default function RootLayout() {
           'SELECT id FROM perfil_usuario LIMIT 1;',
         );
         const existeUsuario = result.length > 0;
-
         setHasUser(existeUsuario);
 
         if (existeUsuario) {
@@ -81,10 +81,17 @@ export default function RootLayout() {
   useEffect(() => {
     if (!isReady || startupError) return;
     const rootSegment = segments[0] as string | undefined;
+    const isAuthenticated = getAuthSessionUserId() !== null;
     const isAtRoot =
       rootSegment === undefined ||
       rootSegment === 'index' ||
       rootSegment === '';
+    const inAuthGroup = rootSegment === '(auth)';
+    const inTabsGroup = rootSegment === '(tabs)';
+    const isPublicRoute =
+      inAuthGroup || pathname === AppRoutes.calculadora;
+    const isPrivateRoute =
+      inTabsGroup && pathname !== AppRoutes.calculadora;
 
     if (isAtRoot) {
       if (hasUser) {
@@ -92,8 +99,30 @@ export default function RootLayout() {
       } else {
         router.replace(AppRoutes.cadastro);
       }
+      return;
     }
-  }, [isReady, startupError, hasUser, segments, router]);
+
+    if (!isAuthenticated && isPrivateRoute) {
+      router.replace(AppRoutes.login);
+      return;
+    }
+
+    if (
+      isAuthenticated &&
+      isPublicRoute &&
+      pathname !== AppRoutes.termos &&
+      pathname !== '/(auth)/politica-privacidade'
+    ) {
+      router.replace(AppRoutes.dashboard);
+    }
+  }, [
+    hasUser,
+    isReady,
+    pathname,
+    router,
+    segments,
+    startupError,
+  ]);
 
   useEffect(() => {
     if (Platform.OS !== 'android' || !isReady || startupError) {
@@ -103,12 +132,17 @@ export default function RootLayout() {
     const subscription = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        const fallbackRoute = hasUser
+        const isAuthenticated = getAuthSessionUserId() !== null;
+        const fallbackRoute = isAuthenticated
           ? AppRoutes.dashboard
-          : AppRoutes.cadastro;
+          : AppRoutes.login;
 
-        if (!hasUser) {
-          if (!pathname.includes('cadastro')) {
+        if (!isAuthenticated) {
+          if (
+            pathname !== AppRoutes.login &&
+            pathname !== AppRoutes.cadastro &&
+            pathname !== AppRoutes.calculadora
+          ) {
             router.replace(fallbackRoute);
           }
           return true;
@@ -133,7 +167,12 @@ export default function RootLayout() {
     );
 
     return () => subscription.remove();
-  }, [hasUser, isReady, startupError, pathname, router]);
+  }, [
+    isReady,
+    pathname,
+    router,
+    startupError,
+  ]);
 
   if (!isReady) {
     return (

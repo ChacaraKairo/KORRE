@@ -15,6 +15,7 @@ import {
 import { AppRoutes } from '../../constants/routes';
 import { logger } from '../../utils/logger';
 import { waitForUiFeedback } from '../../utils/ui/waitForUiFeedback';
+import { setAuthSession } from '../../utils/auth/authSession';
 
 type UsuarioLogin = {
   id: number;
@@ -150,6 +151,7 @@ export const useLogin = () => {
 
       if (usuario) {
         if (await verifyPassword(senhaLimpa, usuario.senha)) {
+          setAuthSession(usuario.id);
           const senhaAtual = parsePasswordHash(usuario.senha);
           await resetarTentativasLogin();
           await db.runAsync(
@@ -264,6 +266,7 @@ export const useLogin = () => {
           return;
         }
 
+        setAuthSession(usuario.id);
         router.replace({
           pathname: AppRoutes.dashboard,
           params: { userId: usuario.id },

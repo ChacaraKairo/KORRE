@@ -1,7 +1,8 @@
 import {
   Ionicons,
   MaterialCommunityIcons,
-  } from '@expo/vector-icons';
+} from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import {
   Modal,
   ScrollView,
@@ -13,6 +14,7 @@ import { useTema } from '../../../hooks/modo_tema';
 
 import { styles } from '../../../styles/generated/components/telas/CalculadoraFlex/ModalAjudaStyles';
 import { inlineStyles } from '../../../styles/generated-inline/components/telas/CalculadoraFlex/ModalAjudaInlineStyles';
+
 export default function ModalAjuda({
   modalAjuda,
   setModalAjuda,
@@ -22,6 +24,7 @@ export default function ModalAjuda({
     React.SetStateAction<boolean>
   >;
 }) {
+  const { t } = useTranslation();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
@@ -46,14 +49,11 @@ export default function ModalAjuda({
           contentContainerStyle={styles.modalContent}
           showsVerticalScrollIndicator={false}
         >
-          {/* Close Button */}
           <TouchableOpacity
             style={[
               styles.modalCloseBtn,
               {
-                backgroundColor: isDark
-                  ? '#161616'
-                  : '#FFFFFF',
+                backgroundColor: isDark ? '#161616' : '#FFFFFF',
                 borderColor: isDark ? '#222' : '#E0E0E0',
               },
             ]}
@@ -67,7 +67,6 @@ export default function ModalAjuda({
             />
           </TouchableOpacity>
 
-          {/* Header */}
           <View style={styles.modalHeader}>
             <View style={styles.modalIconWrap}>
               <Ionicons
@@ -82,21 +81,18 @@ export default function ModalAjuda({
                 { color: isDark ? '#fff' : '#000' },
               ]}
             >
-              Entenda a Matemática
+              {t('flex_calc.help.title')}
             </Text>
             <Text style={styles.modalSubtitle}>
-              Por que os 70% ficaram para trás?
+              {t('flex_calc.help.subtitle')}
             </Text>
           </View>
 
-          {/* Tópico 1 */}
           <View
             style={[
               styles.modalCard,
               {
-                backgroundColor: isDark
-                  ? '#161616'
-                  : '#FFFFFF',
+                backgroundColor: isDark ? '#161616' : '#FFFFFF',
                 borderColor: isDark ? '#222' : '#E0E0E0',
               },
             ]}
@@ -113,7 +109,7 @@ export default function ModalAjuda({
                   { color: '#EAB308' },
                 ]}
               >
-                A Nova Gasolina (E30)
+                {t('flex_calc.help.topic1_title')}
               </Text>
             </View>
             <Text
@@ -122,31 +118,24 @@ export default function ModalAjuda({
                 { color: isDark ? '#888' : '#555' },
               ]}
             >
-              Desde agosto de 2025, a gasolina comum no
-              Brasil passou a ter{' '}
+              {t('flex_calc.help.topic1_text_before')}{' '}
               <Text
                 style={[
                   styles.highlight,
                   { color: isDark ? '#fff' : '#000' },
                 ]}
               >
-                30% de etanol anidro
+                {t('flex_calc.help.topic1_highlight')}
               </Text>{' '}
-              (antes era 27%). Isso significa que a gasolina
-              ficou menos pura e rende menos quilómetros
-              por litro, o que aproxima o custo-benefício
-              dos dois combustíveis.
+              {t('flex_calc.help.topic1_text_after')}
             </Text>
           </View>
 
-          {/* Tópico 2 */}
           <View
             style={[
               styles.modalCard,
               {
-                backgroundColor: isDark
-                  ? '#161616'
-                  : '#FFFFFF',
+                backgroundColor: isDark ? '#161616' : '#FFFFFF',
                 borderColor: isDark ? '#222' : '#E0E0E0',
               },
             ]}
@@ -163,7 +152,7 @@ export default function ModalAjuda({
                   { color: '#00C853' },
                 ]}
               >
-                Motores Inteligentes
+                {t('flex_calc.help.topic2_title')}
               </Text>
             </View>
             <Text
@@ -172,23 +161,15 @@ export default function ModalAjuda({
                 { color: isDark ? '#888' : '#555' },
               ]}
             >
-              Os carros flex fabricados nos últimos anos
-              possuem sistemas de injeção e taxas de
-              compressão muito mais eficientes com o
-              combustível vegetal. O etanol agora rende mais
-              do que rendia antigamente em relação à
-              gasolina.
+              {t('flex_calc.help.topic2_text')}
             </Text>
           </View>
 
-          {/* Tópico 3 */}
           <View
             style={[
               styles.modalCard,
               {
-                backgroundColor: isDark
-                  ? '#161616'
-                  : '#FFFFFF',
+                backgroundColor: isDark ? '#161616' : '#FFFFFF',
                 borderColor: isDark ? '#222' : '#E0E0E0',
               },
             ]}
@@ -205,7 +186,7 @@ export default function ModalAjuda({
                   { color: '#3B82F6' },
                 ]}
               >
-                Seja Preciso
+                {t('flex_calc.help.topic3_title')}
               </Text>
             </View>
             <Text
@@ -217,16 +198,13 @@ export default function ModalAjuda({
                 },
               ]}
             >
-              A regra dos 75% é uma média nacional segura.
-              Mas queres ser exato? Faz o seguinte:
+              {t('flex_calc.help.topic3_text')}
             </Text>
             <View
               style={[
                 styles.stepsBox,
                 {
-                  backgroundColor: isDark
-                    ? '#0A0A0A'
-                    : '#F5F5F5',
+                  backgroundColor: isDark ? '#0A0A0A' : '#F5F5F5',
                   borderColor: isDark ? '#222' : '#E0E0E0',
                 },
               ]}
@@ -237,8 +215,7 @@ export default function ModalAjuda({
                   { color: isDark ? '#fff' : '#000' },
                 ]}
               >
-                1. Vê quanto o teu veículo faz por litro no
-                Etanol (ex: 9km/l)
+                {t('flex_calc.help.step1')}
               </Text>
               <Text
                 style={[
@@ -246,7 +223,7 @@ export default function ModalAjuda({
                   { color: isDark ? '#fff' : '#000' },
                 ]}
               >
-                2. Vê quanto faz na Gasolina (ex: 12km/l)
+                {t('flex_calc.help.step2')}
               </Text>
               <Text
                 style={[
@@ -254,9 +231,9 @@ export default function ModalAjuda({
                   { color: isDark ? '#fff' : '#000' },
                 ]}
               >
-                3. Divide um pelo outro:{' '}
+                {t('flex_calc.help.step3_before')}{' '}
                 <Text style={inlineStyles.inline1}>
-                  9 ÷ 12 = 0,75
+                  {t('flex_calc.help.step3_formula')}
                 </Text>
               </Text>
             </View>
@@ -268,7 +245,7 @@ export default function ModalAjuda({
             activeOpacity={0.85}
           >
             <Text style={styles.modalCtaText}>
-              Tudo certo, vamos rodar!
+              {t('flex_calc.help.cta')}
             </Text>
           </TouchableOpacity>
         </ScrollView>
@@ -276,5 +253,3 @@ export default function ModalAjuda({
     </Modal>
   );
 }
-
-

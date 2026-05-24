@@ -19,6 +19,7 @@ import { LanguageSwitcherButton } from '../../components/LanguageSwitcherButton'
 import { useLogin } from '../../hooks/login/useLogin';
 import { loginStyles as styles } from '../../styles/telas/login/LoginStyles';
 import { AppRoutes } from '../../constants/routes';
+import { setReturnRoute } from '../../utils/navigation/returnRoute';
 
 import { inlineStyles } from '../../styles/generated-inline/app/(auth)/loginInlineStyles';
 import { dynamicInlineStyles } from '../../styles/generated-dynamic/app/(auth)/loginDynamicStyles';
@@ -40,24 +41,23 @@ const LoginScreen: React.FC = () => {
     bounceAnim,
     realizarLoginManual,
     realizarLoginBiometrico,
-    recuperarSenha,
   } = useLogin();
 
   return (
     <View style={styles.container}>
-      <LanguageSwitcherButton />
-      <TouchableOpacity
-        style={inlineStyles.inline1}
-        onPress={() =>
-          router.push({
-            pathname: AppRoutes.calculadora,
-            params: { origem: 'login' },
-          })
-        }
-        activeOpacity={0.7}
-      >
-        <Fuel size={24} color="#00C853" />
-      </TouchableOpacity>
+      <View style={inlineStyles.inline0}>
+        <LanguageSwitcherButton style={inlineStyles.inline7} />
+        <TouchableOpacity
+          style={inlineStyles.inline1}
+          onPress={() => {
+            setReturnRoute(AppRoutes.login);
+            router.push(AppRoutes.calculadora);
+          }}
+          activeOpacity={0.7}
+        >
+          <Fuel size={24} color="#00C853" />
+        </TouchableOpacity>
+      </View>
 
       <KeyboardAvoidingView
         behavior={
@@ -96,7 +96,9 @@ const LoginScreen: React.FC = () => {
             onLogin={realizarLoginManual}
             onBiometria={realizarLoginBiometrico}
             onEsqueciSenha={
-              temUsuario ? recuperarSenha : undefined
+              temUsuario
+                ? () => router.push(AppRoutes.recuperarSenha)
+                : undefined
             }
             onNavigateCadastro={
               !temUsuario

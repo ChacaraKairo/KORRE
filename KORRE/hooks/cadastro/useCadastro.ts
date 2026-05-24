@@ -11,6 +11,7 @@ import { hashPassword } from '../../utils/auth/passwordHash';
 import { AppRoutes } from '../../constants/routes';
 import { logger } from '../../utils/logger';
 import { waitForUiFeedback } from '../../utils/ui/waitForUiFeedback';
+import { setAuthSession } from '../../utils/auth/authSession';
 
 export const useCadastro = () => {
   const router = useRouter();
@@ -118,6 +119,7 @@ export const useCadastro = () => {
       );
 
       const usuarioId = resultUsuario.lastInsertRowId;
+      setAuthSession(usuarioId);
 
       await VeiculoService.inserirVeiculo({
         tipo: tipoVeiculo,

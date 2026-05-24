@@ -27,6 +27,7 @@ import { StatusGrid } from '../../components/telas/Dashboard/StatusGrid';
 import { UltimasMovimentacoes } from '../../components/telas/Dashboard/UltimasMovimentacoes';
 import { VeiculoCard } from '../../components/telas/Dashboard/VeiculoCard';
 import { AppRoutes } from '../../constants/routes';
+import { setReturnRoute } from '../../utils/navigation/returnRoute';
 
 export default function DashboardScreen() {
   const { t } = useTranslation();
@@ -66,8 +67,10 @@ export default function DashboardScreen() {
     router.push(AppRoutes.garagem);
   const onIrParaOficina = () =>
     router.push(AppRoutes.oficina);
-  const abrirCalculadora = () =>
+  const abrirCalculadora = () => {
+    setReturnRoute(AppRoutes.dashboard);
     router.push(AppRoutes.calculadora);
+  };
 
   // Handler do Modal de KM
   const salvarKm = async () => {

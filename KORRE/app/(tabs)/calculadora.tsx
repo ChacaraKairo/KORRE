@@ -3,7 +3,6 @@ import {
   StatusBar,
   View,
 } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
 import HeaderCalculadoraFlex from '../../components/telas/CalculadoraFlex/HeaderCalculadoraFlex';
 import MainCalculadoraFlex from '../../components/telas/CalculadoraFlex/MainCalculadoraFlex';
 import ModalAjuda from '../../components/telas/CalculadoraFlex/ModalAjuda';
@@ -14,7 +13,6 @@ export default function CalculadoraFlexScreen() {
   const [modalAjuda, setModalAjuda] = useState(false);
   const { tema } = useTema();
   const isDark = tema === 'escuro';
-  const { origem } = useLocalSearchParams();
 
   return (
     <View
@@ -34,7 +32,6 @@ export default function CalculadoraFlexScreen() {
       />
       <HeaderCalculadoraFlex
         setModalAjuda={setModalAjuda}
-        origem={origem as string}
       />
       <MainCalculadoraFlex />
     </View>

@@ -1,11 +1,16 @@
 import { StyleSheet } from 'react-native';
 
 export const inlineStyles = StyleSheet.create({
-  inline1: {
+  inline0: {
           position: 'absolute',
           top: 50,
           right: 20,
           zIndex: 50,
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 10,
+        },
+  inline1: {
           backgroundColor: '#161616',
           padding: 10,
           borderRadius: 12,
@@ -16,6 +21,12 @@ export const inlineStyles = StyleSheet.create({
           shadowOpacity: 0.25,
           shadowRadius: 3.84,
           elevation: 5,
+        },
+  inline7: {
+          position: 'relative',
+          top: 0,
+          right: 0,
+          zIndex: 1,
         },
   inline2: { flex: 1 },
   inline3: {

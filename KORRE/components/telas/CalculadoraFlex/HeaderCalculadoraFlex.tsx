@@ -6,30 +6,27 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { AppRoutes } from '../../../constants/routes';
 import { useTema } from '../../../hooks/modo_tema';
-import { safeBack } from '../../../utils/navigation/safeBack';
+import { goBackToReturnRoute } from '../../../utils/navigation/returnRoute';
 
 import { styles } from '../../../styles/generated/components/telas/CalculadoraFlex/HeaderCalculadoraFlexStyles';
 export default function HeaderCalculadoraFlex({
   setModalAjuda,
-  origem,
 }: {
   setModalAjuda: React.Dispatch<
     React.SetStateAction<boolean>
   >;
-  origem?: string;
 }) {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
   const handleBack = () => {
-    safeBack(
-      router,
-      origem === 'login' ? AppRoutes.login : AppRoutes.dashboard,
-    );
+    goBackToReturnRoute(router, AppRoutes.login);
   };
 
   return (
@@ -59,7 +56,7 @@ export default function HeaderCalculadoraFlex({
         />
       </TouchableOpacity>
       <Text style={styles.headerTitle}>
-        Calculadora Flex
+        {t('flex_calc.title')}
       </Text>
       <TouchableOpacity
         style={styles.headerHelpBtn}

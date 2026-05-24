@@ -31,6 +31,22 @@ const deriveKey = (passphrase: string, salt: string) =>
     hasher: CryptoJS.algo.SHA256,
   });
 
+const getRandomHex = (bytes: number) => {
+  const random = new Uint8Array(bytes);
+
+  if (typeof globalThis.crypto?.getRandomValues === 'function') {
+    globalThis.crypto.getRandomValues(random);
+  } else {
+    for (let index = 0; index < bytes; index += 1) {
+      random[index] = Math.floor(Math.random() * 256);
+    }
+  }
+
+  return Array.from(random, (value) =>
+    value.toString(16).padStart(2, '0'),
+  ).join('');
+};
+
 export const encryptJson = (
   data: unknown,
   passphrase: string,
@@ -39,10 +55,9 @@ export const encryptJson = (
     throw new Error('Senha de backup vazia.');
   }
 
-  const salt = CryptoJS.lib.WordArray.random(SALT_BYTES);
-  const iv = CryptoJS.lib.WordArray.random(IV_BYTES);
-  const saltHex = salt.toString(CryptoJS.enc.Hex);
-  const ivHex = iv.toString(CryptoJS.enc.Hex);
+  const saltHex = getRandomHex(SALT_BYTES);
+  const ivHex = getRandomHex(IV_BYTES);
+  const iv = CryptoJS.enc.Hex.parse(ivHex);
   const key = deriveKey(passphrase, saltHex);
   const encrypted = CryptoJS.AES.encrypt(
     JSON.stringify(data),

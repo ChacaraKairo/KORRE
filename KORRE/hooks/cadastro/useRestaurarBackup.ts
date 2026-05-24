@@ -5,12 +5,14 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppRoutes } from '../../constants/routes';
+import db from '../../database/DatabaseInit';
 import { BackupRestoreService } from '../../services/BackupRestoreService';
 import { logger } from '../../utils/logger';
 import {
   decryptJson,
   isEncryptedPayload,
 } from '../../utils/security/encryption';
+import { setAuthSession } from '../../utils/auth/authSession';
 import { showCustomAlert } from '../alert/useCustomAlert';
 
 const mostrarAviso = (titulo: string, mensagem: string) => {
@@ -49,6 +51,12 @@ export function useRestaurarBackup() {
 
     try {
       await BackupRestoreService.restaurarBackup(data);
+      const restoredUser = await db.getFirstAsync<{ id: number }>(
+        'SELECT id FROM perfil_usuario LIMIT 1',
+      );
+      if (restoredUser?.id) {
+        setAuthSession(restoredUser.id);
+      }
 
       Alert.alert(
         t('configuracoes.backup_restaurado'),

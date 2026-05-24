@@ -57,6 +57,10 @@ i18n.use(initReactI18next).init({
 });
 
 export const loadSavedLanguage = async () => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   const savedLanguage = await AsyncStorage.getItem(
     APP_LANGUAGE_STORAGE_KEY,
   );

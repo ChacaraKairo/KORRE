@@ -11,6 +11,7 @@ import type {
 } from '../../types/database';
 import { logger } from '../../utils/logger';
 import { showCustomAlert } from '../alert/useCustomAlert';
+import { clearAuthSession } from '../../utils/auth/authSession';
 
 export function usePerfil() {
   const { t } = useTranslation();
@@ -178,7 +179,10 @@ export function usePerfil() {
         {
           text: t('perfil.sair_acao'),
           style: 'destructive',
-          onPress: () => router.replace(AppRoutes.login),
+          onPress: () => {
+            clearAuthSession();
+            router.replace(AppRoutes.login);
+          },
         },
       ],
     );
