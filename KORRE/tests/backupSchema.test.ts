@@ -81,6 +81,30 @@ describe('backup schema validation', () => {
     assert.equal((tabelas.analises_corrida as unknown[]).length, 1);
   });
 
+  it('aceita backup KORRE v7 com campos de manutencao planejada', () => {
+    const backup = makeBackup(BACKUP_APP_NAME, 7) as any;
+    backup.tabelas.itens_manutencao = [
+      {
+        id: 1,
+        veiculo_id: 2,
+        nome: 'Pneus',
+        icone: 'circle-dot',
+        ultima_troca_km: 0,
+        intervalo_km: 40000,
+        ultima_troca_data: null,
+        intervalo_meses: null,
+        criticidade: 'alta',
+        valor_previsto: 1600,
+        origem: 'auditoria_korre',
+        tem_historico_real: 0,
+        computar_no_custo: 1,
+      },
+    ];
+
+    const tabelas = validateBackupPayload(backup);
+    assert.equal((tabelas.itens_manutencao as unknown[]).length, 1);
+  });
+
   it('aceita backup v4 sem tabela de origens de ganho', () => {
     const backup = makeBackup(BACKUP_APP_NAME, 4) as any;
     delete backup.tabelas.origens_ganho_usuario;
@@ -139,6 +163,59 @@ describe('backup schema validation', () => {
       'Delivery',
       'ShoppingBag',
       '#EA1D2C',
+      1,
+    ]);
+  });
+
+  it('sanitiza campos novos de manutencao planejada no restore', () => {
+    const { columns, values } = sanitizeBackupRow(
+      'itens_manutencao',
+      {
+        id: 1,
+        veiculo_id: 2,
+        nome: 'Oleo e filtros',
+        icone: 'droplets',
+        ultima_troca_km: 0,
+        intervalo_km: 10000,
+        ultima_troca_data: null,
+        intervalo_meses: null,
+        criticidade: 'alta',
+        valor_previsto: 280,
+        origem: 'auditoria_korre',
+        tem_historico_real: 0,
+        computar_no_custo: 1,
+        campo_inesperado: 'ignorado',
+      },
+    );
+
+    assert.deepEqual(columns, [
+      'id',
+      'veiculo_id',
+      'nome',
+      'icone',
+      'ultima_troca_km',
+      'intervalo_km',
+      'ultima_troca_data',
+      'intervalo_meses',
+      'criticidade',
+      'valor_previsto',
+      'origem',
+      'tem_historico_real',
+      'computar_no_custo',
+    ]);
+    assert.deepEqual(values, [
+      1,
+      2,
+      'Oleo e filtros',
+      'droplets',
+      0,
+      10000,
+      null,
+      null,
+      'alta',
+      280,
+      'auditoria_korre',
+      0,
       1,
     ]);
   });

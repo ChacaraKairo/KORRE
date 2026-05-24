@@ -350,7 +350,12 @@
     "manutencao_configurada": "Maintenance configured!",
     "sugestao_adicionar": "Suggestion to add",
     "planejado_aguardando": "Planned by KORRE Audit",
-    "status_planejado": "Planned"
+    "status_planejado": "Planned",
+    "aguardando_primeira_manutencao": "Waiting for the first registered maintenance.",
+    "valor_previsto": "Estimated value",
+    "origem_auditoria": "Source: KORRE Audit",
+    "desgaste_atual": "Current wear",
+    "realizada": "Done"
   },
   "historico": {
     "periodo": "Period",
@@ -501,6 +506,12 @@
     "salvar_analise": "Save analysis",
     "analise_salva": "Analysis saved",
     "historico_titulo": "Recent history",
+    "erros": {
+      "campos_obrigatorios": "Fill in all ride fields.",
+      "valor_oferta": "Enter an offer amount greater than zero.",
+      "tempo_total": "Enter a total time greater than zero.",
+      "distancia": "Enter the pickup distance and the trip distance."
+    },
     "decisoes": {
       "ideal": "Ideal",
       "aceitavel": "Acceptable",

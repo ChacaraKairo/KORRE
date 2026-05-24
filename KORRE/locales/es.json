@@ -350,7 +350,12 @@
     "manutencao_configurada": "Mantenimiento configurado!",
     "sugestao_adicionar": "Sugerencia para agregar",
     "planejado_aguardando": "Planificado por la Auditoria KORRE",
-    "status_planejado": "Planificado"
+    "status_planejado": "Planificado",
+    "aguardando_primeira_manutencao": "Esperando el primer mantenimiento registrado.",
+    "valor_previsto": "Valor previsto",
+    "origem_auditoria": "Origen: Auditoria KORRE",
+    "desgaste_atual": "Desgaste actual",
+    "realizada": "Realizado"
   },
   "historico": {
     "periodo": "Periodo",
@@ -501,6 +506,12 @@
     "salvar_analise": "Guardar analisis",
     "analise_salva": "Analisis guardado",
     "historico_titulo": "Historial reciente",
+    "erros": {
+      "campos_obrigatorios": "Completa todos los campos del viaje.",
+      "valor_oferta": "Ingresa un valor ofrecido mayor que cero.",
+      "tempo_total": "Ingresa un tiempo total mayor que cero.",
+      "distancia": "Ingresa la distancia hasta la recogida y la distancia del viaje."
+    },
     "decisoes": {
       "ideal": "Ideal",
       "aceitavel": "Aceptable",

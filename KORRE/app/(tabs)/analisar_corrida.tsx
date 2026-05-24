@@ -23,6 +23,7 @@ export default function AnalisarCorridaScreen() {
   const {
     analisar,
     analiseSalva,
+    erroValidacao,
     historico,
     indicesConfigurados,
     kmEmbarque,
@@ -180,6 +181,27 @@ export default function AnalisarCorridaScreen() {
               {t('ride_decision.analisar')}
             </Text>
           </TouchableOpacity>
+
+          {erroValidacao && (
+            <View
+              style={{
+                padding: 12,
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: '#FCA5A5',
+                backgroundColor: isDark ? '#3B0A0A' : '#FEF2F2',
+              }}
+            >
+              <Text
+                style={{
+                  color: isDark ? '#FECACA' : '#991B1B',
+                  fontWeight: '800',
+                }}
+              >
+                {t(erroValidacao)}
+              </Text>
+            </View>
+          )}
 
           {resultado && (
             <View

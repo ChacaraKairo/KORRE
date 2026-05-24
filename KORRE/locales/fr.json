@@ -350,7 +350,12 @@
     "manutencao_configurada": "Entretien configure!",
     "sugestao_adicionar": "Suggestion a ajouter",
     "planejado_aguardando": "Planifie par l'Audit KORRE",
-    "status_planejado": "Planifie"
+    "status_planejado": "Planifie",
+    "aguardando_primeira_manutencao": "En attente du premier entretien enregistre.",
+    "valor_previsto": "Valeur estimee",
+    "origem_auditoria": "Source : Audit KORRE",
+    "desgaste_atual": "Usure actuelle",
+    "realizada": "Effectuee"
   },
   "historico": {
     "periodo": "Periode",
@@ -501,6 +506,12 @@
     "salvar_analise": "Enregistrer l'analyse",
     "analise_salva": "Analyse enregistree",
     "historico_titulo": "Historique recent",
+    "erros": {
+      "campos_obrigatorios": "Remplissez tous les champs de la course.",
+      "valor_oferta": "Saisissez un montant propose superieur a zero.",
+      "tempo_total": "Saisissez un temps total superieur a zero.",
+      "distancia": "Saisissez la distance jusqu'au depart et la distance de la course."
+    },
     "decisoes": {
       "ideal": "Ideal",
       "aceitavel": "Acceptable",

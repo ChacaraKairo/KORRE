@@ -31,6 +31,12 @@
 - [x] `npm run i18n:scan`
 - [x] Testes unitarios da Analise Manual de Corrida
 - [x] Testes de schema de backup com `analises_corrida`
+- [x] Testes de schema de backup com campos V7 de `itens_manutencao`
+- [x] Validacao de entrada da Analise Manual de Corrida por typecheck/lint
+- [x] Acesso visual para Analise Manual de Corrida no Dashboard e na Auditoria KORRE
 - [ ] Testar Analise Manual de Corrida em aparelho fisico
 - [ ] Testar historico de analises em aparelho fisico
 - [ ] Testar manutencao planejada gerada pela Auditoria KORRE em aparelho fisico
+- [ ] Testar backup/restauracao V7 em aparelho fisico
+- [ ] Implementar historico/qualidade dos indices KORRE
+- [ ] Implementar custo real com dados financeiros

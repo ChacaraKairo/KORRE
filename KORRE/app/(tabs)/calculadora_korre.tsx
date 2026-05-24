@@ -1,7 +1,6 @@
-import {
-  Save } from 'lucide-react-native';
-import React,
-  { useState } from 'react';
+import { useRouter } from 'expo-router';
+import { Route, Save } from 'lucide-react-native';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
@@ -29,6 +28,7 @@ import {
   useIndicesKorreForm,
 } from '../../modules/indicesKorre';
 import { useTema } from '../../hooks/modo_tema';
+import { AppRoutes } from '../../constants/routes';
 
 // Layout (A casca da tela)
 
@@ -39,6 +39,7 @@ import { MainButton as Button } from '../../components/ui/buttons/Button'; // Ma
 
 export default function CalculadoraScreen() {
   const { t } = useTranslation();
+  const router = useRouter();
   const {
     form,
     handleChange,
@@ -340,6 +341,30 @@ export default function CalculadoraScreen() {
                   onPress={calcularESalvar}
                   icon={Save}
                 />
+                <TouchableOpacity
+                  onPress={() => router.push(AppRoutes.analisarCorrida)}
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    gap: 8,
+                    marginTop: 10,
+                    paddingVertical: 13,
+                    borderRadius: 12,
+                    borderWidth: 1,
+                    borderColor: '#00C853',
+                  }}
+                >
+                  <Route size={18} color="#00C853" />
+                  <Text
+                    style={{
+                      color: '#00C853',
+                      fontWeight: '900',
+                    }}
+                  >
+                    {t('ride_decision.dashboard_cta')}
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </ScrollView>

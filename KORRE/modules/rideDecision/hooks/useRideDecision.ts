@@ -14,6 +14,8 @@ const parseNumber = (value: string) => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const isBlank = (value: string) => value.trim().length === 0;
+
 export function useRideDecision() {
   const [veiculoAtivo, setVeiculoAtivo] =
     useState<Veiculo | null>(null);
@@ -29,6 +31,9 @@ export function useRideDecision() {
   );
   const [salvando, setSalvando] = useState(false);
   const [analiseSalva, setAnaliseSalva] = useState(false);
+  const [erroValidacao, setErroValidacao] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     async function carregarVeiculoAtivo() {
@@ -64,16 +69,52 @@ export function useRideDecision() {
   );
 
   const analisar = () => {
+    setErroValidacao(null);
+
     if (!veiculoAtivo || !indicesConfigurados) {
       setResultado(null);
       return;
     }
 
+    const valorOfertaNumber = parseNumber(valorOferta);
+    const tempoTotalNumber = parseNumber(tempoTotal);
+    const kmEmbarqueNumber = parseNumber(kmEmbarque);
+    const kmViagemNumber = parseNumber(kmViagem);
+
+    if (
+      isBlank(valorOferta) ||
+      isBlank(tempoTotal) ||
+      isBlank(kmEmbarque) ||
+      isBlank(kmViagem)
+    ) {
+      setResultado(null);
+      setErroValidacao('ride_decision.erros.campos_obrigatorios');
+      return;
+    }
+
+    if (valorOfertaNumber <= 0) {
+      setResultado(null);
+      setErroValidacao('ride_decision.erros.valor_oferta');
+      return;
+    }
+
+    if (tempoTotalNumber <= 0) {
+      setResultado(null);
+      setErroValidacao('ride_decision.erros.tempo_total');
+      return;
+    }
+
+    if (kmEmbarqueNumber < 0 || kmViagemNumber <= 0) {
+      setResultado(null);
+      setErroValidacao('ride_decision.erros.distancia');
+      return;
+    }
+
     const result = RideDecisionService.analisar({
-      valorOferta: parseNumber(valorOferta),
-      tempoTotalMinutos: parseNumber(tempoTotal),
-      kmAteEmbarque: parseNumber(kmEmbarque),
-      kmViagem: parseNumber(kmViagem),
+      valorOferta: valorOfertaNumber,
+      tempoTotalMinutos: tempoTotalNumber,
+      kmAteEmbarque: kmEmbarqueNumber,
+      kmViagem: kmViagemNumber,
       custoKm: Number(veiculoAtivo.custo_km_calculado ?? 0),
       custoMinuto: Number(veiculoAtivo.custo_minuto_calculado ?? 0),
       metaLucroMinuto: Number(
@@ -108,6 +149,7 @@ export function useRideDecision() {
   return {
     analisar,
     analiseSalva,
+    erroValidacao,
     historico,
     indicesConfigurados,
     kmEmbarque,

@@ -66,6 +66,7 @@ export const ItemManutencaoCard = ({
   const isPlanejado =
     item.origem === 'auditoria_korre' &&
     Number(item.tem_historico_real ?? 0) === 0;
+  const valorPrevisto = Number(item.valor_previsto ?? 0);
 
   return (
     <View
@@ -137,40 +138,68 @@ export const ItemManutencaoCard = ({
             </Text>
           </View>
         )}
-        <View
-          style={itemManutencaoCardDynamicStyles.statusBadge(
-            info.cor,
-          )}
-        >
-          <Text
-            style={dynamicInlineStyles.inline1({ info })}
+        {!isPlanejado && (
+          <View
+            style={itemManutencaoCardDynamicStyles.statusBadge(
+              info.cor,
+            )}
           >
-            {info.status}
-          </Text>
-        </View>
+            <Text
+              style={dynamicInlineStyles.inline1({ info })}
+            >
+              {info.status}
+            </Text>
+          </View>
+        )}
       </View>
 
-      <View>
+      {isPlanejado ? (
         <View
-          style={inlineStyles.inline2}
+          style={{
+            gap: 6,
+            padding: 12,
+            borderRadius: 12,
+            backgroundColor: isDark ? '#0A0A0A' : '#F7FDF9',
+            borderWidth: 1,
+            borderColor: isDark ? '#1F3A2A' : '#CFF2DA',
+          }}
         >
-          <Text
-            style={dynamicInlineStyles.inline2({ isDark })}
-          >
-            Desgaste Atual
+          <Text style={{ color: isDark ? '#E5E7EB' : '#111827' }}>
+            {t('oficina.aguardando_primeira_manutencao')}
           </Text>
-          <Text
-            style={dynamicInlineStyles.inline3({ info })}
-          >
-            {info.infoTexto}
+          {valorPrevisto > 0 && (
+            <Text style={{ color: isDark ? '#9CA3AF' : '#4B5563' }}>
+              {t('oficina.valor_previsto')}: R${' '}
+              {valorPrevisto.toFixed(2).replace('.', ',')}
+            </Text>
+          )}
+          <Text style={{ color: isDark ? '#9CA3AF' : '#4B5563' }}>
+            {t('oficina.origem_auditoria')}
           </Text>
         </View>
-        <View style={styles.barraBg}>
+      ) : (
+        <View>
           <View
-            style={dynamicInlineStyles.inline4({ info })}
-          />
+            style={inlineStyles.inline2}
+          >
+            <Text
+              style={dynamicInlineStyles.inline2({ isDark })}
+            >
+              {t('oficina.desgaste_atual')}
+            </Text>
+            <Text
+              style={dynamicInlineStyles.inline3({ info })}
+            >
+              {info.infoTexto}
+            </Text>
+          </View>
+          <View style={styles.barraBg}>
+            <View
+              style={dynamicInlineStyles.inline4({ info })}
+            />
+          </View>
         </View>
-      </View>
+      )}
 
       <View style={styles.botoesAcao}>
         <TouchableOpacity
@@ -189,7 +218,7 @@ export const ItemManutencaoCard = ({
           <Text
             style={dynamicInlineStyles.inline5({ isDark })}
           >
-            Realizada
+            {t('oficina.realizada')}
           </Text>
         </TouchableOpacity>
       </View>
