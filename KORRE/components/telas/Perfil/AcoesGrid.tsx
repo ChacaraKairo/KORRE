@@ -9,6 +9,7 @@ import {
 import {
   BarChart3,
   Bell,
+  Database,
   Download,
   HelpCircle,
 } from 'lucide-react-native';
@@ -16,6 +17,7 @@ import { useRouter } from 'expo-router';
 import { styles } from '../../../styles/telas/Perfil/perfilStyles';
 import { useTema } from '../../../hooks/modo_tema';
 import { useExportarDados } from '../../../hooks/perfil_user/useExportarDados';
+import { OfficialLinksBanner } from '../../OfficialLinksBanner';
 
 export const AcoesGrid = () => {
   const { t } = useTranslation();
@@ -42,6 +44,7 @@ export const AcoesGrid = () => {
       >
         {t('perfil.configuracoes')}
       </Text>
+      <OfficialLinksBanner isDark={isDark} compact />
       <View style={styles.gridAcoes}>
         <TouchableOpacity
           style={[styles.btnAcao, cardStyle]}
@@ -113,6 +116,25 @@ export const AcoesGrid = () => {
             {t('perfil.ajuda_suporte')}
           </Text>
         </TouchableOpacity>
+
+        {__DEV__ && (
+          <TouchableOpacity
+            style={[styles.btnAcao, cardStyle]}
+            onPress={() =>
+              router.push('/(tabs)/dev-database' as never)
+            }
+          >
+            <Database size={24} color="#00C853" />
+            <Text
+              style={[
+                styles.btnAcaoTexto,
+                { color: isDark ? '#FFFFFF' : '#000000' },
+              ]}
+            >
+              Banco Dev
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

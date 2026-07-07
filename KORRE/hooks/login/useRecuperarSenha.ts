@@ -10,10 +10,8 @@ import { clearAuthSession } from '../../utils/auth/authSession';
 import { resetarTentativasLogin } from '../../utils/auth/loginLockout';
 import { logger } from '../../utils/logger';
 import { criarNotificacao } from '../../notifications/NotificationService';
-
-const normalizeCpf = (value: string) => value.replace(/\D/g, '');
-const normalizePlate = (value: string) =>
-  value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+import { recoverPasswordWithLocalData } from '../../modules/auth/PasswordRecoveryService';
+import { validarRegrasSenha } from '../../utils/validacaoSenha';
 
 export const useRecuperarSenha = () => {
   const { t } = useTranslation();
@@ -48,8 +46,8 @@ export const useRecuperarSenha = () => {
       return false;
     }
 
-    if (novaSenha.trim().length < 7) {
-      setErro(t('recuperar_senha.senha_curta'));
+    if (!validarRegrasSenha(novaSenha.trim()).valida) {
+      setErro(t('recuperar_senha.senha_invalida'));
       return false;
     }
 
@@ -61,7 +59,7 @@ export const useRecuperarSenha = () => {
     return true;
   };
 
-  const resetarSenha = async (usuarioId: number) => {
+  const finalizarResetSenha = async (usuarioId: number) => {
     const novaHash = await hashPassword(novaSenha.trim());
     await db.runAsync(
       'UPDATE perfil_usuario SET senha = ? WHERE id = ?',
@@ -70,8 +68,8 @@ export const useRecuperarSenha = () => {
     await resetarTentativasLogin();
     clearAuthSession();
     await criarNotificacao({
-      titulo: 'Senha redefinida',
-      mensagem: 'Sua senha foi redefinida com sucesso.',
+      titulo: t('notifications.security.password_reset_title'),
+      mensagem: t('notifications.security.password_reset_body'),
       tipo: 'seguranca',
       prioridade: 'alta',
       destino: AppRoutes.login,
@@ -118,7 +116,7 @@ export const useRecuperarSenha = () => {
         return;
       }
 
-      await resetarSenha(usuario.id);
+      await finalizarResetSenha(usuario.id);
     } catch (error) {
       logger.error(
         '[RecuperarSenha] Falha ao redefinir senha por biometria:',
@@ -132,36 +130,73 @@ export const useRecuperarSenha = () => {
 
   const recuperarComDados = async () => {
     setErro('');
-    if (!validarSenha()) return;
-
-    const emailNormalizado = email.trim().toLowerCase();
-    const cpfNormalizado = normalizeCpf(cpf);
-    const placaNormalizada = normalizePlate(placa);
-
-    if (!emailNormalizado || !cpfNormalizado || !placaNormalizada) {
-      setErro(t('recuperar_senha.preencha_dados'));
-      return;
-    }
 
     setLoading(true);
     try {
-      const usuario = await db.getFirstAsync<{ id: number }>(
-        `SELECT p.id
-         FROM perfil_usuario p
-         INNER JOIN veiculos v ON v.id_user = p.id
-         WHERE LOWER(p.email) = ?
-           AND REPLACE(REPLACE(REPLACE(p.cpf, '.', ''), '-', ''), ' ', '') = ?
-           AND UPPER(REPLACE(REPLACE(v.placa, '-', ''), ' ', '')) = ?
-         LIMIT 1`,
-        [emailNormalizado, cpfNormalizado, placaNormalizada],
+      const result = await recoverPasswordWithLocalData(
+        {
+          email,
+          cpf,
+          plate: placa,
+          newPassword: novaSenha,
+          confirmPassword: confirmarSenha,
+        },
+        db,
+        hashPassword,
       );
 
-      if (!usuario?.id) {
+      if (!result.ok) {
+        if (result.reason === 'invalid_email') {
+          setErro(t('recuperar_senha.email_invalido'));
+          return;
+        }
+
+        if (result.reason === 'invalid_cpf') {
+          setErro(t('recuperar_senha.cpf_invalido'));
+          return;
+        }
+
+        if (result.reason === 'invalid_plate') {
+          setErro(t('recuperar_senha.placa_invalida'));
+          return;
+        }
+
+        if (result.reason === 'password_invalid') {
+          setErro(t('recuperar_senha.senha_invalida'));
+          return;
+        }
+
+        if (result.reason === 'password_mismatch') {
+          setErro(t('recuperar_senha.senhas_diferentes'));
+          return;
+        }
+
         setErro(t('recuperar_senha.validacao_falhou'));
         return;
       }
 
-      await resetarSenha(usuario.id);
+      await resetarTentativasLogin();
+      clearAuthSession();
+      await criarNotificacao({
+        titulo: t('notifications.security.password_reset_title'),
+        mensagem: t('notifications.security.password_reset_body'),
+        tipo: 'seguranca',
+        prioridade: 'alta',
+        destino: AppRoutes.login,
+        canal: 'historico',
+        grupoPreferencia: 'seguranca',
+        dedupKey: `senha_redefinida:${Date.now()}`,
+      });
+      Alert.alert(
+        t('common.sucesso'),
+        t('recuperar_senha.sucesso_msg'),
+        [
+          {
+            text: t('common.ok'),
+            onPress: () => router.replace(AppRoutes.login),
+          },
+        ],
+      );
     } catch (error) {
       logger.error(
         '[RecuperarSenha] Falha ao redefinir senha por dados:',

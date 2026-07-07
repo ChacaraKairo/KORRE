@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { ChevronRight, Route } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 
 // Camada de Estilos Consolidada
@@ -28,6 +29,7 @@ import { ModalUpdateKm } from '../../components/telas/Dashboard/ModalUpdateKm';
 import { StatusGrid } from '../../components/telas/Dashboard/StatusGrid';
 import { UltimasMovimentacoes } from '../../components/telas/Dashboard/UltimasMovimentacoes';
 import { VeiculoCard } from '../../components/telas/Dashboard/VeiculoCard';
+import { OfficialLinksBanner } from '../../components/OfficialLinksBanner';
 import { AppRoutes } from '../../constants/routes';
 import { setReturnRoute } from '../../utils/navigation/returnRoute';
 
@@ -129,6 +131,8 @@ export default function DashboardScreen() {
           onOficina={onIrParaOficina}
         />
 
+        <OfficialLinksBanner isDark={isDark} compact />
+
         {/* Organism: Grade de Manutenção Preventiva (O Coração da Oficina no Dash) */}
         <StatusGrid
           kmAtual={veiculo?.km_atual ?? 0}
@@ -154,24 +158,41 @@ export default function DashboardScreen() {
         <TouchableOpacity
           activeOpacity={0.85}
           onPress={() => router.push(AppRoutes.analisarCorrida)}
-          style={{
-            marginHorizontal: 16,
-            marginBottom: 12,
-            padding: 16,
-            borderRadius: 14,
-            backgroundColor: '#00C853',
-          }}
+          style={[
+            styles.rideDecisionCard,
+            {
+              backgroundColor: isDark ? '#101F16' : '#E9FFF0',
+              borderColor: isDark ? '#0E3B20' : '#B7F4C8',
+            },
+          ]}
         >
-          <Text
-            style={{
-              color: '#06140C',
-              fontSize: 16,
-              fontWeight: '900',
-              textAlign: 'center',
-            }}
-          >
-            {t('ride_decision.dashboard_cta')}
-          </Text>
+          <View style={styles.rideDecisionIconBox}>
+            <Route size={22} color="#06140C" />
+          </View>
+          <View style={styles.rideDecisionCopy}>
+            <Text
+              style={[
+                styles.rideDecisionTitle,
+                { color: isDark ? '#FFFFFF' : '#06140C' },
+              ]}
+              numberOfLines={1}
+            >
+              {t('ride_decision.dashboard_cta')}
+            </Text>
+            <Text
+              style={[
+                styles.rideDecisionSubtitle,
+                { color: isDark ? '#A7D7B4' : '#2B6B3D' },
+              ]}
+              numberOfLines={2}
+            >
+              {t('ride_decision.dashboard_cta_subtitle')}
+            </Text>
+          </View>
+          <ChevronRight
+            size={18}
+            color={isDark ? '#00C853' : '#167A35'}
+          />
         </TouchableOpacity>
 
         <GanhosCard

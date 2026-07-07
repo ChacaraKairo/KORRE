@@ -1,4 +1,5 @@
 import { AppRoutes } from '../../constants/routes';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 
 export const PrivacyNotificationChecker = {
@@ -8,8 +9,8 @@ export const PrivacyNotificationChecker = {
 
   async notifyPoliticaAtualizada(versao: string) {
     await criarNotificacao({
-      titulo: 'Politica de privacidade atualizada',
-      mensagem: 'Revise os termos de privacidade da versao atual.',
+      titulo: i18n.t('notifications.privacy.policy_title'),
+      mensagem: i18n.t('notifications.privacy.policy_body'),
       tipo: 'privacidade',
       prioridade: 'media',
       destino: AppRoutes.politicaPrivacidade,
@@ -21,8 +22,8 @@ export const PrivacyNotificationChecker = {
 
   async notifyTermosAtualizados(versao: string) {
     await criarNotificacao({
-      titulo: 'Termos atualizados',
-      mensagem: 'Os termos de uso foram atualizados.',
+      titulo: i18n.t('notifications.privacy.terms_title'),
+      mensagem: i18n.t('notifications.privacy.terms_body'),
       tipo: 'privacidade',
       prioridade: 'media',
       destino: AppRoutes.termos,

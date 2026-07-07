@@ -48,6 +48,9 @@ export const useFinance = () => {
     useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [salvando, setSalvando] = useState(false);
+  const [dataTransacao, setDataTransacao] = useState(
+    new Date(),
+  );
 
   const [allVehicles, setAllVehicles] = useState<Veiculo[]>(
     [],
@@ -82,6 +85,16 @@ export const useFinance = () => {
   const valorNumerico = parseFloat(
     valor.replace(/\./g, '').replace(',', '.'),
   );
+
+  const formatarDataBanco = (data: Date) => {
+    const pad = (value: number) => value.toString().padStart(2, '0');
+
+    return `${data.getFullYear()}-${pad(data.getMonth() + 1)}-${pad(
+      data.getDate(),
+    )} ${pad(data.getHours())}:${pad(data.getMinutes())}:${pad(
+      data.getSeconds(),
+    )}`;
+  };
 
   const carregarCategorias = useCallback(async (tipoConsulta: TipoTransacao) => {
     const requestId = categoriasRequestRef.current + 1;
@@ -142,6 +155,7 @@ export const useFinance = () => {
           tipoAtualRef.current = tipoInicial;
           setTipo(tipoInicial);
           setValor('0,00');
+          setDataTransacao(new Date());
           setCategoriaSelecionada('');
           setCategorias([]);
 
@@ -251,21 +265,21 @@ export const useFinance = () => {
       await db.runAsync(
         `INSERT INTO transacoes_financeiras
         (veiculo_id, categoria_id, valor, tipo, data_transacao)
-        VALUES (?, ?, ?, ?, datetime('now', 'localtime'))`,
+        VALUES (?, ?, ?, ?, ?)`,
         [
           selectedVehicleId,
           parseInt(categoriaSelecionada),
           valorNumerico,
           tipo,
+          formatarDataBanco(dataTransacao),
         ],
       );
 
       await verificarMetaDiaria();
       if (tipo === 'despesa' && valorNumerico >= 500) {
         await criarNotificacao({
-          titulo: 'Despesa acima da media',
-          mensagem:
-            'Uma despesa alta foi registrada. Revise seu fluxo financeiro.',
+          titulo: t('notifications.financial.high_expense_title'),
+          mensagem: t('notifications.financial.high_expense_body'),
           tipo: 'financeiro',
           prioridade: 'alta',
           destino: AppRoutes.finance,
@@ -280,6 +294,7 @@ export const useFinance = () => {
         setSalvando(false);
         setShowSuccess(false);
         setValor('0,00');
+        setDataTransacao(new Date());
         setCategoriaSelecionada('');
         router.replace('/(tabs)/dashboard');
       }, 1200);
@@ -333,6 +348,8 @@ export const useFinance = () => {
     valor,
     valorNumerico,
     handleValueChange,
+    dataTransacao,
+    setDataTransacao,
     categoriaSelecionada,
     setCategoriaSelecionada,
     showSuccess,

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
@@ -10,10 +10,12 @@ import {
   View,
 } from 'react-native';
 import {
+  CalendarDays,
   Check,
   TrendingDown,
   TrendingUp,
 } from 'lucide-react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { inlineStyles } from '../../styles/generated-inline/app/(tabs)/financeInlineStyles';
 import { useFinance } from '../../hooks/finance/useFinance';
@@ -37,6 +39,8 @@ export default function AddTransactionScreen() {
     valor,
     valorNumerico,
     handleValueChange,
+    dataTransacao,
+    setDataTransacao,
     categoriaSelecionada,
     setCategoriaSelecionada,
     showSuccess,
@@ -61,9 +65,33 @@ export default function AddTransactionScreen() {
 
   const { tema } = useTema();
   const isDark = tema === 'escuro';
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const voltar = useCallback(() => {
     safeBack(router);
   }, [router]);
+
+  const hoje = new Date();
+  const isHoje =
+    dataTransacao.getFullYear() === hoje.getFullYear() &&
+    dataTransacao.getMonth() === hoje.getMonth() &&
+    dataTransacao.getDate() === hoje.getDate();
+
+  const dataLabel = isHoje
+    ? t('financeiro.hoje')
+    : dataTransacao.toLocaleDateString('pt-BR');
+
+  const handleDateChange = (_event: unknown, selectedDate?: Date) => {
+    setShowDatePicker(false);
+    if (!selectedDate) return;
+
+    const proximaData = new Date(dataTransacao);
+    proximaData.setFullYear(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+    );
+    setDataTransacao(proximaData);
+  };
 
   const podeSalvar =
     valorNumerico > 0 &&
@@ -190,6 +218,38 @@ export default function AddTransactionScreen() {
             inputRef={inputRef}
             onChangeText={handleValueChange}
           />
+
+          <View style={styles.dateSection}>
+            <Text style={styles.dateTitle}>
+              {t('financeiro.data')}
+            </Text>
+            <TouchableOpacity
+              activeOpacity={0.75}
+              onPress={() => setShowDatePicker(true)}
+              style={[
+                styles.dateButton,
+                {
+                  backgroundColor: isDark ? '#1A1A1A' : '#FFFFFF',
+                  borderColor: isDark ? '#333' : '#E0E0E0',
+                },
+              ]}
+            >
+              <View style={styles.dateValueRow}>
+                <CalendarDays size={20} color={mainColor} />
+                <Text
+                  style={[
+                    styles.dateValue,
+                    { color: isDark ? '#FFFFFF' : '#1A1A1A' },
+                  ]}
+                >
+                  {dataLabel}
+                </Text>
+              </View>
+              <Text style={[styles.dateChangeText, { color: mainColor }]}>
+                {t('financeiro.alterar_data')}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.vehicleSection}>
             <Text style={styles.vehicleTitle}>
@@ -393,6 +453,16 @@ export default function AddTransactionScreen() {
         setIcone={setNovaCategoriaIcone}
         mainColor={mainColor}
       />
+
+      {showDatePicker && (
+        <DateTimePicker
+          value={dataTransacao}
+          mode="date"
+          display="default"
+          onChange={handleDateChange}
+          maximumDate={new Date()}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 }

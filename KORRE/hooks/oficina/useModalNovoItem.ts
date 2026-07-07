@@ -1,5 +1,6 @@
 // src/hooks/oficina/useModalNovoItem.ts
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import db from '../../database/DatabaseInit';
 import { showCustomAlert } from '../alert/useCustomAlert';
 import {
@@ -11,6 +12,7 @@ export function useModalNovoItem(
   veiculoId: number,
   onSucesso: () => void,
 ) {
+  const { t } = useTranslation();
   const [nome, setNome] = useState('');
   const [intervalo, setIntervalo] = useState('');
   const [tempo, setTempo] = useState('');
@@ -37,14 +39,14 @@ export function useModalNovoItem(
   const salvarManutencao = async () => {
     if (!nome || (!intervalo && !tempo)) {
       showCustomAlert(
-        'Atenção',
-        'Preencha o nome e um intervalo.',
+        t('common.atencao'),
+        t('oficina.preencha_nome_intervalo'),
       );
       return;
     }
 
     try {
-      await showAppLoadingAsync('Salvando manutenção...');
+      await showAppLoadingAsync(t('oficina.salvando_manutencao'));
       let dataFormatada = null;
       if (ultimaTrocaData.length === 10) {
         const [d, m, a] = ultimaTrocaData.split('/');
@@ -119,14 +121,17 @@ export function useModalNovoItem(
         );
       }
 
-      showCustomAlert('Sucesso', 'Manutenção configurada!');
+      showCustomAlert(
+        t('common.sucesso'),
+        t('oficina.manutencao_configurada'),
+      );
       resetForm();
       onSucesso();
     } catch (error) {
       console.error(error);
       showCustomAlert(
-        'Erro',
-        'Falha ao salvar a manutenção.',
+        t('common.erro'),
+        t('oficina.falha_salvar_manutencao'),
       );
     } finally {
       hideAppLoading();

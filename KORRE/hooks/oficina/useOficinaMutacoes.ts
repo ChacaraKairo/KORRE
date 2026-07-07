@@ -1,5 +1,6 @@
 // Arquivo: src/hooks/oficina/useOficinaMutacoes.ts
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import db from '../../database/DatabaseInit';
 import { showCustomAlert } from '../alert/useCustomAlert';
 import { criarNotificacao } from '../../notifications/NotificationService';
@@ -9,6 +10,7 @@ export function useOficinaMutacoes(
   veiculoConsultado: any,
   atualizarDadosTela: () => Promise<void>,
 ) {
+  const { t } = useTranslation();
   // Controle do Modal de Novo Item (apenas visibilidade)
   const [modalNovoItem, setModalNovoItem] = useState(false);
 
@@ -134,8 +136,10 @@ export function useOficinaMutacoes(
         [veiculoConsultado.id, itemIdToUse],
       );
       await criarNotificacao({
-        titulo: 'Manutencao registrada com sucesso',
-        mensagem: `${item.nome} registrada e adicionada ao historico.`,
+        titulo: t('notifications.maintenance.registered_title'),
+        mensagem: t('notifications.maintenance.registered_body', {
+          item: item.nome,
+        }),
         tipo: 'sucesso',
         prioridade: 'baixa',
         destino: AppRoutes.oficina,
@@ -190,14 +194,14 @@ export function useOficinaMutacoes(
         ultimoValor: 0,
       });
       showCustomAlert(
-        'Sucesso',
-        'Manutenção registrada e ciclo renovado!',
+        t('common.sucesso'),
+        t('oficina.manutencao_registrada_ciclo'),
       );
     } catch (error) {
       console.error('Erro ao resetar manutenção:', error);
       showCustomAlert(
-        'Erro',
-        'Não foi possível registrar a manutenção.',
+        t('common.erro'),
+        t('oficina.falha_registrar_manutencao'),
       );
     }
   };

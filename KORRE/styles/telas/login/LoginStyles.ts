@@ -7,7 +7,9 @@ export const loginStyles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     padding: 24,
+    paddingTop: 86,
+    paddingBottom: 36,
   },
 });

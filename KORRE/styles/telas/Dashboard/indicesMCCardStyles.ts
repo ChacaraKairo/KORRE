@@ -80,4 +80,34 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },
+  communitySupport: {
+    marginTop: 14,
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  communitySupportIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 200, 83, 0.12)',
+  },
+  communitySupportCopy: {
+    flex: 1,
+  },
+  communitySupportTitle: {
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  communitySupportSubtitle: {
+    fontSize: 11,
+    lineHeight: 15,
+    marginTop: 2,
+  },
 });

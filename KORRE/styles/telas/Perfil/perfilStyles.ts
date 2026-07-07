@@ -35,8 +35,8 @@ export const styles = StyleSheet.create({
   // Cartão Principal
   cardPerfil: {
     backgroundColor: '#161616',
-    borderRadius: 32,
-    padding: 24,
+    borderRadius: 20,
+    padding: 22,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#222',
@@ -118,7 +118,7 @@ export const styles = StyleSheet.create({
   },
   cardMeta: {
     backgroundColor: '#161616',
-    borderRadius: 24,
+    borderRadius: 18,
     padding: 20,
     borderWidth: 1,
     borderColor: '#222',
@@ -175,7 +175,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#161616',
-    borderRadius: 24,
+    borderRadius: 18,
     padding: 20,
     borderWidth: 1,
     borderColor: '#222',
@@ -220,9 +220,11 @@ export const styles = StyleSheet.create({
   btnAcao: {
     width: '48%',
     backgroundColor: '#161616',
-    padding: 20,
-    borderRadius: 24,
+    minHeight: 104,
+    padding: 16,
+    borderRadius: 16,
     alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#222',
     gap: 12,
@@ -243,7 +245,7 @@ export const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 20,
     marginBottom: 20,
-    borderRadius: 24,
+    borderRadius: 16,
     backgroundColor: 'rgba(244, 67, 54, 0.05)',
   },
   btnLogoutTexto: {

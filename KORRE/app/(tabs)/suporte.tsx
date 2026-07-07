@@ -6,6 +6,7 @@ import {
   ChevronUp,
   FileText,
   Globe,
+  Instagram,
   Mail,
   MessageCircle,
   Youtube,
@@ -108,6 +109,12 @@ export default function SuporteScreen() {
   const hasComplaints = Boolean(
     COMPANY_CONTACTS.support.complaintsUrl,
   );
+  const hasInstagram = Boolean(
+    COMPANY_CONTACTS.support.instagramUrl,
+  );
+  const hasCommunityWhatsapp = Boolean(
+    COMPANY_CONTACTS.support.whatsappCommunityUrl,
+  );
   const hasPrivacyPolicy = Boolean(
     COMPANY_CONTACTS.support.privacyPolicyUrl,
   );
@@ -118,6 +125,8 @@ export default function SuporteScreen() {
     hasSupportWebsite ||
     hasAppWebsite ||
     hasComplaints ||
+    hasInstagram ||
+    hasCommunityWhatsapp ||
     hasPrivacyPolicy;
 
   const showChannelNotConfigured = () => {
@@ -296,6 +305,39 @@ export default function SuporteScreen() {
           </View>
         )}
 
+        {hasComplaints && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() =>
+              void openExternalUrl(
+                COMPANY_CONTACTS.support.complaintsUrl,
+                t('suporte.reclamacoes_erro'),
+              )
+            }
+            style={[
+              styles.cardWhatsapp,
+              {
+                backgroundColor: cardColor,
+                borderColor: '#F44336',
+              },
+            ]}
+          >
+            <View style={styles.whatsappIconBox}>
+              <AlertTriangle size={24} color="#F44336" />
+            </View>
+            <View style={styles.whatsappTextContainer}>
+              <Text
+                style={[
+                  styles.whatsappTitle,
+                  { color: textColor },
+                ]}
+              >
+                {t('suporte.reclamacoes')}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
         {hasAppWebsite && (
           <TouchableOpacity
             activeOpacity={0.8}
@@ -321,6 +363,66 @@ export default function SuporteScreen() {
                 ]}
               >
                 {t('suporte.site_app')}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
+        {hasCommunityWhatsapp && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() =>
+              void openExternalUrl(
+                COMPANY_CONTACTS.support.whatsappCommunityUrl,
+                t('links.community_error'),
+              )
+            }
+            style={[
+              styles.cardWhatsapp,
+              { backgroundColor: cardColor, borderColor },
+            ]}
+          >
+            <View style={styles.whatsappIconBox}>
+              <MessageCircle size={24} color="#00C853" />
+            </View>
+            <View style={styles.whatsappTextContainer}>
+              <Text
+                style={[
+                  styles.whatsappTitle,
+                  { color: textColor },
+                ]}
+              >
+                {t('links.community_title')}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
+        {hasInstagram && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() =>
+              void openExternalUrl(
+                COMPANY_CONTACTS.support.instagramUrl,
+                t('links.instagram_error'),
+              )
+            }
+            style={[
+              styles.cardWhatsapp,
+              { backgroundColor: cardColor, borderColor },
+            ]}
+          >
+            <View style={styles.whatsappIconBox}>
+              <Instagram size={24} color="#00C853" />
+            </View>
+            <View style={styles.whatsappTextContainer}>
+              <Text
+                style={[
+                  styles.whatsappTitle,
+                  { color: textColor },
+                ]}
+              >
+                {t('links.instagram_title')}
               </Text>
             </View>
           </TouchableOpacity>
@@ -371,36 +473,6 @@ export default function SuporteScreen() {
                 ]}
               >
                 {t('suporte.email')}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
-
-        {hasComplaints && (
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() =>
-              void openExternalUrl(
-                COMPANY_CONTACTS.support.complaintsUrl,
-                t('suporte.reclamacoes_erro'),
-              )
-            }
-            style={[
-              styles.cardWhatsapp,
-              { backgroundColor: cardColor, borderColor },
-            ]}
-          >
-            <View style={styles.whatsappIconBox}>
-              <AlertTriangle size={24} color="#00C853" />
-            </View>
-            <View style={styles.whatsappTextContainer}>
-              <Text
-                style={[
-                  styles.whatsappTitle,
-                  { color: textColor },
-                ]}
-              >
-                {t('suporte.reclamacoes')}
               </Text>
             </View>
           </TouchableOpacity>

@@ -1,5 +1,6 @@
 import db from '../../database/DatabaseInit';
 import { AppRoutes } from '../../constants/routes';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 import { buildDailyDedupKey } from '../notificationDedupKeys';
 
@@ -19,8 +20,8 @@ export const RideNotificationChecker = {
     if (ruins < 5) return;
 
     await criarNotificacao({
-      titulo: 'Muitas corridas ruins',
-      mensagem: 'As analises recentes indicam muitas corridas fracas ou em prejuizo.',
+      titulo: i18n.t('notifications.ride.many_bad_title'),
+      mensagem: i18n.t('notifications.ride.many_bad_body'),
       tipo: 'corrida',
       prioridade: 'media',
       destino: String(AppRoutes.analisarCorrida),

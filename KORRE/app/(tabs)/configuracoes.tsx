@@ -44,9 +44,6 @@ export default function ConfiguracoesScreen() {
   const {
     exportarDados,
     isExportando,
-    backupPasswordPrompt: exportPasswordPrompt,
-    submitBackupPassword: submitExportPassword,
-    cancelBackupPassword: cancelExportPassword,
   } = useExportarDados();
   const {
     importarBackup,
@@ -394,7 +391,7 @@ export default function ConfiguracoesScreen() {
           <Text
             style={dynamicInlineStyles.inline1({ textMuted })}
           >
-            KORRE v1.2.0
+            KORRE v1.3.2
           </Text>
         </View>
       </ScrollView>
@@ -406,16 +403,6 @@ export default function ConfiguracoesScreen() {
         isDark={isDark}
         cardColor={cardColor}
         borderColor={borderColor}
-      />
-      <BackupPasswordModal
-        visible={exportPasswordPrompt.visible}
-        title={exportPasswordPrompt.title}
-        message={exportPasswordPrompt.message}
-        isDark={isDark}
-        cardColor={cardColor}
-        borderColor={borderColor}
-        onCancel={cancelExportPassword}
-        onSubmit={submitExportPassword}
       />
       <BackupPasswordModal
         visible={restorePasswordPrompt.visible}

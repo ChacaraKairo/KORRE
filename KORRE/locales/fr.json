@@ -14,9 +14,97 @@
     "loading_local": "Chargement des donnees locales...",
     "atencao": "Attention"
   },
+  "indices": {
+    "steps": {
+      "intro": "Introduction",
+      "mode": "Mode de reglage",
+      "basic": "Couts de base",
+      "advanced": "Couts avances",
+      "review": "Revision"
+    },
+    "intro": {
+      "title": "Ajustons vos indices KORRE",
+      "description": "Ces donnees aident KORRE a mieux estimer les couts de votre vehicule et a montrer des analyses plus utiles au quotidien.",
+      "kmTitle": "Cout par km",
+      "kmDescription": "Aide a comprendre combien coute votre vehicule pour rouler.",
+      "minuteTitle": "Cout par minute",
+      "minuteDescription": "Aide a estimer le cout du temps dans les trajets.",
+      "goalTitle": "Objectif minimum",
+      "goalDescription": "Aide KORRE a comparer si un trajet ou usage vaut la peine.",
+      "start": "Commencer le reglage"
+    },
+    "mode": {
+      "title": "Comment voulez-vous configurer?",
+      "description": "Choisissez un chemin. Rien ne sera applique automatiquement sans votre revision.",
+      "simple": {
+        "title": "Mode simple",
+        "description": "Recommande pour la plupart des utilisateurs. KORRE suggere des valeurs initiales et vous verifiez avant d enregistrer."
+      },
+      "advanced": {
+        "title": "Mode avance",
+        "description": "Pour ceux qui veulent controler tous les couts et indices manuellement."
+      }
+    },
+    "basic": {
+      "title": "Couts de base du vehicule",
+      "description": "Saisissez des moyennes approximatives de carburant, maintenance et usage mensuel. Vous pourrez modifier ensuite."
+    },
+    "advanced": {
+      "title": "Couts avances",
+      "description": "Ajustez les couts fixes, les couts de votre temps et les depenses qui affinent le calcul."
+    },
+    "suggestion": {
+      "title": "Suggestion KORRE",
+      "description": "Nous pouvons suggerer des valeurs selon les ravitaillements, couts et maintenances deja enregistres. Vous verifiez tout avant d enregistrer.",
+      "view": "Voir la suggestion",
+      "apply": "Appliquer la suggestion",
+      "editBeforeApply": "Modifier avant d appliquer",
+      "ignore": "Ignorer",
+      "available": "Nous avons trouve des donnees qui peuvent aider au remplissage.",
+      "applied": "Suggestion appliquee. Verifiez les valeurs avant d enregistrer."
+    },
+    "summary": {
+      "title": "Resume des indices KORRE",
+      "kmCost": "Cout estime par km",
+      "kmCostDescription": "Reference pour savoir combien coute 1 km.",
+      "minuteCost": "Cout estime par minute",
+      "minuteCostDescription": "Reference pour le cout du temps dans les trajets.",
+      "goal": "Objectif minimum suggere",
+      "goalDescription": "Valeur minimum par minute pour comparer trajets et usages.",
+      "save": "Enregistrer les indices"
+    },
+    "navigation": {
+      "continue": "Continuer"
+    },
+    "validation": {
+      "required": "Remplissez les champs obligatoires pour continuer.",
+      "positive": "Saisissez une valeur superieure a zero."
+    },
+    "empty": {
+      "noVehicle": "Pour configurer vos indices KORRE, enregistrez d abord un vehicule.",
+      "noVehicleDescription": "Ensuite KORRE calcule le cout par km, le cout par minute et l objectif minimum.",
+      "registerVehicle": "Enregistrer un vehicule",
+      "noDataForSuggestion": "Il n y a pas encore assez de donnees pour suggerer des valeurs fiables. Vous pouvez remplir manuellement maintenant et ajuster ensuite."
+    }
+  },
   "tabs": {
     "dashboard": "Tableau de bord",
     "dados": "Donnees"
+  },
+  "links": {
+    "official_title": "Rejoignez la communaute KORRE",
+    "official_subtitle": "Suivez les nouveautes, parlez avec d'autres conducteurs et accedez aux canaux officiels.",
+    "community_short": "Communaute",
+    "instagram_short": "Instagram",
+    "site_short": "Site",
+    "community_title": "Communaute WhatsApp",
+    "instagram_title": "Instagram officiel",
+    "community_error": "Impossible d'ouvrir la communaute.",
+    "instagram_error": "Impossible d'ouvrir Instagram.",
+    "site_error": "Impossible d'ouvrir le site KORRE.",
+    "vehicle_community_title": "Soutien communaute",
+    "vehicle_community_subtitle": "Aidez a ameliorer les indices avec des informations reelles sur les vehicules.",
+    "vehicle_community_error": "Impossible d'ouvrir le soutien de la communaute."
   },
   "startup": {
     "loading": "Chargement de KORRE",
@@ -47,8 +135,8 @@
     "backup_salvo": "Sauvegarde enregistree",
     "backup_pronto": "Sauvegarde prete",
     "backup_gerado": "Sauvegarde generee",
-    "backup_criptografado_salvo": "La sauvegarde chiffree a ete enregistree dans le dossier choisi.",
-    "backup_criptografado_pronto": "La sauvegarde chiffree a ete generee. Gardez le mot de passe en lieu sur.",
+    "backup_criptografado_salvo": "La sauvegarde a ete enregistree dans le dossier choisi.",
+    "backup_criptografado_pronto": "La sauvegarde a ete generee avec succes.",
     "backup_compartilhamento_indisponivel": "Le fichier a ete enregistre dans le stockage de l'application, mais le partage n'est pas disponible sur cet appareil.",
     "erro_backup": "Erreur de sauvegarde",
     "erro_backup_msg": "Impossible de generer ou d'enregistrer le fichier de sauvegarde.",
@@ -91,7 +179,9 @@
     "versao": "Version de l'application",
     "atualizado": "A jour",
     "selecione_idioma": "Selectionnez la langue",
-    "cancelar": "Annuler"
+    "cancelar": "Annuler",
+    "backup_salvo_msg": "La sauvegarde a ete enregistree dans le dossier choisi.",
+    "backup_pronto_msg": "La sauvegarde a ete generee avec succes."
   },
   "login": {
     "tagline": "Vous sur la route, nous dans votre poche.",
@@ -251,6 +341,9 @@
     "ganho": "GAIN",
     "despesa": "DEPENSE",
     "vincular_veiculo": "Lier au vehicule",
+    "data": "Date",
+    "hoje": "Aujourd'hui",
+    "alterar_data": "Changer la date",
     "adicionar_categoria": "+ AJOUTER UNE CATEGORIE",
     "selecionar_categoria": "Selectionner une categorie",
     "sem_origem_ganho": "Aucune source de revenu configuree.",
@@ -367,7 +460,12 @@
     "origem_auditoria": "Source : Audit KORRE",
     "desgaste_atual": "Usure actuelle",
     "realizada": "Effectuee",
-    "registrar_primeira_manutencao": "Enregistrer le premier entretien"
+    "registrar_primeira_manutencao": "Enregistrer le premier entretien",
+    "preencha_nome_intervalo": "Saisissez le nom et un intervalle.",
+    "salvando_manutencao": "Enregistrement de la maintenance...",
+    "falha_salvar_manutencao": "Impossible d enregistrer la maintenance.",
+    "manutencao_registrada_ciclo": "Maintenance enregistree et cycle renouvele!",
+    "falha_registrar_manutencao": "Impossible d enregistrer la maintenance."
   },
   "historico": {
     "periodo": "Periode",
@@ -495,8 +593,13 @@
   },
   "notificacoes": {
     "titulo": "Notifications",
+    "subtitulo": "Alertes, rappels et avis importants restent ici.",
+    "limpar": "Effacer les notifications",
     "testar": "TESTER LA NOTIFICATION",
     "vazio": "Aucune notification pour le moment.",
+    "vazio_desc": "Lorsque des objectifs, maintenances, backups ou alertes systeme apparaissent, vous les verrez ici.",
+    "lida": "Lue",
+    "nao_lida": "Nouvelle",
     "teste_titulo": "Objectif proche!",
     "teste_msg": "Il ne reste que R$ 25 pour atteindre votre objectif quotidien!",
     "pref": {
@@ -516,6 +619,7 @@
     "title": "Analyser une course",
     "subtitle": "Saisissez les donnees de l'offre et verifiez si la course respecte vos couts et votre objectif.",
     "dashboard_cta": "Analyser une course manuellement",
+    "dashboard_cta_subtitle": "Comparez l'offre, le temps et les km avant d'accepter.",
     "valor_oferta": "Montant propose pour la course",
     "tempo_total": "Temps total estime (min)",
     "km_embarque": "KM jusqu'au depart",
@@ -567,11 +671,16 @@
     "reset_action": "Redefinir le mot de passe",
     "preencha_nova_senha": "Saisissez et confirmez le nouveau mot de passe.",
     "senha_curta": "Le nouveau mot de passe doit contenir au moins 7 caracteres.",
+    "senha_invalida": "Le nouveau mot de passe doit respecter les regles de securite.",
     "senhas_diferentes": "Les mots de passe ne correspondent pas.",
+    "email_invalido": "Saisissez un e-mail valide.",
+    "cpf_invalido": "Saisissez un CPF valide.",
+    "placa_invalida": "Saisissez une plaque valide.",
     "preencha_dados": "Remplissez e-mail, CPF et plaque pour continuer.",
-    "validacao_falhou": "Impossible de valider les donnees fournies.",
+    "validacao_falhou": "Impossible de confirmer les donnees fournies. Verifiez les informations et reessayez.",
     "erro_banco": "Impossible de reinitialiser le mot de passe maintenant. Reessayez.",
-    "sucesso_msg": "Mot de passe reinitialise avec succes. Connectez-vous avec votre nouveau mot de passe."
+    "sucesso_msg": "Mot de passe reinitialise avec succes. Connectez-vous avec votre nouveau mot de passe.",
+    "back_to_login": "Retour au login"
   },
   "flex_calc": {
     "title": "Calculatrice Flex",
@@ -683,5 +792,123 @@
     "secao_nunca_texto": "Nom, CPF, e-mail, telephone, mot de passe, hash, plaque, photo, localisation exacte et historique individuel identifiable ne sont pas inclus dans des rapports commerciaux.",
     "secao_desativar_titulo": "Comment desactiver",
     "secao_desativar_texto": "Parametres > Confidentialite et donnees > desactiver l'usage de donnees anonymes."
+  },
+  "notifications": {
+    "daily": {
+      "title": "Il est temps de verifier KORRE",
+      "body": "Consultez vos depenses, le benefice du jour et les prochaines maintenances en quelques secondes."
+    },
+    "backup": {
+      "first_pending_title": "Premier backup en attente",
+      "first_pending_body": "Protegez vos donnees en exportant le premier backup KORRE.",
+      "old_title": "Backup ancien",
+      "old_body": "Votre dernier backup est ancien. Mettez-le a jour pour garder les donnees en securite.",
+      "export_success_title": "Backup exporte avec succes",
+      "export_saved_body": "Votre backup a ete exporte et enregistre.",
+      "export_success_body": "Votre backup a ete exporte avec succes.",
+      "export_failed_title": "Echec de l export du backup",
+      "export_failed_body": "Impossible de terminer l export du backup.",
+      "restore_success_title": "Restauration terminee",
+      "restore_success_body": "Le backup a ete restaure avec succes.",
+      "restore_failed_title": "Echec de la restauration",
+      "restore_failed_body": "Impossible de restaurer le backup selectionne."
+    },
+    "financial": {
+      "goal_hit_title": "Objectif quotidien atteint",
+      "goal_hit_body": "Vous avez atteint votre objectif quotidien.",
+      "goal_incomplete_title": "Objectif quotidien incomplet",
+      "goal_incomplete_body": "Il manque R$ {{amount}} pour atteindre l objectif du jour.",
+      "no_recent_title": "Aucune entree recente",
+      "no_recent_body": "Vous n avez pas enregistre de gains ou depenses depuis quelques jours.",
+      "earnings_low_title": "Gains sous la moyenne",
+      "earnings_low_body": "Les gains recents sont sous ceux de la semaine precedente.",
+      "high_expense_title": "Depense au-dessus de la moyenne",
+      "high_expense_body": "Une depense elevee a ete enregistree. Verifiez votre flux financier."
+    },
+    "garage": {
+      "km_outdated_title": "KM peut-etre obsolète",
+      "km_outdated_body": "Mettez a jour le KM actuel du vehicule pour garder des alertes exactes."
+    },
+    "indices": {
+      "no_audit_title": "Vehicule sans Audit KORRE",
+      "no_audit_body": "Terminez l Audit KORRE pour activer les indices.",
+      "incomplete_title": "Indices incomplets",
+      "incomplete_body": "La completion de l audit est faible. Verifiez les champs principaux.",
+      "audit_saved_title": "Audit KORRE enregistre",
+      "audit_saved_body": "Les indices ont ete mis a jour avec succes.",
+      "ikm_increased_title": "Cout par km augmente",
+      "ikm_increased_body": "Votre IKM a augmente de facon importante. Revoyez les couts.",
+      "imin_increased_title": "Cout par minute augmente",
+      "imin_increased_body": "Votre IMIN a augmente de facon importante."
+    },
+    "maintenance": {
+      "no_items_title": "Vehicule sans maintenance enregistree",
+      "no_items_body": "Ajoutez des elements de maintenance pour suivre couts et cycles.",
+      "planned_title": "{{item}} planifie",
+      "planned_body": "Vous avez deja planifie {{item}}, mais pas encore enregistre la premiere maintenance reelle.",
+      "overdue_title": "{{item}} en retard",
+      "overdue_body": "La maintenance a depasse la limite de {{km}} km.",
+      "upcoming_title": "{{item}} proche de la limite",
+      "upcoming_body": "Il reste {{km}} km avant la prochaine maintenance.",
+      "no_real_data_title": "Atelier sans donnees reelles",
+      "no_real_data_body": "Enregistrez des maintenances reelles pour ameliorer les indices et eviter les anciennes estimations.",
+      "cost_above_title": "{{item}} au-dessus du prevu",
+      "cost_above_body": "{{item}} a coute plus que prevu. Revoyez vos indices KORRE.",
+      "registered_title": "Maintenance enregistree avec succes",
+      "registered_body": "{{item}} a ete enregistre et ajoute a l historique."
+    },
+    "mei": {
+      "das_today_title": "DAS arrive a echeance aujourd hui",
+      "das_today_body": "Le DAS du MEI arrive a echeance aujourd hui.",
+      "das_late_title": "DAS possiblement en retard",
+      "das_late_body": "La date d echeance du DAS est passee. Verifiez votre situation.",
+      "das_soon_title": "DAS proche de l echeance",
+      "das_soon_body": "Le DAS du MEI est proche de l echeance.",
+      "revenue_title": "Alerte de chiffre d affaires MEI",
+      "revenue_critical_body": "CRITIQUE: vous avez atteint {{percentage}}% de la limite MEI. Il ne reste que {{remaining}}.",
+      "revenue_body": "Votre chiffre d affaires MEI est a {{percentage}}% ce mois-ci. Il vous reste {{remaining}} de marge.",
+      "revenue_fallback_body": "Verifiez votre chiffre d affaires MEI ce mois-ci."
+    },
+    "onboarding": {
+      "finish_title": "Terminez votre onboarding",
+      "finish_body": "Ajoutez votre premier vehicule pour commencer avec KORRE.",
+      "no_audit_title": "Vehicule sans audit",
+      "no_audit_body": "Remplissez l Audit KORRE pour calculer vos indices."
+    },
+    "privacy": {
+      "policy_title": "Politique de confidentialite mise a jour",
+      "policy_body": "Revoyez les conditions de confidentialite de la version actuelle.",
+      "terms_title": "Conditions mises a jour",
+      "terms_body": "Les conditions d utilisation ont ete mises a jour."
+    },
+    "ride": {
+      "many_bad_title": "Trop de courses faibles",
+      "many_bad_body": "Les analyses recentes indiquent beaucoup de courses faibles ou a perte.",
+      "loss_title": "Course a perte",
+      "ideal_title": "Course ideale",
+      "saved_title": "Analyse de course enregistree",
+      "loss_body": "La course analysee est a perte. Revoyez avant d accepter de nouvelles offres.",
+      "saved_body": "Analyse enregistree avec succes."
+    },
+    "security": {
+      "login_success_title": "Connexion effectuee",
+      "login_success_body": "Votre acces a ete termine avec succes.",
+      "too_many_title": "Trop de tentatives de connexion",
+      "too_many_body": "Plusieurs tentatives d acces ont ete detectees. Reessayez plus tard.",
+      "password_reset_title": "Mot de passe reinitialise",
+      "password_reset_body": "Votre mot de passe a ete reinitialise avec succes."
+    },
+    "system": {
+      "error_title": "Erreur interne recurrente",
+      "error_body": "Nous avons detecte une erreur recurrente. Ouvrez le support pour obtenir des conseils.",
+      "support_title": "Support disponible",
+      "support_body": "Les canaux de support sont disponibles dans l application."
+    },
+    "remote": {
+      "command_received_title": "Commande distante recue",
+      "command_received_body": "Commande {{command}} traitee en securite.",
+      "backup_requested_title": "Backup demande",
+      "backup_requested_body": "Le serveur a demande un backup. Exportez-le manuellement dans Parametres."
+    }
   }
 }

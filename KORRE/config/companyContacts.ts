@@ -11,7 +11,11 @@ export const COMPANY_CONTACTS = {
     websiteUrl: 'https://site-koru-company.vercel.app',
     complaintsUrl:
       'https://korre-app.netlify.app/reclamacoes',
-    instagramUrl: '',
+    instagramUrl: 'https://www.instagram.com/korre_app/',
+    whatsappCommunityUrl:
+      'https://chat.whatsapp.com/GkWYVbiPTS9Ctc5xbMPebh',
+    vehicleCommunitySupportUrl:
+      'https://korre-app.netlify.app/comunidade-veiculos',
     privacyPolicyUrl:
       'https://korre-app.netlify.app/privacidade',
     termsOfUseUrl: 'https://korre-app.netlify.app/termos',

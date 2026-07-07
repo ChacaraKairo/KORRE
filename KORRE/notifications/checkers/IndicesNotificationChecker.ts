@@ -1,4 +1,5 @@
 import { AppRoutes } from '../../constants/routes';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 import { buildDailyDedupKey } from '../notificationDedupKeys';
 import { getVeiculoAtivo } from './shared';
@@ -16,8 +17,8 @@ export const IndicesNotificationChecker = {
 
     if (!possuiIndices) {
       await criarNotificacao({
-        titulo: 'Veiculo sem Auditoria KORRE',
-        mensagem: 'Finalize a Auditoria KORRE para ativar os indices.',
+        titulo: i18n.t('notifications.indices.no_audit_title'),
+        mensagem: i18n.t('notifications.indices.no_audit_body'),
         tipo: 'indices',
         prioridade: 'alta',
         destino: AppRoutes.calculadoraKorre,
@@ -28,8 +29,8 @@ export const IndicesNotificationChecker = {
 
     if (completude < 50) {
       await criarNotificacao({
-        titulo: 'Indices incompletos',
-        mensagem: 'A completude da auditoria esta baixa. Revise os campos principais.',
+        titulo: i18n.t('notifications.indices.incomplete_title'),
+        mensagem: i18n.t('notifications.indices.incomplete_body'),
         tipo: 'indices',
         prioridade: 'alta',
         destino: AppRoutes.calculadoraKorre,

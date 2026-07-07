@@ -1,5 +1,6 @@
 import { AppRoutes } from '../../constants/routes';
 import db from '../../database/DatabaseInit';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 import { buildDailyDedupKey } from '../notificationDedupKeys';
 import { DIAS_BACKUP_ALERTA } from './shared';
@@ -13,8 +14,8 @@ export const BackupNotificationChecker = {
 
     if (!row?.valor) {
       await criarNotificacao({
-        titulo: 'Primeiro backup pendente',
-        mensagem: 'Proteja seus dados exportando o primeiro backup do KORRE.',
+        titulo: i18n.t('notifications.backup.first_pending_title'),
+        mensagem: i18n.t('notifications.backup.first_pending_body'),
         tipo: 'backup',
         prioridade: 'alta',
         destino: AppRoutes.configuracoes,
@@ -29,8 +30,8 @@ export const BackupNotificationChecker = {
     if (diff < DIAS_BACKUP_ALERTA) return;
 
     await criarNotificacao({
-      titulo: 'Backup antigo',
-      mensagem: 'Seu ultimo backup esta antigo. Atualize para manter seguranca dos dados.',
+      titulo: i18n.t('notifications.backup.old_title'),
+      mensagem: i18n.t('notifications.backup.old_body'),
       tipo: 'backup',
       prioridade: 'alta',
       destino: AppRoutes.configuracoes,

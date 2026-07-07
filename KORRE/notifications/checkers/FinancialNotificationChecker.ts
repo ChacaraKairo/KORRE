@@ -1,5 +1,6 @@
 import { AppRoutes } from '../../constants/routes';
 import db from '../../database/DatabaseInit';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 import { buildDailyDedupKey, buildWeeklyDedupKey } from '../notificationDedupKeys';
 import { DIAS_SEM_LANCAMENTO, HORARIO_ALERTA_META, getToday, getYearWeek } from './shared';
@@ -31,8 +32,8 @@ export const FinancialNotificationChecker = {
 
     if (total >= meta) {
       await criarNotificacao({
-        titulo: 'Meta diaria batida',
-        mensagem: 'Voce atingiu sua meta diaria.',
+        titulo: i18n.t('notifications.financial.goal_hit_title'),
+        mensagem: i18n.t('notifications.financial.goal_hit_body'),
         tipo: 'meta',
         prioridade: 'baixa',
         destino: AppRoutes.dashboard,
@@ -45,8 +46,11 @@ export const FinancialNotificationChecker = {
 
     if (new Date().getHours() >= HORARIO_ALERTA_META) {
       await criarNotificacao({
-        titulo: 'Meta diaria incompleta',
-        mensagem: `Faltam R$ ${(meta - total).toFixed(2)} para bater a meta de hoje.`,
+        titulo: i18n.t('notifications.financial.goal_incomplete_title'),
+        mensagem: i18n.t(
+          'notifications.financial.goal_incomplete_body',
+          { amount: (meta - total).toFixed(2) },
+        ),
         tipo: 'meta',
         prioridade: 'media',
         destino: AppRoutes.finance,
@@ -66,8 +70,8 @@ export const FinancialNotificationChecker = {
     if (diff < DIAS_SEM_LANCAMENTO) return;
 
     await criarNotificacao({
-      titulo: 'Sem lancamentos recentes',
-      mensagem: 'Voce esta ha alguns dias sem registrar ganhos ou despesas.',
+      titulo: i18n.t('notifications.financial.no_recent_title'),
+      mensagem: i18n.t('notifications.financial.no_recent_body'),
       tipo: 'financeiro',
       prioridade: 'media',
       destino: AppRoutes.finance,
@@ -109,8 +113,8 @@ export const FinancialNotificationChecker = {
     if (atualTotal >= anteriorTotal * 0.85) return;
 
     await criarNotificacao({
-      titulo: 'Ganhos abaixo da media',
-      mensagem: 'Os ganhos recentes ficaram abaixo da semana anterior.',
+      titulo: i18n.t('notifications.financial.earnings_low_title'),
+      mensagem: i18n.t('notifications.financial.earnings_low_body'),
       tipo: 'financeiro',
       prioridade: 'media',
       destino: AppRoutes.relatorios,

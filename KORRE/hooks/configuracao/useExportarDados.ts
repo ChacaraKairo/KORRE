@@ -15,9 +15,7 @@ import {
   hideAppLoading,
   showAppLoadingAsync,
 } from '../ui/useAppLoading';
-import { encryptJson } from '../../utils/security/encryption';
 import { logger } from '../../utils/logger';
-import { useBackupPasswordPrompt } from './useBackupPasswordPrompt';
 import { criarNotificacao } from '../../notifications/NotificationService';
 import { AppRoutes } from '../../constants/routes';
 
@@ -27,12 +25,6 @@ const BACKUP_EXTENSION = 'korrebackup';
 export function useExportarDados() {
   const { t } = useTranslation();
   const [isExportando, setIsExportando] = useState(false);
-  const {
-    backupPasswordPrompt,
-    requestPassword,
-    submitPassword,
-    cancelPassword,
-  } = useBackupPasswordPrompt();
 
   const montarBackup = async () => {
     const backupData: any = {
@@ -76,23 +68,16 @@ export function useExportarDados() {
   const exportarDados = async () => {
     if (isExportando) return;
 
-    const passphrase = await requestPassword(
-      t('configuracoes.senha_backup_criar_titulo'),
-      t('configuracoes.senha_backup_criar_msg'),
-    );
-
-    if (!passphrase) return;
-
     setIsExportando(true);
     await showAppLoadingAsync(t('configuracoes.gerando_backup'));
 
     try {
       const backupData = await montarBackup();
-      const encryptedBackup = encryptJson(backupData, passphrase);
+      const backupContent = JSON.stringify(backupData, null, 2);
       const nomeArquivo = `KORRE_Backup_v${BACKUP_SCHEMA_VERSION}.${BACKUP_EXTENSION}`;
       const fileUri = FileSystem.documentDirectory + nomeArquivo;
 
-      await FileSystem.writeAsStringAsync(fileUri, encryptedBackup);
+      await FileSystem.writeAsStringAsync(fileUri, backupContent);
 
       if (
         Platform.OS === 'android' &&
@@ -112,12 +97,12 @@ export function useExportarDados() {
             );
           await FileSystem.StorageAccessFramework.writeAsStringAsync(
             destinationUri,
-            encryptedBackup,
+            backupContent,
           );
           await registrarBackupExportado();
           await criarNotificacao({
-            titulo: 'Backup exportado com sucesso',
-            mensagem: 'Seu backup foi exportado e salvo.',
+            titulo: t('notifications.backup.export_success_title'),
+            mensagem: t('notifications.backup.export_saved_body'),
             tipo: 'backup',
             prioridade: 'baixa',
             destino: AppRoutes.configuracoes,
@@ -128,7 +113,7 @@ export function useExportarDados() {
           hideAppLoading();
           showCustomAlert(
             t('configuracoes.backup_salvo'),
-            t('configuracoes.backup_criptografado_salvo'),
+            t('configuracoes.backup_salvo_msg'),
           );
           return;
         }
@@ -145,8 +130,8 @@ export function useExportarDados() {
         });
         await registrarBackupExportado();
         await criarNotificacao({
-          titulo: 'Backup exportado com sucesso',
-          mensagem: 'Seu backup foi exportado com sucesso.',
+          titulo: t('notifications.backup.export_success_title'),
+          mensagem: t('notifications.backup.export_success_body'),
           tipo: 'backup',
           prioridade: 'baixa',
           destino: AppRoutes.configuracoes,
@@ -157,7 +142,7 @@ export function useExportarDados() {
         hideAppLoading();
         showCustomAlert(
           t('configuracoes.backup_pronto'),
-          t('configuracoes.backup_criptografado_pronto'),
+          t('configuracoes.backup_pronto_msg'),
         );
       } else {
         hideAppLoading();
@@ -174,8 +159,8 @@ export function useExportarDados() {
         t('configuracoes.erro_backup_msg'),
       );
       await criarNotificacao({
-        titulo: 'Falha ao exportar backup',
-        mensagem: 'Nao foi possivel concluir a exportacao do backup.',
+        titulo: t('notifications.backup.export_failed_title'),
+        mensagem: t('notifications.backup.export_failed_body'),
         tipo: 'backup',
         prioridade: 'alta',
         destino: AppRoutes.configuracoes,
@@ -191,8 +176,5 @@ export function useExportarDados() {
   return {
     exportarDados,
     isExportando,
-    backupPasswordPrompt,
-    submitBackupPassword: submitPassword,
-    cancelBackupPassword: cancelPassword,
   };
 }

@@ -1,4 +1,5 @@
 import { AppRoutes } from '../../constants/routes';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 
 export const SystemNotificationChecker = {
@@ -8,8 +9,8 @@ export const SystemNotificationChecker = {
 
   async notifyErroRecorrente(codigo: string) {
     await criarNotificacao({
-      titulo: 'Erro interno recorrente',
-      mensagem: 'Detectamos um erro recorrente. Acesse suporte para orientacoes.',
+      titulo: i18n.t('notifications.system.error_title'),
+      mensagem: i18n.t('notifications.system.error_body'),
       tipo: 'sistema',
       prioridade: 'alta',
       canal: 'historico',
@@ -21,8 +22,8 @@ export const SystemNotificationChecker = {
 
   async notifySuporteDisponivel() {
     await criarNotificacao({
-      titulo: 'Suporte disponivel',
-      mensagem: 'Os canais de suporte estao disponiveis no aplicativo.',
+      titulo: i18n.t('notifications.system.support_title'),
+      mensagem: i18n.t('notifications.system.support_body'),
       tipo: 'suporte',
       prioridade: 'baixa',
       canal: 'historico',

@@ -1,6 +1,7 @@
 import Constants from 'expo-constants';
 import db, { DATABASE_VERSION } from '../database/DatabaseInit';
 import { AppRoutes } from '../constants/routes';
+import i18n from '../locales/i18n';
 import { criarNotificacao } from './NotificationService';
 import type {
   CriarNotificacaoInput,
@@ -44,8 +45,10 @@ export async function handleRemoteCommand(payload: unknown) {
   try {
     const data = await executeCommand(commandPayload);
     await criarNotificacao({
-      titulo: 'Comando remoto recebido',
-      mensagem: `Comando ${commandPayload.command} processado com seguranca.`,
+      titulo: i18n.t('notifications.remote.command_received_title'),
+      mensagem: i18n.t('notifications.remote.command_received_body', {
+        command: commandPayload.command,
+      }),
       tipo: 'servidor',
       prioridade: 'media',
       origem: 'servidor',
@@ -245,9 +248,8 @@ const syncRemoteConfig = async (
 
 const requestBackupExport = async (requestId: string) => {
   await criarNotificacao({
-    titulo: 'Backup solicitado',
-    mensagem:
-      'O servidor solicitou um backup. Exporte manualmente em Configuracoes.',
+    titulo: i18n.t('notifications.remote.backup_requested_title'),
+    mensagem: i18n.t('notifications.remote.backup_requested_body'),
     tipo: 'backup',
     prioridade: 'media',
     origem: 'servidor',

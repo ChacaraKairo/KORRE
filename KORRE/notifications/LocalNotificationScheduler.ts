@@ -7,8 +7,10 @@ import { MeiNotificationChecker } from './checkers/MeiNotificationChecker';
 import { OnboardingNotificationChecker } from './checkers/OnboardingNotificationChecker';
 import { SystemNotificationChecker } from './checkers/SystemNotificationChecker';
 import { GarageNotificationChecker } from './checkers/GarageNotificationChecker';
+import { configurarNotificacaoDiaria } from './DailyEngagementNotificationService';
 
 export async function executarVerificacoesLocais() {
+  await configurarNotificacaoDiaria();
   await MaintenanceNotificationChecker.run();
   await FinancialNotificationChecker.run();
   await BackupNotificationChecker.run();

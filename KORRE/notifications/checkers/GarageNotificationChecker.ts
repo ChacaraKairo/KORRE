@@ -1,5 +1,6 @@
 import db from '../../database/DatabaseInit';
 import { AppRoutes } from '../../constants/routes';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 import { buildDailyDedupKey } from '../notificationDedupKeys';
 import { getVeiculoAtivo } from './shared';
@@ -19,8 +20,8 @@ export const GarageNotificationChecker = {
         86400000;
       if (diff >= 10) {
         await criarNotificacao({
-          titulo: 'KM possivelmente desatualizado',
-          mensagem: 'Atualize o KM atual do veiculo para manter alertas corretos.',
+          titulo: i18n.t('notifications.garage.km_outdated_title'),
+          mensagem: i18n.t('notifications.garage.km_outdated_body'),
           tipo: 'garagem',
           prioridade: 'media',
           destino: AppRoutes.garagem,

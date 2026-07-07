@@ -12,11 +12,99 @@
     "em_breve": "Em breve",
     "sem_placa": "Sem placa",
     "loading_local": "Carregando dados locais...",
-    "atencao": "Aten??o"
+    "atencao": "Atenção"
+  },
+  "indices": {
+    "steps": {
+      "intro": "Introducao",
+      "mode": "Modo de ajuste",
+      "basic": "Custos basicos",
+      "advanced": "Custos avancados",
+      "review": "Revisao"
+    },
+    "intro": {
+      "title": "Vamos ajustar seus Indices KORRE",
+      "description": "Esses dados ajudam o KORRE a estimar melhor os custos do seu veiculo e mostrar analises mais uteis no dia a dia.",
+      "kmTitle": "Custo por km",
+      "kmDescription": "Ajuda a entender quanto seu veiculo custa para rodar.",
+      "minuteTitle": "Custo por minuto",
+      "minuteDescription": "Ajuda a estimar o custo do tempo em deslocamentos.",
+      "goalTitle": "Meta minima",
+      "goalDescription": "Ajuda o KORRE a comparar se uma viagem ou uso compensa.",
+      "start": "Comecar ajuste"
+    },
+    "mode": {
+      "title": "Como voce quer configurar?",
+      "description": "Escolha um caminho. Nada sera aplicado automaticamente sem sua revisao.",
+      "simple": {
+        "title": "Modo simples",
+        "description": "Recomendado para a maioria dos usuarios. O KORRE sugere valores iniciais e voce revisa antes de salvar."
+      },
+      "advanced": {
+        "title": "Modo avancado",
+        "description": "Para quem quer controlar todos os custos e indices manualmente."
+      }
+    },
+    "basic": {
+      "title": "Custos basicos do veiculo",
+      "description": "Informe medias aproximadas de combustivel, manutencao e uso mensal. Voce pode alterar depois."
+    },
+    "advanced": {
+      "title": "Custos avancados",
+      "description": "Ajuste custos fixos, custos do seu tempo e despesas que refinam o calculo."
+    },
+    "suggestion": {
+      "title": "Sugestao do KORRE",
+      "description": "Podemos sugerir valores com base em abastecimentos, custos e manutencoes que voce ja registrou. Voce revisa tudo antes de salvar.",
+      "view": "Ver sugestao",
+      "apply": "Aplicar sugestao",
+      "editBeforeApply": "Editar antes de aplicar",
+      "ignore": "Ignorar",
+      "available": "Encontramos dados que podem ajudar no preenchimento.",
+      "applied": "Sugestao aplicada. Revise os valores antes de salvar."
+    },
+    "summary": {
+      "title": "Resumo dos Indices KORRE",
+      "kmCost": "Custo estimado por km",
+      "kmCostDescription": "Referencia para saber quanto custa rodar 1 km.",
+      "minuteCost": "Custo estimado por minuto",
+      "minuteCostDescription": "Referencia para o custo do tempo em deslocamentos.",
+      "goal": "Meta minima sugerida",
+      "goalDescription": "Valor minimo por minuto para comparar corridas e usos.",
+      "save": "Salvar indices"
+    },
+    "navigation": {
+      "continue": "Continuar"
+    },
+    "validation": {
+      "required": "Preencha os campos obrigatorios para avancar.",
+      "positive": "Informe um valor maior que zero."
+    },
+    "empty": {
+      "noVehicle": "Para configurar seus Indices KORRE, primeiro cadastre um veiculo.",
+      "noVehicleDescription": "Depois disso o KORRE calcula custo por km, custo por minuto e meta minima.",
+      "registerVehicle": "Cadastrar veiculo",
+      "noDataForSuggestion": "Ainda nao ha dados suficientes para sugerir valores com confianca. Voce pode preencher manualmente agora e ajustar depois."
+    }
   },
   "tabs": {
     "dashboard": "Dashboard",
     "dados": "Dados"
+  },
+  "links": {
+    "official_title": "Entre na comunidade KORRE",
+    "official_subtitle": "Acompanhe novidades, converse com outros motoristas e acesse os canais oficiais.",
+    "community_short": "Comunidade",
+    "instagram_short": "Instagram",
+    "site_short": "Site",
+    "community_title": "Comunidade no WhatsApp",
+    "instagram_title": "Instagram oficial",
+    "community_error": "Nao foi possivel abrir a comunidade.",
+    "instagram_error": "Nao foi possivel abrir o Instagram.",
+    "site_error": "Nao foi possivel abrir o site do KORRE.",
+    "vehicle_community_title": "Apoio da comunidade",
+    "vehicle_community_subtitle": "Ajude a melhorar os indices com informacoes reais de veiculos.",
+    "vehicle_community_error": "Nao foi possivel abrir o apoio da comunidade."
   },
   "startup": {
     "loading": "Carregando KORRE",
@@ -47,8 +135,8 @@
     "backup_salvo": "Backup salvo",
     "backup_pronto": "Backup pronto",
     "backup_gerado": "Backup gerado",
-    "backup_criptografado_salvo": "O backup criptografado foi salvo na pasta escolhida.",
-    "backup_criptografado_pronto": "O backup criptografado foi gerado. Guarde a senha em local seguro.",
+    "backup_criptografado_salvo": "O backup foi salvo na pasta escolhida.",
+    "backup_criptografado_pronto": "O backup foi gerado com sucesso.",
     "backup_compartilhamento_indisponivel": "O arquivo foi salvo no armazenamento do aplicativo, mas o compartilhamento nao esta disponivel neste dispositivo.",
     "erro_backup": "Erro no backup",
     "erro_backup_msg": "Nao foi possivel gerar ou salvar o arquivo de backup.",
@@ -91,7 +179,9 @@
     "versao": "Versao do aplicativo",
     "atualizado": "Atualizado",
     "selecione_idioma": "Selecione o idioma",
-    "cancelar": "Cancelar"
+    "cancelar": "Cancelar",
+    "backup_salvo_msg": "O backup foi salvo na pasta escolhida.",
+    "backup_pronto_msg": "O backup foi gerado com sucesso."
   },
   "login": {
     "tagline": "Voce nas ruas, nos no seu bolso.",
@@ -124,20 +214,20 @@
     "aceito": "Aceito os",
     "termos": "Termos de uso",
     "armazenamento": "e confirmo o armazenamento local.",
-    "comecar": "Come?ar o KORRE",
-    "preencha_obrigatorios": "Preencha todos os campos obrigat?rios corretamente.",
-    "cpf_invalido": "CPF inv?lido",
-    "cpf_invalido_msg": "Informe um CPF v?lido.",
-    "senha_invalida": "Senha inv?lida",
-    "senha_invalida_msg": "Informe uma senha v?lida.",
-    "senhas_nao_coincidem": "As senhas n?o coincidem. Verifique se h? espa?os extras.",
+    "comecar": "Começar o KORRE",
+    "preencha_obrigatorios": "Preencha todos os campos obrigatórios corretamente.",
+    "cpf_invalido": "CPF inválido",
+    "cpf_invalido_msg": "Informe um CPF válido.",
+    "senha_invalida": "Senha inválida",
+    "senha_invalida_msg": "Informe uma senha válida.",
+    "senhas_nao_coincidem": "As senhas não coincidem. Verifique se há espaços extras.",
     "erro_salvar_banco": "Falha ao salvar os dados no banco de dados local.",
     "backup_restaurado_boas_vindas": "Dados restaurados. Bem-vindo de volta!",
     "ir_dashboard": "Ir para o Dashboard",
     "arquivo_vazio": "Arquivo vazio",
-    "arquivo_vazio_msg": "O arquivo selecionado est? vazio.",
-    "arquivo_invalido": "Arquivo inv?lido",
-    "arquivo_invalido_msg": "O arquivo selecionado n?o ? um JSON v?lido nem um backup criptografado do KORRE.",
+    "arquivo_vazio_msg": "O arquivo selecionado está vazio.",
+    "arquivo_invalido": "Arquivo inválido",
+    "arquivo_invalido_msg": "O arquivo selecionado não é um JSON válido nem um backup criptografado do KORRE.",
     "confirmar_importacao_backup": "Deseja importar o backup \"{{nome}}\"?",
     "sim_restaurar": "Sim, restaurar",
     "foto_erro": "Nao foi possivel capturar a foto.",
@@ -251,6 +341,9 @@
     "ganho": "GANHO",
     "despesa": "DESPESA",
     "vincular_veiculo": "Vincular ao veiculo",
+    "data": "Data",
+    "hoje": "Hoje",
+    "alterar_data": "Alterar data",
     "adicionar_categoria": "+ ADICIONAR NOVA CATEGORIA",
     "selecionar_categoria": "Selecionar categoria",
     "sem_origem_ganho": "Nenhuma origem de ganho configurada.",
@@ -348,7 +441,7 @@
     "categorias": {
       "delivery": "Delivery",
       "transporte": "Transporte",
-      "logistica": "Log?stica",
+      "logistica": "Logística",
       "bebidas": "Bebidas",
       "fixo_extra": "Fixo / Extra",
       "personalizado": "Personalizado"
@@ -367,7 +460,12 @@
     "origem_auditoria": "Origem: Auditoria KORRE",
     "desgaste_atual": "Desgaste atual",
     "realizada": "Realizada",
-    "registrar_primeira_manutencao": "Registrar primeira manutencao"
+    "registrar_primeira_manutencao": "Registrar primeira manutencao",
+    "preencha_nome_intervalo": "Preencha o nome e um intervalo.",
+    "salvando_manutencao": "Salvando manutencao...",
+    "falha_salvar_manutencao": "Falha ao salvar a manutencao.",
+    "manutencao_registrada_ciclo": "Manutencao registrada e ciclo renovado!",
+    "falha_registrar_manutencao": "Nao foi possivel registrar a manutencao."
   },
   "historico": {
     "periodo": "Periodo",
@@ -495,8 +593,13 @@
   },
   "notificacoes": {
     "titulo": "Notificacoes",
+    "subtitulo": "Alertas, lembretes e avisos importantes ficam aqui.",
+    "limpar": "Limpar notificacoes",
     "testar": "TESTAR NOTIFICACAO",
     "vazio": "Nenhuma notificacao no momento.",
+    "vazio_desc": "Quando houver metas, manutencao, backup ou alertas do sistema, voce vera tudo por aqui.",
+    "lida": "Lida",
+    "nao_lida": "Nova",
     "teste_titulo": "Meta proxima!",
     "teste_msg": "Faltam apenas R$ 25 para bater sua meta diaria!",
     "pref": {
@@ -516,6 +619,7 @@
     "title": "Analisar corrida",
     "subtitle": "Digite os dados da oferta e veja se a corrida respeita seus custos e sua meta.",
     "dashboard_cta": "Analisar corrida manualmente",
+    "dashboard_cta_subtitle": "Compare oferta, tempo e km antes de aceitar.",
     "valor_oferta": "Valor oferecido pela corrida",
     "tempo_total": "Tempo total estimado (min)",
     "km_embarque": "KM ate o embarque",
@@ -567,11 +671,16 @@
     "reset_action": "Redefinir senha",
     "preencha_nova_senha": "Informe e confirme a nova senha.",
     "senha_curta": "A nova senha precisa ter pelo menos 7 caracteres.",
+    "senha_invalida": "A nova senha deve seguir as regras de seguranca.",
     "senhas_diferentes": "As senhas nao coincidem.",
+    "email_invalido": "Informe um e-mail valido.",
+    "cpf_invalido": "Informe um CPF valido.",
+    "placa_invalida": "Informe uma placa valida.",
     "preencha_dados": "Preencha e-mail, CPF e placa para continuar.",
-    "validacao_falhou": "Nao foi possivel validar os dados informados.",
+    "validacao_falhou": "Nao foi possivel confirmar os dados informados. Verifique as informacoes e tente novamente.",
     "erro_banco": "Nao foi possivel redefinir a senha agora. Tente novamente.",
-    "sucesso_msg": "Senha redefinida com sucesso. Entre novamente com sua nova senha."
+    "sucesso_msg": "Senha redefinida com sucesso. Entre novamente com sua nova senha.",
+    "back_to_login": "Voltar para login"
   },
   "flex_calc": {
     "title": "Calculadora Flex",
@@ -610,9 +719,9 @@
     "home": "Ir para a tela inicial"
   },
   "categorias": {
-    "combustivel": "Combust?vel",
-    "manutencao": "Manuten??o",
-    "alimentacao": "Alimenta??o",
+    "combustivel": "Combustível",
+    "manutencao": "Manutenção",
+    "alimentacao": "Alimentação",
     "outros_ganhos": "Outros ganhos",
     "outras_despesas": "Outras despesas",
     "outros": "Outros",
@@ -683,5 +792,123 @@
     "secao_nunca_texto": "Nome, CPF, e-mail, telefone, senha, hash, placa, foto, localizacao exata e historico individual identificavel nao entram em relatorios comerciais.",
     "secao_desativar_titulo": "Como desativar",
     "secao_desativar_texto": "Configuacoes > Privacidade e dados > desativar uso de dados anonimos."
+  },
+  "notifications": {
+    "daily": {
+      "title": "Hora de conferir o KORRE",
+      "body": "Veja seus gastos, lucro do dia e proximas manutencoes em poucos segundos."
+    },
+    "backup": {
+      "first_pending_title": "Primeiro backup pendente",
+      "first_pending_body": "Proteja seus dados exportando o primeiro backup do KORRE.",
+      "old_title": "Backup antigo",
+      "old_body": "Seu ultimo backup esta antigo. Atualize para manter a seguranca dos dados.",
+      "export_success_title": "Backup exportado com sucesso",
+      "export_saved_body": "Seu backup foi exportado e salvo.",
+      "export_success_body": "Seu backup foi exportado com sucesso.",
+      "export_failed_title": "Falha ao exportar backup",
+      "export_failed_body": "Nao foi possivel concluir a exportacao do backup.",
+      "restore_success_title": "Restauracao concluida",
+      "restore_success_body": "O backup foi restaurado com sucesso.",
+      "restore_failed_title": "Falha na restauracao",
+      "restore_failed_body": "Nao foi possivel restaurar o backup selecionado."
+    },
+    "financial": {
+      "goal_hit_title": "Meta diaria batida",
+      "goal_hit_body": "Voce atingiu sua meta diaria.",
+      "goal_incomplete_title": "Meta diaria incompleta",
+      "goal_incomplete_body": "Faltam R$ {{amount}} para bater a meta de hoje.",
+      "no_recent_title": "Sem lancamentos recentes",
+      "no_recent_body": "Voce esta ha alguns dias sem registrar ganhos ou despesas.",
+      "earnings_low_title": "Ganhos abaixo da media",
+      "earnings_low_body": "Os ganhos recentes ficaram abaixo da semana anterior.",
+      "high_expense_title": "Despesa acima da media",
+      "high_expense_body": "Uma despesa alta foi registrada. Revise seu fluxo financeiro."
+    },
+    "garage": {
+      "km_outdated_title": "KM possivelmente desatualizado",
+      "km_outdated_body": "Atualize o KM atual do veiculo para manter alertas corretos."
+    },
+    "indices": {
+      "no_audit_title": "Veiculo sem Auditoria KORRE",
+      "no_audit_body": "Finalize a Auditoria KORRE para ativar os indices.",
+      "incomplete_title": "Indices incompletos",
+      "incomplete_body": "A completude da auditoria esta baixa. Revise os campos principais.",
+      "audit_saved_title": "Auditoria KORRE salva",
+      "audit_saved_body": "Os indices foram atualizados com sucesso.",
+      "ikm_increased_title": "Custo por km aumentou",
+      "ikm_increased_body": "Seu IKM subiu de forma relevante. Revise os custos.",
+      "imin_increased_title": "Custo por minuto aumentou",
+      "imin_increased_body": "Seu IMIN subiu de forma relevante."
+    },
+    "maintenance": {
+      "no_items_title": "Veiculo sem manutencao cadastrada",
+      "no_items_body": "Cadastre itens de manutencao para acompanhar custos e ciclos.",
+      "planned_title": "{{item}} planejado",
+      "planned_body": "Voce ja planejou {{item}}, mas ainda nao registrou a primeira manutencao real.",
+      "overdue_title": "{{item}} vencida",
+      "overdue_body": "A manutencao passou do limite em {{km}} km.",
+      "upcoming_title": "{{item}} quase no limite",
+      "upcoming_body": "Faltam {{km}} km para a proxima manutencao.",
+      "no_real_data_title": "Oficina sem dados reais",
+      "no_real_data_body": "Registre manutencoes reais para melhorar os indices e evitar estimativas antigas.",
+      "cost_above_title": "{{item}} acima do previsto",
+      "cost_above_body": "{{item}} custou mais que o previsto. Revise seus indices KORRE.",
+      "registered_title": "Manutencao registrada com sucesso",
+      "registered_body": "{{item}} registrada e adicionada ao historico."
+    },
+    "mei": {
+      "das_today_title": "DAS vence hoje",
+      "das_today_body": "O DAS do MEI vence hoje.",
+      "das_late_title": "DAS possivelmente atrasado",
+      "das_late_body": "O vencimento do DAS ja passou. Verifique sua situacao.",
+      "das_soon_title": "DAS perto do vencimento",
+      "das_soon_body": "O DAS do MEI esta perto do vencimento.",
+      "revenue_title": "Alerta de faturamento MEI",
+      "revenue_critical_body": "CRITICO: voce atingiu {{percentage}}% do limite MEI. Restam apenas {{remaining}}.",
+      "revenue_body": "Seu faturamento MEI esta em {{percentage}}% este mes. Voce ainda tem {{remaining}} de margem.",
+      "revenue_fallback_body": "Confira como esta seu faturamento MEI para este mes."
+    },
+    "onboarding": {
+      "finish_title": "Finalize seu onboarding",
+      "finish_body": "Cadastre seu primeiro veiculo para comecar no KORRE.",
+      "no_audit_title": "Veiculo sem auditoria",
+      "no_audit_body": "Preencha a Auditoria KORRE para calcular seus indices."
+    },
+    "privacy": {
+      "policy_title": "Politica de privacidade atualizada",
+      "policy_body": "Revise os termos de privacidade da versao atual.",
+      "terms_title": "Termos atualizados",
+      "terms_body": "Os termos de uso foram atualizados."
+    },
+    "ride": {
+      "many_bad_title": "Muitas corridas ruins",
+      "many_bad_body": "As analises recentes indicam muitas corridas fracas ou em prejuizo.",
+      "loss_title": "Corrida em prejuizo",
+      "ideal_title": "Corrida ideal",
+      "saved_title": "Analise de corrida salva",
+      "loss_body": "A corrida analisada ficou em prejuizo. Revise antes de aceitar novas ofertas.",
+      "saved_body": "Analise registrada com sucesso."
+    },
+    "security": {
+      "login_success_title": "Login realizado",
+      "login_success_body": "Seu acesso foi concluido com sucesso.",
+      "too_many_title": "Muitas tentativas de login",
+      "too_many_body": "Foram detectadas varias tentativas de acesso. Tente novamente mais tarde.",
+      "password_reset_title": "Senha redefinida",
+      "password_reset_body": "Sua senha foi redefinida com sucesso."
+    },
+    "system": {
+      "error_title": "Erro interno recorrente",
+      "error_body": "Detectamos um erro recorrente. Acesse suporte para orientacoes.",
+      "support_title": "Suporte disponivel",
+      "support_body": "Os canais de suporte estao disponiveis no aplicativo."
+    },
+    "remote": {
+      "command_received_title": "Comando remoto recebido",
+      "command_received_body": "Comando {{command}} processado com seguranca.",
+      "backup_requested_title": "Backup solicitado",
+      "backup_requested_body": "O servidor solicitou um backup. Exporte manualmente em Configuracoes."
+    }
   }
 }

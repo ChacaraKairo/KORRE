@@ -48,7 +48,10 @@ export function useGerenciarDados() {
     try {
       return JSON.parse(content);
     } catch (error) {
-      logger.warn('[Backup] Conteudo nao e JSON puro:', error);
+      logger.warn(
+        '[Backup] Conteudo nao e JSON puro. Tentando compatibilidade com backup antigo criptografado:',
+        error,
+      );
     }
 
     if (!isEncryptedPayload(content)) {
@@ -89,14 +92,14 @@ export function useGerenciarDados() {
         t('configuracoes.backup_restaurado_msg'),
         [
           {
-            text: 'OK',
+            text: t('common.ok'),
             onPress: () => router.replace(AppRoutes.dashboard),
           },
         ],
       );
       await criarNotificacao({
-        titulo: 'Restauracao concluida',
-        mensagem: 'O backup foi restaurado com sucesso.',
+        titulo: t('notifications.backup.restore_success_title'),
+        mensagem: t('notifications.backup.restore_success_body'),
         tipo: 'backup',
         prioridade: 'media',
         destino: AppRoutes.dashboard,
@@ -112,8 +115,8 @@ export function useGerenciarDados() {
         t('configuracoes.falha_restaurar_backup_msg'),
       );
       await criarNotificacao({
-        titulo: 'Falha na restauracao',
-        mensagem: 'Nao foi possivel restaurar o backup selecionado.',
+        titulo: t('notifications.backup.restore_failed_title'),
+        mensagem: t('notifications.backup.restore_failed_body'),
         tipo: 'backup',
         prioridade: 'alta',
         destino: AppRoutes.configuracoes,

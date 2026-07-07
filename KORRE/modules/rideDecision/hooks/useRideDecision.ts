@@ -9,6 +9,7 @@ import { RideDecisionService } from '../domain/rideDecisionService';
 import type { RideDecisionResult } from '../domain/types';
 import { criarNotificacao } from '../../../notifications/NotificationService';
 import { AppRoutes } from '../../../constants/routes';
+import i18n from '../../../locales/i18n';
 
 const parseNumber = (value: string) => {
   const normalized = value.replace(',', '.').replace(/[^0-9.]/g, '');
@@ -145,14 +146,14 @@ export function useRideDecision() {
       await criarNotificacao({
         titulo:
           decisao === 'prejuizo'
-            ? 'Corrida em prejuizo'
+            ? i18n.t('notifications.ride.loss_title')
             : decisao === 'ideal'
-              ? 'Corrida ideal'
-              : 'Analise de corrida salva',
+              ? i18n.t('notifications.ride.ideal_title')
+              : i18n.t('notifications.ride.saved_title'),
         mensagem:
           decisao === 'prejuizo'
-            ? 'A corrida analisada ficou em prejuizo. Revise antes de aceitar novas ofertas.'
-            : 'Analise registrada com sucesso.',
+            ? i18n.t('notifications.ride.loss_body')
+            : i18n.t('notifications.ride.saved_body'),
         tipo: 'corrida',
         prioridade: decisao === 'prejuizo' ? 'alta' : 'baixa',
         destino: String(AppRoutes.analisarCorrida),

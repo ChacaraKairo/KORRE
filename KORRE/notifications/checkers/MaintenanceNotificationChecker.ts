@@ -1,5 +1,6 @@
 import { AppRoutes } from '../../constants/routes';
 import db from '../../database/DatabaseInit';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 import { buildMaintenanceDedupKey, buildWeeklyDedupKey } from '../notificationDedupKeys';
 import { KM_ALERTA_MANUTENCAO, getVeiculoAtivo, getYearWeek } from './shared';
@@ -26,8 +27,8 @@ export const MaintenanceNotificationChecker = {
 
     if (!itens.length) {
       await criarNotificacao({
-        titulo: 'Veiculo sem manutencao cadastrada',
-        mensagem: 'Cadastre itens de manutencao para acompanhar custos e ciclos.',
+        titulo: i18n.t('notifications.maintenance.no_items_title'),
+        mensagem: i18n.t('notifications.maintenance.no_items_body'),
         tipo: 'oficina',
         prioridade: 'media',
         destino: AppRoutes.oficina,
@@ -45,8 +46,12 @@ export const MaintenanceNotificationChecker = {
       if (planejado) {
         semHistoricoReal += 1;
         await criarNotificacao({
-          titulo: `${item.nome} planejado`,
-          mensagem: `Voce ja planejou ${item.nome}, mas ainda nao registrou a primeira manutencao real.`,
+          titulo: i18n.t('notifications.maintenance.planned_title', {
+            item: item.nome,
+          }),
+          mensagem: i18n.t('notifications.maintenance.planned_body', {
+            item: item.nome,
+          }),
           tipo: 'oficina',
           prioridade: 'media',
           destino: AppRoutes.oficina,
@@ -64,8 +69,12 @@ export const MaintenanceNotificationChecker = {
 
       if (restante <= 0) {
         await criarNotificacao({
-          titulo: `${item.nome} vencida`,
-          mensagem: `A manutencao passou do limite em ${Math.abs(restante)} km.`,
+          titulo: i18n.t('notifications.maintenance.overdue_title', {
+            item: item.nome,
+          }),
+          mensagem: i18n.t('notifications.maintenance.overdue_body', {
+            km: Math.abs(restante),
+          }),
           tipo: 'manutencao',
           prioridade: 'critica',
           destino: AppRoutes.oficina,
@@ -74,8 +83,12 @@ export const MaintenanceNotificationChecker = {
         });
       } else if (restante <= KM_ALERTA_MANUTENCAO) {
         await criarNotificacao({
-          titulo: `${item.nome} quase no limite`,
-          mensagem: `Faltam ${restante} km para a proxima manutencao.`,
+          titulo: i18n.t('notifications.maintenance.upcoming_title', {
+            item: item.nome,
+          }),
+          mensagem: i18n.t('notifications.maintenance.upcoming_body', {
+            km: restante,
+          }),
           tipo: 'manutencao',
           prioridade: 'alta',
           destino: AppRoutes.oficina,
@@ -87,8 +100,8 @@ export const MaintenanceNotificationChecker = {
 
     if (semHistoricoReal === itens.length) {
       await criarNotificacao({
-        titulo: 'Oficina sem dados reais',
-        mensagem: 'Registre manutencoes reais para melhorar os indices e evitar estimativas antigas.',
+        titulo: i18n.t('notifications.maintenance.no_real_data_title'),
+        mensagem: i18n.t('notifications.maintenance.no_real_data_body'),
         tipo: 'oficina',
         prioridade: 'media',
         destino: AppRoutes.oficina,
@@ -126,8 +139,12 @@ export const MaintenanceNotificationChecker = {
       if (diff < 0.2) continue;
 
       await criarNotificacao({
-        titulo: `${row.nome} acima do previsto`,
-        mensagem: `${row.nome} custou mais que o previsto. Revise seus indices KORRE.`,
+        titulo: i18n.t('notifications.maintenance.cost_above_title', {
+          item: row.nome,
+        }),
+        mensagem: i18n.t('notifications.maintenance.cost_above_body', {
+          item: row.nome,
+        }),
         tipo: 'auditoria',
         prioridade: 'alta',
         destino: AppRoutes.calculadoraKorre,

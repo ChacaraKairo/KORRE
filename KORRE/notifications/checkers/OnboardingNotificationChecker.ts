@@ -1,5 +1,6 @@
 import db from '../../database/DatabaseInit';
 import { AppRoutes } from '../../constants/routes';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 
 export const OnboardingNotificationChecker = {
@@ -15,8 +16,8 @@ export const OnboardingNotificationChecker = {
     );
     if (!veiculo) {
       await criarNotificacao({
-        titulo: 'Finalize seu onboarding',
-        mensagem: 'Cadastre seu primeiro veiculo para comecar no KORRE.',
+        titulo: i18n.t('notifications.onboarding.finish_title'),
+        mensagem: i18n.t('notifications.onboarding.finish_body'),
         tipo: 'uso_app',
         prioridade: 'alta',
         destino: AppRoutes.garagem,
@@ -33,8 +34,8 @@ export const OnboardingNotificationChecker = {
     );
     if (!Number(auditoria?.total || 0)) {
       await criarNotificacao({
-        titulo: 'Veiculo sem auditoria',
-        mensagem: 'Preencha a Auditoria KORRE para calcular seus indices.',
+        titulo: i18n.t('notifications.onboarding.no_audit_title'),
+        mensagem: i18n.t('notifications.onboarding.no_audit_body'),
         tipo: 'uso_app',
         prioridade: 'alta',
         destino: AppRoutes.calculadoraKorre,

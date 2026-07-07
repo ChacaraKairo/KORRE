@@ -14,9 +14,97 @@
     "loading_local": "Loading local data...",
     "atencao": "Attention"
   },
+  "indices": {
+    "steps": {
+      "intro": "Introduction",
+      "mode": "Setup mode",
+      "basic": "Basic costs",
+      "advanced": "Advanced costs",
+      "review": "Review"
+    },
+    "intro": {
+      "title": "Let's adjust your KORRE Indexes",
+      "description": "These details help KORRE estimate your vehicle costs better and show more useful daily analyses.",
+      "kmTitle": "Cost per km",
+      "kmDescription": "Helps you understand how much your vehicle costs to drive.",
+      "minuteTitle": "Cost per minute",
+      "minuteDescription": "Helps estimate the cost of time during trips.",
+      "goalTitle": "Minimum goal",
+      "goalDescription": "Helps KORRE compare whether a trip or use is worth it.",
+      "start": "Start setup"
+    },
+    "mode": {
+      "title": "How do you want to configure it?",
+      "description": "Choose a path. Nothing will be applied automatically without your review.",
+      "simple": {
+        "title": "Simple mode",
+        "description": "Recommended for most users. KORRE suggests initial values and you review before saving."
+      },
+      "advanced": {
+        "title": "Advanced mode",
+        "description": "For users who want to control all costs and indexes manually."
+      }
+    },
+    "basic": {
+      "title": "Basic vehicle costs",
+      "description": "Enter approximate fuel, maintenance and monthly usage averages. You can change them later."
+    },
+    "advanced": {
+      "title": "Advanced costs",
+      "description": "Adjust fixed costs, time costs and expenses that refine the calculation."
+    },
+    "suggestion": {
+      "title": "KORRE suggestion",
+      "description": "We can suggest values based on fuel entries, costs and maintenance you already recorded. You review everything before saving.",
+      "view": "View suggestion",
+      "apply": "Apply suggestion",
+      "editBeforeApply": "Edit before applying",
+      "ignore": "Ignore",
+      "available": "We found data that can help fill this in.",
+      "applied": "Suggestion applied. Review the values before saving."
+    },
+    "summary": {
+      "title": "KORRE Indexes summary",
+      "kmCost": "Estimated cost per km",
+      "kmCostDescription": "Reference to know how much it costs to drive 1 km.",
+      "minuteCost": "Estimated cost per minute",
+      "minuteCostDescription": "Reference for time cost during trips.",
+      "goal": "Suggested minimum goal",
+      "goalDescription": "Minimum value per minute to compare trips and usage.",
+      "save": "Save indexes"
+    },
+    "navigation": {
+      "continue": "Continue"
+    },
+    "validation": {
+      "required": "Fill in the required fields to continue.",
+      "positive": "Enter a value greater than zero."
+    },
+    "empty": {
+      "noVehicle": "To configure your KORRE Indexes, first register a vehicle.",
+      "noVehicleDescription": "After that KORRE calculates cost per km, cost per minute and minimum goal.",
+      "registerVehicle": "Register vehicle",
+      "noDataForSuggestion": "There is not enough data yet to suggest values with confidence. You can fill them manually now and adjust later."
+    }
+  },
   "tabs": {
     "dashboard": "Dashboard",
     "dados": "Data"
+  },
+  "links": {
+    "official_title": "Join the KORRE community",
+    "official_subtitle": "Follow updates, talk to other drivers and access the official channels.",
+    "community_short": "Community",
+    "instagram_short": "Instagram",
+    "site_short": "Website",
+    "community_title": "WhatsApp community",
+    "instagram_title": "Official Instagram",
+    "community_error": "Could not open the community.",
+    "instagram_error": "Could not open Instagram.",
+    "site_error": "Could not open the KORRE website.",
+    "vehicle_community_title": "Community support",
+    "vehicle_community_subtitle": "Help improve the indexes with real vehicle information.",
+    "vehicle_community_error": "Could not open community support."
   },
   "startup": {
     "loading": "Loading KORRE",
@@ -47,8 +135,8 @@
     "backup_salvo": "Backup saved",
     "backup_pronto": "Backup ready",
     "backup_gerado": "Backup generated",
-    "backup_criptografado_salvo": "The encrypted backup was saved in the selected folder.",
-    "backup_criptografado_pronto": "The encrypted backup was generated. Keep the password somewhere safe.",
+    "backup_criptografado_salvo": "The backup was saved in the selected folder.",
+    "backup_criptografado_pronto": "The backup was generated successfully.",
     "backup_compartilhamento_indisponivel": "The file was saved in app storage, but sharing is not available on this device.",
     "erro_backup": "Backup error",
     "erro_backup_msg": "Could not generate or save the backup file.",
@@ -91,7 +179,9 @@
     "versao": "App version",
     "atualizado": "Up to date",
     "selecione_idioma": "Select language",
-    "cancelar": "Cancel"
+    "cancelar": "Cancel",
+    "backup_salvo_msg": "The backup was saved in the selected folder.",
+    "backup_pronto_msg": "The backup was generated successfully."
   },
   "login": {
     "tagline": "You on the road, us in your pocket.",
@@ -251,6 +341,9 @@
     "ganho": "INCOME",
     "despesa": "EXPENSE",
     "vincular_veiculo": "Link to vehicle",
+    "data": "Date",
+    "hoje": "Today",
+    "alterar_data": "Change date",
     "adicionar_categoria": "+ ADD NEW CATEGORY",
     "selecionar_categoria": "Select category",
     "sem_origem_ganho": "No income source configured.",
@@ -367,7 +460,12 @@
     "origem_auditoria": "Source: KORRE Audit",
     "desgaste_atual": "Current wear",
     "realizada": "Done",
-    "registrar_primeira_manutencao": "Register first maintenance"
+    "registrar_primeira_manutencao": "Register first maintenance",
+    "preencha_nome_intervalo": "Enter the name and one interval.",
+    "salvando_manutencao": "Saving maintenance...",
+    "falha_salvar_manutencao": "Could not save the maintenance.",
+    "manutencao_registrada_ciclo": "Maintenance registered and cycle renewed!",
+    "falha_registrar_manutencao": "Could not register the maintenance."
   },
   "historico": {
     "periodo": "Period",
@@ -495,8 +593,13 @@
   },
   "notificacoes": {
     "titulo": "Notifications",
+    "subtitulo": "Alerts, reminders and important notices stay here.",
+    "limpar": "Clear notifications",
     "testar": "TEST NOTIFICATION",
     "vazio": "No notifications right now.",
+    "vazio_desc": "When goals, maintenance, backup or system alerts appear, you will see them here.",
+    "lida": "Read",
+    "nao_lida": "New",
     "teste_titulo": "Goal is close!",
     "teste_msg": "Only R$ 25 left to hit your daily goal!",
     "pref": {
@@ -516,6 +619,7 @@
     "title": "Analyze ride",
     "subtitle": "Enter the offer data and see whether the ride respects your costs and goal.",
     "dashboard_cta": "Analyze a ride manually",
+    "dashboard_cta_subtitle": "Compare offer, time and distance before accepting.",
     "valor_oferta": "Ride offer amount",
     "tempo_total": "Estimated total time (min)",
     "km_embarque": "KM to pickup",
@@ -567,11 +671,16 @@
     "reset_action": "Reset password",
     "preencha_nova_senha": "Enter and confirm the new password.",
     "senha_curta": "The new password must be at least 7 characters.",
+    "senha_invalida": "The new password must follow the security rules.",
     "senhas_diferentes": "Passwords do not match.",
+    "email_invalido": "Enter a valid email.",
+    "cpf_invalido": "Enter a valid CPF.",
+    "placa_invalida": "Enter a valid plate.",
     "preencha_dados": "Fill email, CPF and plate to continue.",
-    "validacao_falhou": "Could not validate the provided data.",
+    "validacao_falhou": "Could not confirm the provided data. Check the information and try again.",
     "erro_banco": "Could not reset the password right now. Try again.",
-    "sucesso_msg": "Password reset successfully. Sign in again with your new password."
+    "sucesso_msg": "Password reset successfully. Sign in again with your new password.",
+    "back_to_login": "Back to login"
   },
   "flex_calc": {
     "title": "Flex Calculator",
@@ -683,5 +792,123 @@
     "secao_nunca_texto": "Name, CPF, email, phone, password, hash, plate, photo, exact location and identifiable individual history are never included in commercial reports.",
     "secao_desativar_titulo": "How to disable",
     "secao_desativar_texto": "Settings > Privacy and data > disable anonymous data usage."
+  },
+  "notifications": {
+    "daily": {
+      "title": "Time to check KORRE",
+      "body": "Review your expenses, daily profit and upcoming maintenance in a few seconds."
+    },
+    "backup": {
+      "first_pending_title": "First backup pending",
+      "first_pending_body": "Protect your data by exporting your first KORRE backup.",
+      "old_title": "Backup is old",
+      "old_body": "Your last backup is old. Update it to keep your data safe.",
+      "export_success_title": "Backup exported successfully",
+      "export_saved_body": "Your backup was exported and saved.",
+      "export_success_body": "Your backup was exported successfully.",
+      "export_failed_title": "Backup export failed",
+      "export_failed_body": "Could not complete the backup export.",
+      "restore_success_title": "Restore complete",
+      "restore_success_body": "The backup was restored successfully.",
+      "restore_failed_title": "Restore failed",
+      "restore_failed_body": "Could not restore the selected backup."
+    },
+    "financial": {
+      "goal_hit_title": "Daily goal reached",
+      "goal_hit_body": "You reached your daily goal.",
+      "goal_incomplete_title": "Daily goal incomplete",
+      "goal_incomplete_body": "R$ {{amount}} left to reach today's goal.",
+      "no_recent_title": "No recent entries",
+      "no_recent_body": "You have gone a few days without recording earnings or expenses.",
+      "earnings_low_title": "Earnings below average",
+      "earnings_low_body": "Recent earnings were below the previous week.",
+      "high_expense_title": "Expense above average",
+      "high_expense_body": "A high expense was recorded. Review your cash flow."
+    },
+    "garage": {
+      "km_outdated_title": "KM may be outdated",
+      "km_outdated_body": "Update the vehicle current KM to keep alerts accurate."
+    },
+    "indices": {
+      "no_audit_title": "Vehicle without KORRE Audit",
+      "no_audit_body": "Complete the KORRE Audit to activate indices.",
+      "incomplete_title": "Incomplete indices",
+      "incomplete_body": "Audit completeness is low. Review the main fields.",
+      "audit_saved_title": "KORRE Audit saved",
+      "audit_saved_body": "The indices were updated successfully.",
+      "ikm_increased_title": "Cost per KM increased",
+      "ikm_increased_body": "Your IKM rose significantly. Review your costs.",
+      "imin_increased_title": "Cost per minute increased",
+      "imin_increased_body": "Your IMIN rose significantly."
+    },
+    "maintenance": {
+      "no_items_title": "Vehicle has no maintenance items",
+      "no_items_body": "Add maintenance items to track costs and cycles.",
+      "planned_title": "{{item}} planned",
+      "planned_body": "You planned {{item}}, but have not registered the first real maintenance yet.",
+      "overdue_title": "{{item}} overdue",
+      "overdue_body": "Maintenance passed the limit by {{km}} km.",
+      "upcoming_title": "{{item}} near the limit",
+      "upcoming_body": "{{km}} km left until the next maintenance.",
+      "no_real_data_title": "Workshop has no real data",
+      "no_real_data_body": "Register real maintenance to improve indices and avoid old estimates.",
+      "cost_above_title": "{{item}} above estimate",
+      "cost_above_body": "{{item}} cost more than expected. Review your KORRE indices.",
+      "registered_title": "Maintenance registered successfully",
+      "registered_body": "{{item}} was registered and added to history."
+    },
+    "mei": {
+      "das_today_title": "DAS due today",
+      "das_today_body": "Your MEI DAS is due today.",
+      "das_late_title": "DAS may be late",
+      "das_late_body": "The DAS due date has passed. Check your status.",
+      "das_soon_title": "DAS due soon",
+      "das_soon_body": "Your MEI DAS is close to its due date.",
+      "revenue_title": "MEI revenue alert",
+      "revenue_critical_body": "CRITICAL: you reached {{percentage}}% of the MEI limit. Only {{remaining}} left.",
+      "revenue_body": "Your MEI revenue is at {{percentage}}% this month. You still have {{remaining}} available.",
+      "revenue_fallback_body": "Check your MEI revenue for this month."
+    },
+    "onboarding": {
+      "finish_title": "Finish onboarding",
+      "finish_body": "Add your first vehicle to start using KORRE.",
+      "no_audit_title": "Vehicle without audit",
+      "no_audit_body": "Fill in the KORRE Audit to calculate your indices."
+    },
+    "privacy": {
+      "policy_title": "Privacy policy updated",
+      "policy_body": "Review the privacy terms for the current version.",
+      "terms_title": "Terms updated",
+      "terms_body": "The terms of use were updated."
+    },
+    "ride": {
+      "many_bad_title": "Too many weak rides",
+      "many_bad_body": "Recent analyses show many weak or loss-making rides.",
+      "loss_title": "Ride at a loss",
+      "ideal_title": "Ideal ride",
+      "saved_title": "Ride analysis saved",
+      "loss_body": "The analyzed ride would be at a loss. Review before accepting new offers.",
+      "saved_body": "Analysis registered successfully."
+    },
+    "security": {
+      "login_success_title": "Login completed",
+      "login_success_body": "Your access was completed successfully.",
+      "too_many_title": "Too many login attempts",
+      "too_many_body": "Several access attempts were detected. Try again later.",
+      "password_reset_title": "Password reset",
+      "password_reset_body": "Your password was reset successfully."
+    },
+    "system": {
+      "error_title": "Recurring internal error",
+      "error_body": "We detected a recurring error. Open support for guidance.",
+      "support_title": "Support available",
+      "support_body": "Support channels are available in the app."
+    },
+    "remote": {
+      "command_received_title": "Remote command received",
+      "command_received_body": "Command {{command}} was processed safely.",
+      "backup_requested_title": "Backup requested",
+      "backup_requested_body": "The server requested a backup. Export it manually in Settings."
+    }
   }
 }

@@ -6,16 +6,19 @@ import {
   Clock,
   HelpCircle,
   MapPin,
+  MessageCircle,
   Target,
   TrendingUp,
   } from 'lucide-react-native';
 import React from 'react';
 import {
+    Linking,
     Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { COMPANY_CONTACTS } from '../../../config/companyContacts';
 import { showCustomAlert } from '../../../hooks/alert/useCustomAlert';
 import { useTema } from '../../../hooks/modo_tema';
 import { styles as baseStyles } from '../../../styles/telas/Dashboard/indicesMCCardStyles';
@@ -73,6 +76,16 @@ export const IndicesMCCard = ({
         `Faturamento Ideal: R$ ${metaTotal.toFixed(2)}\n\n` +
         `Resumo: Se pagar menos de R$ ${custoTotal.toFixed(2)}, você PAGA para trabalhar. O ideal é focar na sua Meta/Hora.`,
     );
+  };
+  const handleApoioComunidade = () => {
+    Linking.openURL(
+      COMPANY_CONTACTS.support.vehicleCommunitySupportUrl,
+    ).catch(() => {
+      showCustomAlert(
+        t('common.erro'),
+        t('links.vehicle_community_error'),
+      );
+    });
   };
 
   return (
@@ -274,6 +287,46 @@ export const IndicesMCCard = ({
         </Text>
       </View>
 
+      <TouchableOpacity
+        activeOpacity={0.82}
+        onPress={(event) => {
+          event.stopPropagation();
+          handleApoioComunidade();
+        }}
+        style={[
+          baseStyles.communitySupport,
+          {
+            backgroundColor: isDark ? '#0A0A0A' : '#F5F5F5',
+            borderColor: '#00C853',
+          },
+        ]}
+      >
+        <View style={baseStyles.communitySupportIcon}>
+          <MessageCircle size={18} color="#00C853" />
+        </View>
+        <View style={baseStyles.communitySupportCopy}>
+          <Text
+            style={[
+              baseStyles.communitySupportTitle,
+              { color: textColor },
+            ]}
+            numberOfLines={1}
+          >
+            {t('links.vehicle_community_title')}
+          </Text>
+          <Text
+            style={[
+              baseStyles.communitySupportSubtitle,
+              { color: textMuted },
+            ]}
+            numberOfLines={2}
+          >
+            {t('links.vehicle_community_subtitle')}
+          </Text>
+        </View>
+        <ChevronRight size={16} color="#00C853" />
+      </TouchableOpacity>
+
       {/* Dica de Clique para Editar */}
       <View style={baseStyles.clickHint}>
         <Text
@@ -289,5 +342,3 @@ export const IndicesMCCard = ({
     </TouchableOpacity>
   );
 };
-
-

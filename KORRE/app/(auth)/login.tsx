@@ -16,6 +16,7 @@ import {
 import { CardLogin } from '../../components/telas/Login/CardLogin';
 import { FooterLogin } from '../../components/telas/Login/FooterLogin';
 import { LanguageSwitcherButton } from '../../components/LanguageSwitcherButton';
+import { OfficialLinksBanner } from '../../components/OfficialLinksBanner';
 import { useLogin } from '../../hooks/login/useLogin';
 import { loginStyles as styles } from '../../styles/telas/login/LoginStyles';
 import { AppRoutes } from '../../constants/routes';
@@ -74,7 +75,7 @@ const LoginScreen: React.FC = () => {
             style={dynamicInlineStyles.inline1({ bounceAnim })}
           >
             <Image
-              source={require('../../assets/images/android-icon-foreground-safe.png')}
+              source={require('../../assets/images/favicon.png')}
               style={inlineStyles.inline3}
               resizeMode="contain"
             />
@@ -104,7 +105,7 @@ const LoginScreen: React.FC = () => {
               !temUsuario
                 ? () => router.push('/(auth)/cadastro')
                 : undefined
-            }
+              }
           />
 
           <TouchableOpacity
@@ -129,6 +130,8 @@ const LoginScreen: React.FC = () => {
               {t('login.lembrar_identificacao')}
             </Text>
           </TouchableOpacity>
+
+          <OfficialLinksBanner isDark compact />
 
           <FooterLogin />
         </ScrollView>

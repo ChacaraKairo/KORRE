@@ -1,5 +1,6 @@
 import db from '../../database/DatabaseInit';
 import { AppRoutes } from '../../constants/routes';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 import { DIA_VENCIMENTO_DAS, getYearMonth } from './shared';
 
@@ -23,8 +24,8 @@ export const MeiNotificationChecker = {
     const dia = hoje.getDate();
     if (dia === DIA_VENCIMENTO_DAS) {
       await criarNotificacao({
-        titulo: 'DAS vence hoje',
-        mensagem: 'O DAS do MEI vence hoje.',
+        titulo: i18n.t('notifications.mei.das_today_title'),
+        mensagem: i18n.t('notifications.mei.das_today_body'),
         tipo: 'mei',
         prioridade: 'critica',
         destino: AppRoutes.finance,
@@ -36,8 +37,8 @@ export const MeiNotificationChecker = {
 
     if (dia > DIA_VENCIMENTO_DAS) {
       await criarNotificacao({
-        titulo: 'DAS possivelmente atrasado',
-        mensagem: 'O vencimento do DAS ja passou. Verifique sua situacao.',
+        titulo: i18n.t('notifications.mei.das_late_title'),
+        mensagem: i18n.t('notifications.mei.das_late_body'),
         tipo: 'mei',
         prioridade: 'critica',
         destino: AppRoutes.finance,
@@ -49,8 +50,8 @@ export const MeiNotificationChecker = {
 
     if (dia >= DIA_VENCIMENTO_DAS - 2) {
       await criarNotificacao({
-        titulo: 'DAS perto do vencimento',
-        mensagem: 'O DAS do MEI esta perto do vencimento.',
+        titulo: i18n.t('notifications.mei.das_soon_title'),
+        mensagem: i18n.t('notifications.mei.das_soon_body'),
         tipo: 'mei',
         prioridade: 'alta',
         destino: AppRoutes.finance,

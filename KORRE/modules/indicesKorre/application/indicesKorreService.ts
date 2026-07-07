@@ -7,6 +7,7 @@ import { MaintenancePlanningService } from '../../maintenancePlanning/Maintenanc
 import db from '../../../database/DatabaseInit';
 import { criarNotificacao } from '../../../notifications/NotificationService';
 import { AppRoutes } from '../../../constants/routes';
+import i18n from '../../../locales/i18n';
 
 export const CalculadoraService = {
   carregarDadosCompletosVeiculo: async (
@@ -98,8 +99,8 @@ export const CalculadoraService = {
     );
 
     await criarNotificacao({
-      titulo: 'Auditoria KORRE salva',
-      mensagem: 'Os indices foram atualizados com sucesso.',
+      titulo: i18n.t('notifications.indices.audit_saved_title'),
+      mensagem: i18n.t('notifications.indices.audit_saved_body'),
       tipo: 'sucesso',
       prioridade: 'baixa',
       destino: AppRoutes.calculadoraKorre,
@@ -111,8 +112,8 @@ export const CalculadoraService = {
     const ikmAnterior = Number(antes?.custo_km_calculado || 0);
     if (ikmAnterior > 0 && ikm > ikmAnterior * 1.15) {
       await criarNotificacao({
-        titulo: 'Custo por km aumentou',
-        mensagem: 'Seu IKM subiu de forma relevante. Revise os custos.',
+        titulo: i18n.t('notifications.indices.ikm_increased_title'),
+        mensagem: i18n.t('notifications.indices.ikm_increased_body'),
         tipo: 'indices',
         prioridade: 'alta',
         destino: AppRoutes.calculadoraKorre,
@@ -124,8 +125,8 @@ export const CalculadoraService = {
     const iminAnterior = Number(antes?.custo_minuto_calculado || 0);
     if (iminAnterior > 0 && iminCustoFixo > iminAnterior * 1.15) {
       await criarNotificacao({
-        titulo: 'Custo por minuto aumentou',
-        mensagem: 'Seu IMIN subiu de forma relevante.',
+        titulo: i18n.t('notifications.indices.imin_increased_title'),
+        mensagem: i18n.t('notifications.indices.imin_increased_body'),
         tipo: 'indices',
         prioridade: 'media',
         destino: AppRoutes.calculadoraKorre,

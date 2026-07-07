@@ -1,5 +1,4 @@
-import { useRouter } from 'expo-router';
-import { ArrowLeft, ShieldCheck } from 'lucide-react-native';
+import { ShieldCheck } from 'lucide-react-native';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -8,23 +7,20 @@ import {
   ScrollView,
   StatusBar,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { AppRoutes } from '../../constants/routes';
 import { useTema } from '../../hooks/modo_tema';
 import { styles } from '../../styles/telas/Termos/termosStyles';
-import { safeBack } from '../../utils/navigation/safeBack';
+import { BackButton } from '../../components/ui/BackButton';
 
 export default function TermosScreen() {
   const { t } = useTranslation();
-  const router = useRouter();
   const { tema } = useTema();
   const isDark = tema === 'escuro';
 
   const bgColor = isDark ? '#0A0A0A' : '#F5F5F5';
   const textColor = isDark ? '#FFFFFF' : '#0A0A0A';
-  const cardColor = isDark ? '#161616' : '#FFFFFF';
   const borderColor = isDark ? '#222' : '#E0E0E0';
   const textMuted = isDark ? '#AAA' : '#555';
 
@@ -59,12 +55,7 @@ export default function TermosScreen() {
     >
       <View style={[styles.header, { borderBottomColor: borderColor }]}>
         <View style={styles.headerContent}>
-          <TouchableOpacity
-            onPress={() => safeBack(router, AppRoutes.cadastro)}
-            style={[styles.btnVoltar, { backgroundColor: cardColor }]}
-          >
-            <ArrowLeft size={20} color={textColor} />
-          </TouchableOpacity>
+          <BackButton fallback={AppRoutes.cadastro} isDark={isDark} />
           <Text style={[styles.headerTitle, { color: textColor }]}>
             {t('termos.titulo')}
           </Text>

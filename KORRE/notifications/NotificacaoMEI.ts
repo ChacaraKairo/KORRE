@@ -1,5 +1,6 @@
 import Constants from 'expo-constants';
 import db from '../database/DatabaseInit';
+import i18n from '../locales/i18n';
 
 const LIMITE_MENSAL_MEI = 6750;
 const isExpoGo = Constants.appOwnership === 'expo';
@@ -32,16 +33,22 @@ export const NotificacaoMEI = {
       });
 
       if (parseFloat(porcentagem) >= 95) {
-        return `CRÍTICO: Você atingiu ${porcentagem}% do limite MEI! Restam apenas ${restante}.`;
+        return i18n.t('notifications.mei.revenue_critical_body', {
+          percentage: porcentagem,
+          remaining: restante,
+        });
       }
 
-      return `Seu faturamento MEI está em ${porcentagem}% este mês. Você ainda tem ${restante} de margem.`;
+      return i18n.t('notifications.mei.revenue_body', {
+        percentage: porcentagem,
+        remaining: restante,
+      });
     } catch (error) {
       console.error(
         'Erro ao calcular dados para notificação:',
         error,
       );
-      return 'Confira como está seu faturamento MEI para este mês!';
+      return i18n.t('notifications.mei.revenue_fallback_body');
     }
   },
 
@@ -54,7 +61,7 @@ export const NotificacaoMEI = {
 
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: 'Alerta de Faturamento MEI',
+        title: i18n.t('notifications.mei.revenue_title'),
         body: mensagem,
         data: { screen: '/(relatorios)' },
         sound: true,

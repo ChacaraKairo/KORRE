@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { Route, Save } from 'lucide-react-native';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
@@ -8,18 +8,15 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
-import { styles } from '../../styles/generated/app/(tabs)/calculadora_korreStyles';
-import { inlineStyles } from '../../styles/generated-inline/app/(tabs)/calculadora_korreInlineStyles';
 import {
   CalculadoraHeader,
+  CalculadoraTempo,
   ModalExplicativo,
-  PainelResultadoFlutuante,
-  PerfilUsoKorre,
   SecaoComposicaoCustoKm,
   SecaoCustoPessoa,
   SecaoCustosAtivo,
@@ -27,15 +24,26 @@ import {
   SecaoPatrimonio,
   useIndicesKorreForm,
 } from '../../modules/indicesKorre';
+import {
+  getIndicesSteps,
+  hasNegativeIndexValue,
+  IndicesFormMode,
+  IndicesFormStep,
+  validateIndicesStep,
+} from '../../modules/indicesKorre/domain/indicesFormWorkflow';
+import { IndicesIntroCard } from '../../components/indices/IndicesIntroCard';
+import { IndicesModeSelector } from '../../components/indices/IndicesModeSelector';
+import { IndicesStepProgress } from '../../components/indices/IndicesStepProgress';
+import { IndicesSuggestionCard } from '../../components/indices/IndicesSuggestionCard';
+import { IndicesSummaryCard } from '../../components/indices/IndicesSummaryCard';
+import { AppButton } from '../../components/ui/AppButton';
+import { AppCard } from '../../components/ui/AppCard';
+import { BackButton } from '../../components/ui/BackButton';
+import { EmptyState } from '../../components/ui/EmptyState';
 import { useTema } from '../../hooks/modo_tema';
+import { showCustomAlert } from '../../hooks/alert/useCustomAlert';
 import { AppRoutes } from '../../constants/routes';
-
-// Layout (A casca da tela)
-
-// Sections (Os blocos do formulário)
-
-// UI Genérica
-import { MainButton as Button } from '../../components/ui/buttons/Button'; // Mantido caso seja global
+import { tokens } from '../../styles/tokens';
 
 export default function CalculadoraScreen() {
   const { t } = useTranslation();
@@ -52,9 +60,11 @@ export default function CalculadoraScreen() {
     mudarVeiculoAtivo,
     validarStatusSecoes,
     calcularIPVAAutomatico,
-    perfilUso,
-    setPerfilUso,
+    verSugestoes,
     aplicarSugestoes,
+    ignorarSugestoes,
+    previewSugestoes,
+    carregandoSugestoes,
     sugestoesAplicadas,
     sugestoesIgnoradas,
     sugestoesRevisao,
@@ -64,67 +74,403 @@ export default function CalculadoraScreen() {
 
   const { tema } = useTema();
   const isDark = tema === 'escuro';
-  const [modoAvancado, setModoAvancado] = useState(false);
-
-  // Estado para o Modal de Ajuda
+  const [mode, setMode] = useState<IndicesFormMode>('simple');
+  const [step, setStep] = useState<IndicesFormStep>('intro');
   const [helpModal, setHelpModal] = useState({
     visible: false,
     titulo: '',
     texto: '',
   });
 
-  const handleOpenHelp = (
-    titulo: string,
-    texto: string,
-  ) => {
+  const steps = useMemo(() => getIndicesSteps(mode), [mode]);
+  const currentStepIndex = Math.max(steps.indexOf(step), 0);
+  const status = validarStatusSecoes();
+
+  const tempo = CalculadoraTempo.calcularCustoMinuto(form as any);
+  const custoKm = breakdownKm
+    ? Object.values(breakdownKm).reduce((sum, value) => sum + Number(value || 0), 0)
+    : 0;
+
+  const textColor = isDark ? tokens.palette.white : tokens.palette.surface900;
+  const mutedColor = isDark ? tokens.palette.surface300 : tokens.palette.surface400;
+
+  const goToStep = (target: IndicesFormStep) => {
+    setStep(target);
+  };
+
+  const goNext = () => {
+    const erros = validateIndicesStep(step, form);
+    if (hasNegativeIndexValue(form)) {
+      showCustomAlert(
+        t('common.atencao'),
+        t('indices.validation.positive'),
+      );
+      return;
+    }
+    if (erros.length > 0) {
+      showCustomAlert(
+        t('common.atencao'),
+        t('indices.validation.required'),
+      );
+      return;
+    }
+
+    const next = steps[currentStepIndex + 1];
+    if (next) {
+      setStep(next);
+    }
+  };
+
+  const goBackStep = () => {
+    const previous = steps[currentStepIndex - 1];
+    if (previous) {
+      setStep(previous);
+    }
+  };
+
+  const handleOpenHelp = (titulo: string, texto: string) => {
     setHelpModal({ visible: true, titulo, texto });
   };
+
+  const formatCurrency = (value: number) =>
+    value.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+    });
+
+  const suggestionLines =
+    previewSugestoes?.sugestoesAplicadas.slice(0, 5).map((sugestao) => ({
+      label: String(sugestao.campo).replace(/_/g, ' '),
+      detail: `${t(`calculadora.fontes_sugestao.${sugestao.fonte}`)} · ${t(
+        'calculadora.confianca_sugestao',
+        {
+          confianca: t(`calculadora.confiancas.${sugestao.confianca}`),
+        },
+      )}`,
+    })) ?? [];
 
   if (loading) {
     return (
       <View
         style={[
           styles.loading,
-          { backgroundColor: isDark ? '#000' : '#FFF' },
+          { backgroundColor: isDark ? tokens.palette.black : tokens.palette.white },
         ]}
       >
-        <ActivityIndicator size="large" color="#00C853" />
+        <ActivityIndicator size="large" color={tokens.palette.brand} />
+        <Text style={[styles.loadingText, { color: mutedColor }]}>
+          {t('common.loading_local')}
+        </Text>
       </View>
     );
   }
 
-  const status = validarStatusSecoes();
-  const perfisUso: PerfilUsoKorre[] = [
-    'uso_leve',
-    'uso_medio',
-    'uso_intenso',
-    'uso_profissional_pesado',
-  ];
+  if (!veiculoAtivo) {
+    return (
+      <SafeAreaView
+        style={[
+          styles.container,
+          { backgroundColor: isDark ? tokens.palette.black : tokens.palette.surface100 },
+        ]}
+      >
+        <View style={styles.topBar}>
+          <BackButton fallback={AppRoutes.dashboard} isDark={isDark} />
+        </View>
+        <EmptyState
+          title={t('indices.empty.noVehicle')}
+          description={t('indices.empty.noVehicleDescription')}
+          actionLabel={t('indices.empty.registerVehicle')}
+          onAction={() => router.push(AppRoutes.garagem)}
+          isDark={isDark}
+        />
+      </SafeAreaView>
+    );
+  }
 
-  const formatarCampoSugestao = (campo: string) =>
-    campo.replace(/_/g, ' ');
+  const renderIntro = () => (
+    <View style={styles.stepContent}>
+      <IndicesIntroCard
+        isDark={isDark}
+        title={t('indices.intro.title')}
+        description={t('indices.intro.description')}
+        items={[
+          {
+            icon: 'km',
+            title: t('indices.intro.kmTitle'),
+            description: t('indices.intro.kmDescription'),
+          },
+          {
+            icon: 'minute',
+            title: t('indices.intro.minuteTitle'),
+            description: t('indices.intro.minuteDescription'),
+          },
+          {
+            icon: 'goal',
+            title: t('indices.intro.goalTitle'),
+            description: t('indices.intro.goalDescription'),
+          },
+        ]}
+      />
+      <AppButton
+        title={t('indices.intro.start')}
+        isDark={isDark}
+        onPress={() => goToStep('mode')}
+      />
+    </View>
+  );
+
+  const renderMode = () => (
+    <View style={styles.stepContent}>
+      <Text style={[styles.stepTitle, { color: textColor }]}>
+        {t('indices.mode.title')}
+      </Text>
+      <Text style={[styles.stepDescription, { color: mutedColor }]}>
+        {t('indices.mode.description')}
+      </Text>
+      <IndicesModeSelector
+        isDark={isDark}
+        value={mode}
+        onChange={(value) => {
+          setMode(value);
+          if (value === 'simple' && step === 'advanced') {
+            setStep('basic');
+          }
+        }}
+        options={[
+          {
+            mode: 'simple',
+            title: t('indices.mode.simple.title'),
+            description: t('indices.mode.simple.description'),
+          },
+          {
+            mode: 'advanced',
+            title: t('indices.mode.advanced.title'),
+            description: t('indices.mode.advanced.description'),
+          },
+        ]}
+      />
+      <SuggestionArea />
+    </View>
+  );
+
+  const SuggestionArea = () => (
+    <IndicesSuggestionCard
+      isDark={isDark}
+      title={t('indices.suggestion.title')}
+      description={t('indices.suggestion.description')}
+      status={
+        previewSugestoes
+          ? previewSugestoes.sugestoesAplicadas.length > 0
+            ? t('indices.suggestion.available')
+            : t('indices.empty.noDataForSuggestion')
+          : undefined
+      }
+      lines={suggestionLines}
+      loading={carregandoSugestoes}
+      onView={() => void verSugestoes()}
+      onApply={
+        previewSugestoes && previewSugestoes.sugestoesAplicadas.length > 0
+          ? () => void aplicarSugestoes()
+          : undefined
+      }
+      onIgnore={previewSugestoes ? ignorarSugestoes : undefined}
+      viewLabel={t('indices.suggestion.view')}
+      applyLabel={t('indices.suggestion.apply')}
+      ignoreLabel={t('indices.suggestion.ignore')}
+    />
+  );
+
+  const renderBasic = () => (
+    <View style={styles.stepContent}>
+      <Text style={[styles.stepTitle, { color: textColor }]}>
+        {t('indices.basic.title')}
+      </Text>
+      <Text style={[styles.stepDescription, { color: mutedColor }]}>
+        {t('indices.basic.description')}
+      </Text>
+      <SecaoCustosAtivo
+        form={form}
+        onChange={handleChange}
+        onHelp={handleOpenHelp}
+        isComplete={status.operacaoCompleta}
+      />
+      <SecaoComposicaoCustoKm breakdown={breakdownKm} avisos={avisosKm} />
+      {mode === 'simple' ? (
+        <SecaoCustoPessoa
+          form={form}
+          onChange={handleChange}
+          onHelp={handleOpenHelp}
+          isComplete={status.humanoCompleto}
+        />
+      ) : null}
+    </View>
+  );
+
+  const renderAdvanced = () => (
+    <View style={styles.stepContent}>
+      <Text style={[styles.stepTitle, { color: textColor }]}>
+        {t('indices.advanced.title')}
+      </Text>
+      <Text style={[styles.stepDescription, { color: mutedColor }]}>
+        {t('indices.advanced.description')}
+      </Text>
+      <SecaoCustoPessoa
+        form={form}
+        onChange={handleChange}
+        onHelp={handleOpenHelp}
+        isComplete={status.humanoCompleto}
+      />
+      <SecaoPatrimonio
+        form={form}
+        onChange={handleChange}
+        onHelp={handleOpenHelp}
+        isComplete={!!form.valor_veiculo_fipe && !!form.custo_oportunidade_selic}
+      />
+      <SecaoCustosExistencia
+        form={form}
+        onChange={handleChange}
+        onHelp={handleOpenHelp}
+        onCalcularIPVA={calcularIPVAAutomatico}
+        isComplete={status.burocraciaCompleta}
+      />
+    </View>
+  );
+
+  const renderReview = () => (
+    <View style={styles.stepContent}>
+      <IndicesSummaryCard
+        isDark={isDark}
+        title={t('indices.summary.title')}
+        items={[
+          {
+            label: t('indices.summary.kmCost'),
+            value: formatCurrency(custoKm),
+            description: t('indices.summary.kmCostDescription'),
+          },
+          {
+            label: t('indices.summary.minuteCost'),
+            value: formatCurrency(tempo.imin),
+            description: t('indices.summary.minuteCostDescription'),
+          },
+          {
+            label: t('indices.summary.goal'),
+            value: formatCurrency(tempo.metaMinuto),
+            description: t('indices.summary.goalDescription'),
+          },
+        ]}
+      />
+
+      {sugestoesAplicadas.length > 0 || sugestoesIgnoradas.length > 0 ? (
+        <AppCard isDark={isDark} style={styles.suggestionResult}>
+          <Text style={[styles.resultTitle, { color: textColor }]}>
+            {t('indices.suggestion.applied')}
+          </Text>
+          <Text style={[styles.resultText, { color: mutedColor }]}>
+            {t('calculadora.sugestoes_resumo', {
+              count: sugestoesAplicadas.length,
+            })}{' '}
+            {t('calculadora.sugestoes_ignoradas', {
+              count: sugestoesIgnoradas.length,
+            })}
+          </Text>
+          <Text style={[styles.resultText, { color: mutedColor }]}>
+            {t('calculadora.baseado_oficina')}: {resumoSugestoes.historicoOficina} ·{' '}
+            {t('calculadora.baseado_financeiro')}: {resumoSugestoes.historicoFinanceiro} ·{' '}
+            {t('calculadora.baseado_planejado')}: {resumoSugestoes.preCadastro} ·{' '}
+            {t('calculadora.baseado_perfil')}: {resumoSugestoes.perfilUso} ·{' '}
+            {t('calculadora.baseado_padrao')}: {resumoSugestoes.padraoKorre}
+          </Text>
+        </AppCard>
+      ) : null}
+
+      {sugestoesRevisao.length > 0 ? (
+        <AppCard isDark={isDark} style={styles.reviewBox}>
+          <Text style={[styles.resultTitle, { color: textColor }]}>
+            {t('calculadora.sugestoes_revisao')}
+          </Text>
+          {sugestoesRevisao.map((sugestao) => (
+            <View
+              key={`${String(sugestao.campo)}-${sugestao.fonte}`}
+              style={styles.reviewItem}
+            >
+              <Text style={[styles.resultText, { color: mutedColor }]}>
+                {String(sugestao.campo).replace(/_/g, ' ')} ·{' '}
+                {t(`calculadora.fontes_sugestao.${sugestao.fonte}`)} ·{' '}
+                {t('calculadora.confianca_sugestao', {
+                  confianca: t(`calculadora.confiancas.${sugestao.confianca}`),
+                })}
+              </Text>
+              <View style={styles.reviewActions}>
+                <AppButton
+                  title={t('calculadora.usar_valor_sugerido')}
+                  isDark={isDark}
+                  onPress={() => {
+                    handleChange(sugestao.campo, sugestao.valor as number);
+                    setSugestoesRevisao((prev) =>
+                      prev.filter((item) => item.campo !== sugestao.campo),
+                    );
+                  }}
+                  style={styles.reviewAction}
+                />
+                <AppButton
+                  title={t('calculadora.manter_meu_valor')}
+                  variant="secondary"
+                  isDark={isDark}
+                  onPress={() =>
+                    setSugestoesRevisao((prev) =>
+                      prev.filter((item) => item.campo !== sugestao.campo),
+                    )
+                  }
+                  style={styles.reviewAction}
+                />
+              </View>
+            </View>
+          ))}
+        </AppCard>
+      ) : null}
+    </View>
+  );
+
+  const renderCurrentStep = () => {
+    switch (step) {
+      case 'intro':
+        return renderIntro();
+      case 'mode':
+        return renderMode();
+      case 'basic':
+        return renderBasic();
+      case 'advanced':
+        return renderAdvanced();
+      default:
+        return renderReview();
+    }
+  };
+
+  const showFooter = step !== 'intro';
+  const isReview = step === 'review';
 
   return (
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#000' : '#F8F9FA' },
+        { backgroundColor: isDark ? tokens.palette.black : tokens.palette.surface100 },
       ]}
     >
       <KeyboardAvoidingView
-        behavior={
-          Platform.OS === 'ios' ? 'padding' : 'height'
-        }
-        style={inlineStyles.inline1}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboard}
       >
-        <View style={inlineStyles.inline2}>
+        <View style={styles.screen}>
+          <View style={styles.topBar}>
+            <BackButton fallback={AppRoutes.dashboard} isDark={isDark} />
+          </View>
+
           <CalculadoraHeader
             veiculoAtivo={veiculoAtivo}
             veiculosDisponiveis={veiculosDisponiveis}
             onMudarVeiculo={mudarVeiculoAtivo}
-            percentualCompletude={
-              status.percentualGeral || 0
-            }
+            percentualCompletude={status.percentualGeral || 0}
           />
 
           <ScrollView
@@ -132,349 +478,78 @@ export default function CalculadoraScreen() {
             contentContainerStyle={styles.scrollContent}
           >
             <View style={styles.formContainer}>
-              <View
-                style={{
-                  gap: 12,
-                  marginBottom: 16,
-                  padding: 16,
-                  borderRadius: 16,
-                  backgroundColor: isDark ? '#111' : '#FFFFFF',
-                  borderWidth: 1,
-                  borderColor: isDark ? '#222' : '#E5E7EB',
-                }}
-              >
-                <Text
-                  style={{
-                    color: isDark ? '#FFF' : '#111827',
-                    fontSize: 18,
-                    fontWeight: '900',
-                  }}
-                >
-                  {t('calculadora.auditoria_korre')}
-                </Text>
-                <Text
-                  style={{
-                    color: isDark ? '#9CA3AF' : '#4B5563',
-                    lineHeight: 20,
-                  }}
-                >
-                  {t('calculadora.sugestoes_intro')}
-                </Text>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    gap: 8,
-                  }}
-                >
-                  {perfisUso.map((perfil) => {
-                    const selecionado = perfilUso === perfil;
-                    return (
-                      <TouchableOpacity
-                        key={perfil}
-                        onPress={() => setPerfilUso(perfil)}
-                        style={{
-                          paddingHorizontal: 12,
-                          paddingVertical: 8,
-                          borderRadius: 999,
-                          backgroundColor: selecionado
-                            ? '#00C853'
-                            : isDark
-                              ? '#1F2937'
-                              : '#F3F4F6',
-                        }}
-                      >
-                        <Text
-                          style={{
-                            color: selecionado
-                              ? '#06140C'
-                              : isDark
-                                ? '#E5E7EB'
-                                : '#111827',
-                            fontWeight: '800',
-                          }}
-                        >
-                          {t(`calculadora.perfis_uso.${perfil}`)}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
-
-                <Button
-                  title={t('calculadora.preencher_para_mim')}
-                  onPress={aplicarSugestoes}
-                />
-
-                {sugestoesAplicadas.length > 0 && (
-                  <View style={{ gap: 6 }}>
-                    <Text
-                      style={{
-                        color: isDark ? '#E5E7EB' : '#111827',
-                        fontWeight: '900',
-                      }}
-                    >
-                      {t('calculadora.sugestoes_resumo', {
-                        count: sugestoesAplicadas.length,
-                      })}
-                    </Text>
-                    {sugestoesAplicadas.slice(0, 4).map((sugestao) => (
-                      <Text
-                        key={String(sugestao.campo)}
-                        style={{
-                          color: isDark ? '#9CA3AF' : '#4B5563',
-                          fontSize: 12,
-                          lineHeight: 17,
-                        }}
-                      >
-                        {formatarCampoSugestao(String(sugestao.campo))} ·{' '}
-                        {t(`calculadora.fontes_sugestao.${sugestao.fonte}`)} ·{' '}
-                        {t('calculadora.confianca_sugestao', {
-                          confianca: t(
-                            `calculadora.confiancas.${sugestao.confianca}`,
-                          ),
-                        })}
-                      </Text>
-                    ))}
-                    {sugestoesIgnoradas.length > 0 && (
-                      <Text
-                        style={{
-                          color: isDark ? '#6B7280' : '#6B7280',
-                          fontSize: 12,
-                        }}
-                      >
-                        {t('calculadora.sugestoes_ignoradas', {
-                          count: sugestoesIgnoradas.length,
-                        })}
-                      </Text>
-                    )}
-                    <Text
-                      style={{
-                        color: isDark ? '#9CA3AF' : '#4B5563',
-                        fontSize: 12,
-                      }}
-                    >
-                      {t('calculadora.baseado_oficina')}: {resumoSugestoes.historicoOficina} · {t('calculadora.baseado_financeiro')}: {resumoSugestoes.historicoFinanceiro} · {t('calculadora.baseado_planejado')}: {resumoSugestoes.preCadastro} · {t('calculadora.baseado_perfil')}: {resumoSugestoes.perfilUso} · {t('calculadora.baseado_padrao')}: {resumoSugestoes.padraoKorre}
-                    </Text>
-                  </View>
-                )}
-                {sugestoesRevisao.length > 0 && (
-                  <View
-                    style={{
-                      gap: 10,
-                      padding: 12,
-                      borderRadius: 12,
-                      backgroundColor: isDark ? '#1A1208' : '#FFF7ED',
-                      borderWidth: 1,
-                      borderColor: isDark ? '#422006' : '#FDBA74',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: isDark ? '#FED7AA' : '#9A3412',
-                        fontWeight: '900',
-                      }}
-                    >
-                      {t('calculadora.sugestoes_revisao')}
-                    </Text>
-                    {sugestoesRevisao.map((sugestao) => (
-                      <View
-                        key={`${String(sugestao.campo)}-${sugestao.fonte}`}
-                        style={{ gap: 8 }}
-                      >
-                        <Text
-                          style={{
-                            color: isDark ? '#E5E7EB' : '#111827',
-                            fontSize: 12,
-                          }}
-                        >
-                          {formatarCampoSugestao(String(sugestao.campo))} · {t(`calculadora.fontes_sugestao.${sugestao.fonte}`)} · {t('calculadora.confianca_sugestao', {
-                            confianca: t(`calculadora.confiancas.${sugestao.confianca}`),
-                          })}
-                        </Text>
-                        <View style={{ flexDirection: 'row', gap: 8 }}>
-                          <TouchableOpacity
-                            style={{
-                              paddingHorizontal: 10,
-                              paddingVertical: 8,
-                              borderRadius: 8,
-                              backgroundColor: '#00C853',
-                            }}
-                            onPress={() => {
-                              handleChange(
-                                sugestao.campo,
-                                sugestao.valor as number,
-                              );
-                              setSugestoesRevisao((prev) =>
-                                prev.filter(
-                                  (item) =>
-                                    item.campo !== sugestao.campo,
-                                ),
-                              );
-                            }}
-                          >
-                            <Text style={{ fontWeight: '800' }}>
-                              {t('calculadora.usar_valor_sugerido')}
-                            </Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            style={{
-                              paddingHorizontal: 10,
-                              paddingVertical: 8,
-                              borderRadius: 8,
-                              backgroundColor: isDark
-                                ? '#1F2937'
-                                : '#E5E7EB',
-                            }}
-                            onPress={() =>
-                              setSugestoesRevisao((prev) =>
-                                prev.filter(
-                                  (item) =>
-                                    item.campo !== sugestao.campo,
-                                ),
-                              )
-                            }
-                          >
-                            <Text
-                              style={{
-                                color: isDark ? '#F3F4F6' : '#111827',
-                                fontWeight: '800',
-                              }}
-                            >
-                              {t('calculadora.manter_meu_valor')}
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    ))}
-                  </View>
-                )}
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 8,
-                  }}
-                >
-                  <TouchableOpacity
-                    onPress={() => setModoAvancado(false)}
-                    style={{
-                      flex: 1,
-                      paddingVertical: 10,
-                      borderRadius: 10,
-                      alignItems: 'center',
-                      backgroundColor: !modoAvancado
-                        ? '#00C853'
-                        : isDark
-                          ? '#1F2937'
-                          : '#F3F4F6',
-                    }}
-                  >
-                    <Text style={{ fontWeight: '900' }}>
-                      {t('calculadora.modo_simples')}
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => setModoAvancado(true)}
-                    style={{
-                      flex: 1,
-                      paddingVertical: 10,
-                      borderRadius: 10,
-                      alignItems: 'center',
-                      backgroundColor: modoAvancado
-                        ? '#00C853'
-                        : isDark
-                          ? '#1F2937'
-                          : '#F3F4F6',
-                    }}
-                  >
-                    <Text style={{ fontWeight: '900' }}>
-                      {t('calculadora.modo_avancado')}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <SecaoCustosAtivo
-                form={form}
-                onChange={handleChange}
-                onHelp={handleOpenHelp}
-                isComplete={status.operacaoCompleta}
+              <IndicesStepProgress
+                steps={steps.map((item) => ({
+                  key: item,
+                  label: t(`indices.steps.${item}`),
+                }))}
+                currentIndex={currentStepIndex}
+                isDark={isDark}
               />
-
-              <SecaoComposicaoCustoKm
-                breakdown={breakdownKm}
-                avisos={avisosKm}
-              />
-
-              <SecaoCustoPessoa
-                form={form}
-                onChange={handleChange}
-                onHelp={handleOpenHelp}
-                isComplete={status.humanoCompleto}
-              />
-
-              {modoAvancado && (
-                <>
-                  <SecaoPatrimonio
-                    form={form}
-                    onChange={handleChange}
-                    onHelp={handleOpenHelp}
-                    isComplete={
-                      !!form.valor_veiculo_fipe &&
-                      !!form.custo_oportunidade_selic
-                    }
-                  />
-
-                  <SecaoCustosExistencia
-                    form={form}
-                    onChange={handleChange}
-                    onHelp={handleOpenHelp}
-                    onCalcularIPVA={calcularIPVAAutomatico}
-                    isComplete={status.burocraciaCompleta}
-                  />
-                </>
-              )}
-
-              <View style={styles.buttonWrapper}>
-                <Button
-                  title={t('calculadora.salvar_auditoria')}
-                  onPress={calcularESalvar}
-                  icon={Save}
-                />
-                <TouchableOpacity
-                  onPress={() => router.push(AppRoutes.analisarCorrida)}
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    gap: 8,
-                    marginTop: 10,
-                    paddingVertical: 13,
-                    borderRadius: 12,
-                    borderWidth: 1,
-                    borderColor: '#00C853',
-                  }}
-                >
-                  <Route size={18} color="#00C853" />
-                  <Text
-                    style={{
-                      color: '#00C853',
-                      fontWeight: '900',
-                    }}
-                  >
-                    {t('ride_decision.dashboard_cta')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              {renderCurrentStep()}
             </View>
           </ScrollView>
 
-          <PainelResultadoFlutuante
-            form={form}
-            veiculoTipo={veiculoAtivo?.tipo || 'carro'}
-          />
+          {showFooter ? (
+            <View
+              style={[
+                styles.footer,
+                {
+                  backgroundColor: isDark
+                    ? tokens.palette.black
+                    : tokens.palette.surface100,
+                  borderTopColor: isDark
+                    ? tokens.palette.surface650
+                    : tokens.palette.surface200,
+                },
+              ]}
+            >
+              <AppButton
+                title={t('common.cancelar')}
+                variant="ghost"
+                isDark={isDark}
+                onPress={() => router.push(AppRoutes.dashboard)}
+                style={styles.footerButton}
+              />
+              {currentStepIndex > 0 ? (
+                <AppButton
+                  title={t('common.voltar')}
+                  variant="secondary"
+                  isDark={isDark}
+                  onPress={goBackStep}
+                  style={styles.footerButton}
+                />
+              ) : null}
+              {isReview ? (
+                <AppButton
+                  title={t('indices.summary.save')}
+                  icon={Save}
+                  isDark={isDark}
+                  onPress={calcularESalvar}
+                  style={styles.footerButton}
+                />
+              ) : (
+                <AppButton
+                  title={t('indices.navigation.continue')}
+                  isDark={isDark}
+                  onPress={goNext}
+                  style={styles.footerButton}
+                />
+              )}
+            </View>
+          ) : null}
+
+          {isReview ? (
+            <View style={styles.analysisCta}>
+              <AppButton
+                title={t('ride_decision.dashboard_cta')}
+                icon={Route}
+                variant="secondary"
+                isDark={isDark}
+                onPress={() => router.push(AppRoutes.analisarCorrida)}
+              />
+            </View>
+          ) : null}
         </View>
       </KeyboardAvoidingView>
 
@@ -482,12 +557,87 @@ export default function CalculadoraScreen() {
         visible={helpModal.visible}
         titulo={helpModal.titulo}
         textoExplicativo={helpModal.texto}
-        onClose={() =>
-          setHelpModal({ ...helpModal, visible: false })
-        }
+        onClose={() => setHelpModal({ ...helpModal, visible: false })}
       />
     </SafeAreaView>
   );
 }
 
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  keyboard: {
+    flex: 1,
+  },
+  screen: {
+    flex: 1,
+  },
+  loading: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: tokens.spacing.md,
+  },
+  loadingText: {
+    fontSize: tokens.typography.size.md,
+    fontWeight: tokens.typography.weight.bold,
+  },
+  topBar: {
+    paddingHorizontal: tokens.spacing.xl,
+    paddingTop: tokens.spacing.sm,
+  },
+  scrollContent: {
+    paddingBottom: 170,
+  },
+  formContainer: {
+    padding: tokens.spacing.xl,
+    gap: tokens.spacing.lg,
+  },
+  stepContent: {
+    gap: tokens.spacing.lg,
+  },
+  stepTitle: {
+    fontSize: tokens.typography.size.xxl,
+    fontWeight: tokens.typography.weight.black,
+  },
+  stepDescription: {
+    fontSize: tokens.typography.size.md,
+    lineHeight: 21,
+  },
+  footer: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    padding: tokens.spacing.md,
+    gap: tokens.spacing.sm,
+  },
+  footerButton: {
+    width: '100%',
+  },
+  analysisCta: {
+    paddingHorizontal: tokens.spacing.md,
+    paddingBottom: tokens.spacing.md,
+  },
+  suggestionResult: {
+    gap: tokens.spacing.sm,
+  },
+  resultTitle: {
+    fontSize: tokens.typography.size.lg,
+    fontWeight: tokens.typography.weight.black,
+  },
+  resultText: {
+    fontSize: tokens.typography.size.sm,
+    lineHeight: 18,
+  },
+  reviewBox: {
+    gap: tokens.spacing.md,
+  },
+  reviewItem: {
+    gap: tokens.spacing.sm,
+  },
+  reviewActions: {
+    gap: tokens.spacing.sm,
+  },
+  reviewAction: {
+    width: '100%',
+  },
+});

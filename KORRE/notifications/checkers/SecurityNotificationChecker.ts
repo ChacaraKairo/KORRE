@@ -1,4 +1,5 @@
 import { AppRoutes } from '../../constants/routes';
+import i18n from '../../locales/i18n';
 import { criarNotificacao } from '../NotificationService';
 
 export const SecurityNotificationChecker = {
@@ -8,8 +9,8 @@ export const SecurityNotificationChecker = {
 
   async notifyLoginSuccess() {
     await criarNotificacao({
-      titulo: 'Login realizado',
-      mensagem: 'Seu acesso foi concluido com sucesso.',
+      titulo: i18n.t('notifications.security.login_success_title'),
+      mensagem: i18n.t('notifications.security.login_success_body'),
       tipo: 'seguranca',
       prioridade: 'baixa',
       canal: 'historico',
@@ -21,8 +22,8 @@ export const SecurityNotificationChecker = {
 
   async notifyTooManyAttempts() {
     await criarNotificacao({
-      titulo: 'Muitas tentativas de login',
-      mensagem: 'Foram detectadas varias tentativas de acesso. Tente novamente mais tarde.',
+      titulo: i18n.t('notifications.security.too_many_title'),
+      mensagem: i18n.t('notifications.security.too_many_body'),
       tipo: 'seguranca',
       prioridade: 'alta',
       destino: AppRoutes.login,

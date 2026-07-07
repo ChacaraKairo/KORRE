@@ -65,7 +65,7 @@ export const dashboardStyles = StyleSheet.create({
   // VeiculoCard
   cardPreto: {
     backgroundColor: '#161616',
-    borderRadius: 32,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: '#222',
     padding: 20,
@@ -143,7 +143,7 @@ export const dashboardStyles = StyleSheet.create({
   cardMeio: {
     flex: 1,
     backgroundColor: '#161616',
-    borderRadius: 28,
+    borderRadius: 18,
     borderWidth: 1,
     borderColor: '#222',
     padding: 16,
@@ -187,7 +187,7 @@ export const dashboardStyles = StyleSheet.create({
   // GanhosCard e GastosCard
   cardGanhos: {
     backgroundColor: '#161616',
-    borderRadius: 28,
+    borderRadius: 20,
     padding: 24,
     borderWidth: 1,
     borderColor: '#222',
@@ -195,7 +195,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   cardGastos: {
     backgroundColor: '#161616',
-    borderRadius: 28,
+    borderRadius: 20,
     padding: 24,
     borderWidth: 1,
     borderColor: '#222',
@@ -310,6 +310,37 @@ export const dashboardStyles = StyleSheet.create({
     color: '#444',
     textAlign: 'center',
     paddingVertical: 20,
+  },
+  rideDecisionCard: {
+    marginBottom: 16,
+    padding: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  rideDecisionIconBox: {
+    width: 42,
+    height: 42,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#00C853',
+  },
+  rideDecisionCopy: {
+    flex: 1,
+  },
+  rideDecisionTitle: {
+    fontSize: 14,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  rideDecisionSubtitle: {
+    fontSize: 12,
+    lineHeight: 17,
+    marginTop: 3,
+    fontWeight: '600',
   },
 
   // Footer Calculadora

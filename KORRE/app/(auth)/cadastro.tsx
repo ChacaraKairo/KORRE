@@ -26,6 +26,7 @@ import { PerfilSecao } from '../../components/telas/Cadastro/PerfilSecao';
 import { RestaurarFluxoCadastro } from '../../components/telas/Cadastro/RestaurarFluxoCadastro';
 import { VeiculoSecao } from '../../components/telas/Cadastro/VeiculoSecao';
 import { CustomAlert } from '../../components/telas/Cadastro/CustomAlert';
+import { BackButton } from '../../components/ui/BackButton';
 import { useCadastro } from '../../hooks/cadastro/useCadastro';
 import { inlineStyles } from '../../styles/generated-inline/app/(auth)/cadastroInlineStyles';
 import { styles } from '../../styles/telas/Cadastro/componentes/cadastroStyles';
@@ -123,6 +124,16 @@ export default function CadastroScreen() {
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
       <CustomAlert />
+      <BackButton
+        fallback="/(auth)/login"
+        isDark
+        style={{
+          position: 'absolute',
+          top: 48,
+          left: 20,
+          zIndex: 20,
+        }}
+      />
       <LanguageSwitcherButton />
 
       <KeyboardAvoidingView

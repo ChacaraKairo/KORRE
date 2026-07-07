@@ -66,6 +66,12 @@ export function useIndicesKorreForm() {
     perfilUso: 0,
     padraoKorre: 0,
   });
+  const [previewSugestoes, setPreviewSugestoes] =
+    useState<Awaited<
+      ReturnType<typeof IndicesAutoFillService.preencherInteligente>
+    > | null>(null);
+  const [carregandoSugestoes, setCarregandoSugestoes] =
+    useState(false);
 
   useEffect(() => {
     const resultadoKm = CalculadoraMovimento.calcularCustoKm(
@@ -212,17 +218,41 @@ export function useIndicesKorreForm() {
     }
   };
 
-  const aplicarSugestoes = useCallback(async () => {
+  const verSugestoes = useCallback(async () => {
     if (!veiculoAtivo?.id) {
-      return;
+      return null;
     }
-    const resultado =
-      await IndicesAutoFillService.preencherInteligente({
+
+    setCarregandoSugestoes(true);
+    try {
+      const resultado =
+        await IndicesAutoFillService.preencherInteligente({
+          veiculoId: veiculoAtivo.id,
+          form,
+          perfilUso,
+          tipoVeiculo: veiculoAtivo?.tipo,
+        });
+      setPreviewSugestoes(resultado);
+      return resultado;
+    } finally {
+      setCarregandoSugestoes(false);
+    }
+  }, [form, perfilUso, veiculoAtivo]);
+
+  const aplicarSugestoes = useCallback(async () => {
+    let resultado = previewSugestoes;
+
+    if (!resultado) {
+      if (!veiculoAtivo?.id) {
+        return;
+      }
+      resultado = await IndicesAutoFillService.preencherInteligente({
         veiculoId: veiculoAtivo.id,
         form,
         perfilUso,
         tipoVeiculo: veiculoAtivo?.tipo,
       });
+    }
 
     setForm(resultado.form);
     setSugestoesAplicadas(resultado.sugestoesAplicadas);
@@ -236,7 +266,21 @@ export function useIndicesKorreForm() {
         count: resultado.sugestoesAplicadas.length,
       }),
     );
-  }, [form, perfilUso, t, veiculoAtivo]);
+  }, [form, perfilUso, previewSugestoes, t, veiculoAtivo]);
+
+  const ignorarSugestoes = useCallback(() => {
+    setPreviewSugestoes(null);
+    setSugestoesAplicadas([]);
+    setSugestoesIgnoradas([]);
+    setSugestoesRevisao([]);
+    setResumoSugestoes({
+      historicoOficina: 0,
+      historicoFinanceiro: 0,
+      preCadastro: 0,
+      perfilUso: 0,
+      padraoKorre: 0,
+    });
+  }, []);
 
   const validarStatusSecoes = useCallback(() => {
     const operacaoCompleta =
@@ -345,7 +389,11 @@ export function useIndicesKorreForm() {
     calcularIPVAAutomatico,
     perfilUso,
     setPerfilUso,
+    verSugestoes,
     aplicarSugestoes,
+    ignorarSugestoes,
+    previewSugestoes,
+    carregandoSugestoes,
     sugestoesAplicadas,
     sugestoesIgnoradas,
     sugestoesRevisao,
